@@ -13,6 +13,7 @@ namespace NEA
         static void Main(string[] args)
         {
             Complex c = new Complex();
+            Console.WriteLine(c.GetComplex());
             Console.WriteLine(c.GetModulus().GetString());
             Console.ReadKey();
         }

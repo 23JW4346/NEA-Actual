@@ -11,6 +11,13 @@ namespace NEA.Number_Classes
         private Number real;
         private Number imaginary;
 
+        private static Random rnd = new Random();
+
+        private Dictionary<int, (int ,int)> modpairs = new Dictionary<int, (int, int)> { {0, (3,4) }, {1, (5,12) },
+                                                                                       {2 , (8, 15)}, {3 , (7, 24) },
+                                                                                       {4 , (9, 40) } 
+                                                                                       };
+
         public Complex(double inreal, double inimaginary)
         {
             real = new Number(inreal);
@@ -25,19 +32,17 @@ namespace NEA.Number_Classes
 
         public Complex()
         {
-            bool loop = true;
-            do
+            int number = rnd.Next(0, 5);
+            if (rnd.Next(0, 2) == 0)
             {
-                real = new Number();
-                imaginary = new Number();
-                double pythag = Math.Sqrt(Math.Pow(real.GetValue(), 2) + Math.Pow(imaginary.GetValue(), 2));
-                if (!pythag.ToString().Contains("."))
-                {
-                    
-                    loop = false;
-                }
-                Console.WriteLine(".");
-            } while (loop);
+                real = new Number(modpairs[number].Item1);
+                imaginary = new Number(modpairs[number].Item2);
+            }
+            else
+            {
+                imaginary = new Number(modpairs[number].Item1);
+                real = new Number(modpairs[number].Item2);
+            }
         }
 
         public string GetReal() => real.GetString();
