@@ -16,6 +16,7 @@ namespace NEA.Number_Classes
             real = new Number(inreal);
             imaginary = new Number(inimaginary);
         }
+
         public Complex(Number inreal, Number inimaginary)
         {
             real = inreal;
@@ -24,8 +25,19 @@ namespace NEA.Number_Classes
 
         public Complex()
         {
-            real = new Number();
-            imaginary = new Number();
+            bool loop = true;
+            do
+            {
+                real = new Number();
+                imaginary = new Number();
+                double pythag = Math.Sqrt(Math.Pow(real.GetValue(), 2) + Math.Pow(imaginary.GetValue(), 2));
+                if (!pythag.ToString().Contains("."))
+                {
+                    
+                    loop = false;
+                }
+                Console.WriteLine(".");
+            } while (loop);
         }
 
         public string GetReal() => real.GetString();
@@ -57,19 +69,19 @@ namespace NEA.Number_Classes
         public Number GetModulus()
         {
             int pythag = (int)Math.Pow(real.GetValue(), 2) + (int)Math.Pow(imaginary.GetValue(), 2);
-            int coef = 1;
-            if (pythag > 4)
+            if (!Math.Sqrt(pythag).ToString().Contains("."))
             {
-
-                for (int i = 1; i < Math.Sqrt(pythag); i++)
-                {
-                    if (pythag % (int)Math.Pow(i, 2) == 0)
-                    {
-                        coef = i;
-                    }
-                }
-                pythag /= (int)Math.Pow(coef, 2);
+                return new Number(Math.Sqrt(pythag));
             }
+            int coef = 1;
+            for (int i = 1; i < Math.Sqrt(pythag); i++)
+            {
+                if (pythag % (int)Math.Pow(i, 2) == 0)
+                {
+                    coef = i;
+                }
+            }
+            pythag /= (int)Math.Pow(coef, 2);
             if (pythag == 1) return new Number(coef);
             return new Surd(coef, pythag);
         }

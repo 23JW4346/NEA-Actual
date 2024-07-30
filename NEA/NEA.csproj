@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IQuestion.cs" />
     <Compile Include="Number Classes\Complex.cs" />
     <Compile Include="Number Classes\Fraction.cs" />
     <Compile Include="Number Classes\Number.cs" />
