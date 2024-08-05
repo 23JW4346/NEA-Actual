@@ -13,7 +13,7 @@ namespace NEA
     {
         static void Main(string[] args)
         {
-            IQuestion question = new Multiply2Complex();
+            IQuestion question = new Multiply2Complex("Questions.txt");
             Console.WriteLine(question.PrintQuestion());
             Console.WriteLine(question.PrintAnswer(question.CheckAnswer(Console.ReadLine())));
             Console.ReadKey();
