@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using NEA.Number_Classes;
+using NEA.Multiplication_Questions;
 
 namespace NEA
 {
@@ -12,9 +13,9 @@ namespace NEA
     {
         static void Main(string[] args)
         {
-            Complex c = new Complex();
-            Console.WriteLine(c.GetComplex());
-            Console.WriteLine(c.GetModulus().GetString());
+            IQuestion question = new Multiply2Complex();
+            Console.WriteLine(question.PrintQuestion());
+            Console.WriteLine(question.PrintAnswer(question.CheckAnswer(Console.ReadLine())));
             Console.ReadKey();
         }
     }

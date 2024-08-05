@@ -8,18 +8,17 @@ namespace NEA
 {
     public interface IQuestion
     {
+
         string PrintQuestion();
 
         void Calculate();
 
-        string PrintAnswer();
-
-        void GenerateNumbers();
+        string PrintAnswer(bool correct);
 
         bool CheckAnswer(string answer);
 
-        void SaveQuestion();
+        void SaveQuestion(string filename);
 
-        bool GetQuestion();
+        bool GetQuestion(string filename);
     }
 }

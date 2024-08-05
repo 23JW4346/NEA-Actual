@@ -30,18 +30,26 @@ namespace NEA.Number_Classes
             imaginary = inimaginary;
         }
 
-        public Complex()
+        public Complex(bool modquestion)
         {
-            int number = rnd.Next(0, 5);
-            if (rnd.Next(0, 2) == 0)
+            if (modquestion)
             {
-                real = new Number(modpairs[number].Item1);
-                imaginary = new Number(modpairs[number].Item2);
+                int number = rnd.Next(0, 5);
+                if (rnd.Next(0, 2) == 0)
+                {
+                    real = new Number(modpairs[number].Item1);
+                    imaginary = new Number(modpairs[number].Item2);
+                }
+                else
+                {
+                    imaginary = new Number(modpairs[number].Item1);
+                    real = new Number(modpairs[number].Item2);
+                }
             }
             else
             {
-                imaginary = new Number(modpairs[number].Item1);
-                real = new Number(modpairs[number].Item2);
+                real = new Number();
+                imaginary = new Number();
             }
         }
 
@@ -90,7 +98,6 @@ namespace NEA.Number_Classes
             if (pythag == 1) return new Number(coef);
             return new Surd(coef, pythag);
         }
-
         public double GetArgument()
         {
             double tantheta = imaginary.GetValue() / real.GetValue();

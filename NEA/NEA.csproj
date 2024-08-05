@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IQuestion.cs" />
+    <Compile Include="Multiplication Questions\Multiply2Complex.cs" />
     <Compile Include="Number Classes\Complex.cs" />
     <Compile Include="Number Classes\Fraction.cs" />
     <Compile Include="Number Classes\Number.cs" />
@@ -54,8 +55,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Multiplication Questions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
