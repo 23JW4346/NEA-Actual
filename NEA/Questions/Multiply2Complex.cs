@@ -7,35 +7,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NEA.Multiplication_Questions
+namespace NEA.Questions
 {
     public class Multiply2Complex : IQuestion
     {
         private Complex operand1, operand2, answer;
-        
+
         public Multiply2Complex()
         {
             operand1 = new Complex(false);
             operand2 = new Complex(false);
             Calculate();
-            
+
         }
 
         public Multiply2Complex(string filename)
         {
-            if(GetQuestion(filename)) Calculate();
+            if (GetQuestion(filename)) Calculate();
         }
+
         public void Calculate()
         {
-            double realvalue = operand1.GetRealValue()*operand2.GetRealValue() - operand1.GetImaginaryValue()*operand2.GetImaginaryValue();
-            double imagvalue = operand1.GetRealValue()*operand2.GetImaginaryValue() + operand1.GetImaginaryValue()*operand2.GetRealValue();
+            double realvalue = operand1.GetRealValue() * operand2.GetRealValue() - operand1.GetImaginaryValue() * operand2.GetImaginaryValue();
+            double imagvalue = operand1.GetRealValue() * operand2.GetImaginaryValue() + operand1.GetImaginaryValue() * operand2.GetRealValue();
             answer = new Complex(realvalue, imagvalue);
         }
 
         public bool CheckAnswer(string answer)
         {
             bool correct = false;
-            if(answer == this.answer.GetComplex())
+            if (answer == this.answer.GetComplex())
             {
                 correct = true;
             }
@@ -45,23 +46,27 @@ namespace NEA.Multiplication_Questions
             }
             SaveQuestion("Questions.txt");
             return correct;
-            
         }
 
         public bool GetQuestion(string filename)
         {
-            using(StreamReader sr = new StreamReader(filename))
+            bool found = false;
+            string tempfile = Path.GetTempFileName();
+            using (StreamReader sr = new StreamReader(filename))
+            using (StreamWriter sw = new StreamWriter(tempfile))
             {
                 while (!sr.EndOfStream)
                 {
-                    if(sr.ReadLine() == "Multiply2Complex")
+                    string line;
+                    line = sr.ReadLine();
+
+                    if (line == "Multiply 2Complex" && !found)
                     {
                         string number = null;
-                        bool first = true;
                         bool firstneg = true;
-                        double realin=0, imagin=0;
+                        double realin = 0, imagin = 0;
                         string operand1 = sr.ReadLine();
-                        for(int i = 0; i < operand1.Length; i++)
+                        for (int i = 0; i < operand1.Length; i++)
                         {
                             if (Char.IsNumber(operand1[i]))
                             {
@@ -87,9 +92,8 @@ namespace NEA.Multiplication_Questions
                             }
                             else if (operand1[i] == '+')
                             {
-                               realin = double.Parse(number);
-                               first = false;
-                               number = null;
+                                realin = double.Parse(number);
+                                number = null;
                             }
                         }
                         this.operand1 = new Complex(realin, imagin);
@@ -102,7 +106,7 @@ namespace NEA.Multiplication_Questions
                             }
                             if (operand2[i] == '-')
                             {
-                                if (firstneg && number.Length <1)
+                                if (firstneg && number.Length < 1)
                                 {
                                     number += operand2[i];
                                     firstneg = false;
@@ -122,18 +126,23 @@ namespace NEA.Multiplication_Questions
                             {
 
                                 realin = double.Parse(number);
-                                first = false;
                                 number = null;
                             }
                         }
                         this.operand2 = new Complex(realin, imagin);
-
-                        return true;
+                        found = true;
+                    }
+                    else
+                    {
+                        sw.WriteLine(line);
                     }
                 }
                 sr.Close();
-                return false;
+                sw.Close();
             }
+            File.Delete(filename);
+            File.Move(tempfile, filename);
+            return found;
         }
 
         public string PrintAnswer(bool correct)

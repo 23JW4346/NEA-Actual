@@ -15,7 +15,7 @@ namespace NEA.Number_Classes
 
         private Dictionary<int, (int ,int)> modpairs = new Dictionary<int, (int, int)> { {0, (3,4) }, {1, (5,12) },
                                                                                        {2 , (8, 15)}, {3 , (7, 24) },
-                                                                                       {4 , (9, 40) } 
+                                                                                       {4 , (9, 40)}
                                                                                        };
 
         public Complex(double inreal, double inimaginary)
