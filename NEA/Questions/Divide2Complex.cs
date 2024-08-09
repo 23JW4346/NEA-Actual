@@ -55,17 +55,12 @@ namespace NEA.Questions
 
         public bool CheckAnswer(string answer)
         {
-            bool correct = false;
             if (answer == this.answer.GetComplex())
             {
-                correct = true;
-            }
-            if (correct)
-            {
-                return correct;
+                return true;
             }
             SaveQuestion("Questions.txt");
-            return correct;
+            return false;
         }
 
         public bool GetQuestion(string filename)

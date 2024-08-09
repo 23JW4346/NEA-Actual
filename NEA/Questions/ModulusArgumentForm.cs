@@ -1,41 +1,45 @@
-﻿using NEA.Number_Classes;
-using System;
-using System.CodeDom;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NEA.Number_Classes;
 
 namespace NEA.Questions
 {
-    public class Multiply2Complex : IQuestion
+    public class ModulusArgumentForm : IQuestion
     {
-        private Complex operand1, operand2, answer;
+        private Complex operand;
 
-        public Multiply2Complex()
+        private string answer;
+
+        public ModulusArgumentForm()
         {
-            operand1 = new Complex(false);
-            operand2 = new Complex(false);
+            operand = new Complex(true);
             Calculate();
-
         }
 
-        public Multiply2Complex(string filename)
+        public ModulusArgumentForm(string filename)
         {
             if (GetQuestion(filename)) Calculate();
+            else
+            {
+                operand = new Complex(true);
+                Calculate();
+            }
         }
 
         public void Calculate()
         {
-            double realvalue = operand1.GetRealValue() * operand2.GetRealValue() - operand1.GetImaginaryValue() * operand2.GetImaginaryValue();
-            double imagvalue = operand1.GetRealValue() * operand2.GetImaginaryValue() + operand1.GetImaginaryValue() * operand2.GetRealValue();
-            answer = new Complex(realvalue, imagvalue);
+            string Modulus = operand.GetModulus().GetString();
+            string arg = operand.GetArgument().ToString();
+            answer = $"{Modulus}(cos({arg})+isin({arg}))";
         }
 
         public bool CheckAnswer(string answer)
         {
-            if (answer == this.answer.GetComplex())
+            if (answer == this.answer)
             {
                 return true;
             }
@@ -54,8 +58,7 @@ namespace NEA.Questions
                 {
                     string line;
                     line = sr.ReadLine();
-
-                    if (line == "Multiply2Complex" && !found)
+                    if (line == "ModArg" && !found)
                     {
                         string number = null;
                         bool firstneg = true;
@@ -91,40 +94,7 @@ namespace NEA.Questions
                                 number = null;
                             }
                         }
-                        this.operand1 = new Complex(realin, imagin);
-                        string operand2 = sr.ReadLine();
-                        for (int i = 0; i < operand2.Length; i++)
-                        {
-                            if (Char.IsNumber(operand2[i]))
-                            {
-                                number += operand2[i];
-                            }
-                            if (operand2[i] == '-')
-                            {
-                                if (firstneg && number.Length < 1)
-                                {
-                                    number += operand2[i];
-                                    firstneg = false;
-                                }
-                                else
-                                {
-                                    realin = double.Parse(number);
-                                    number = "-";
-                                }
-                            }
-                            else if (operand2[i] == 'i')
-                            {
-                                imagin = double.Parse(number);
-                                break;
-                            }
-                            else if (operand2[i] == '+')
-                            {
-
-                                realin = double.Parse(number);
-                                number = null;
-                            }
-                        }
-                        this.operand2 = new Complex(realin, imagin);
+                        operand = new Complex(realin, imagin);
                         found = true;
                     }
                     else
@@ -142,26 +112,25 @@ namespace NEA.Questions
 
         public string PrintAnswer(bool correct)
         {
-            if(correct)
+            if (correct)
             {
-                return $"Correct!\nThe Answer is {answer.GetComplex()}";
+                return $"Correct!\nThe Answer is {answer}";
             }
-            return $"Incorrect!\nThe Answer was {answer.GetComplex()}";
-        } 
+            return $"Incorrect!\nThe Answer was {answer}";
+        }
 
         public string PrintQuestion()
         {
-            return $"Calculate ({operand1.GetComplex()})*({operand2.GetComplex()})";
+            return $"The complex number z is denoted as {operand.GetComplex()}. Write z in modulus-argument form (arguments in 3.d.p)";
         }
 
         public void SaveQuestion(string filename)
         {
-            using(StreamWriter sw = new StreamWriter(filename, append: true)) 
+            using(StreamWriter sw = new StreamWriter(filename))
             {
                 sw.WriteLine();
-                sw.WriteLine("Multiply2Complex");
-                sw.WriteLine(operand1.GetComplex());
-                sw.WriteLine(operand2.GetComplex());
+                sw.WriteLine("ModArg");
+                sw.WriteLine(operand.GetComplex());
             }
         }
     }
