@@ -6,38 +6,30 @@ using System.Text;
 using System.Threading.Tasks;
 using NEA.Number_Classes;
 
-namespace NEA.Questions.ModArgFormStuff
+namespace NEA.Questions.ModArg
 {
-    public class ModulusQuestion : IQuestion
+    public class ArgumentPowers : IQuestion
     {
         private Complex operand;
+        private int exponent;
+        private double answer;
 
-        private Number answer;
-
-        public ModulusQuestion()
+        public ArgumentPowers(int inexp)
         {
-            operand = new Complex(true);
+            operand = new Complex(false);
+            exponent = inexp;
             Calculate();
-        }
-
-        public ModulusQuestion(string filename)
-        {
-            if (GetQuestion(filename)) Calculate();
-            else
-            {
-                operand = new Complex(true);
-                Calculate();
-            }
         }
 
         public void Calculate()
         {
-            answer = operand.GetModulus();
+            double arg = operand.GetArgument();
+            answer =  Math.Round(arg * exponent,2);
         }
 
         public bool CheckAnswer(string answer)
         {
-            if (answer == this.answer.GetString())
+            if(answer == this.answer.ToString())
             {
                 return true;
             }
@@ -56,7 +48,7 @@ namespace NEA.Questions.ModArgFormStuff
                 {
                     string line;
                     line = sr.ReadLine();
-                    if (line == "Modulus" && !found)
+                    if (line == "ArgPow" && !found)
                     {
                         string number = null;
                         bool firstneg = true;
@@ -93,6 +85,7 @@ namespace NEA.Questions.ModArgFormStuff
                             }
                         }
                         operand = new Complex(realin, imagin);
+                        exponent = int.Parse(sr.ReadLine());
                         found = true;
                     }
                     else
@@ -112,23 +105,24 @@ namespace NEA.Questions.ModArgFormStuff
         {
             if (correct)
             {
-                return $"Correct!\nThe Answer is {answer.GetString()}";
+                return $"Correct!\nThe Answer is {answer}";
             }
-            return $"Incorrect!\nThe Answer was {answer.GetString()}";
+            return $"Incorrect!\nThe Answer was {answer}";
         }
 
         public string PrintQuestion()
         {
-            return $"The Complex number z is defined as {operand.GetComplex()}. Calculate |z|"; 
+            return $"The complex number Z is denoted as {operand.GetComplex()}.\nWithout calculating Z^5, Find arg(Z^5)";
         }
 
         public void SaveQuestion(string filename)
         {
-            using(StreamWriter sw = new StreamWriter(filename))
+            using (StreamWriter sw = new StreamWriter(filename))
             {
                 sw.WriteLine();
-                sw.WriteLine("Modulus");
+                sw.WriteLine("ArgPow");
                 sw.WriteLine(operand.GetComplex());
+                sw.WriteLine(exponent);
             }
         }
     }
