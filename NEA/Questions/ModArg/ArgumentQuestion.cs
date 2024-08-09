@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NEA.Number_Classes;
 
-namespace NEA.Questions
+namespace NEA.Questions.ModArg
 {
     public class ArgumentQuestion : IQuestion
     {

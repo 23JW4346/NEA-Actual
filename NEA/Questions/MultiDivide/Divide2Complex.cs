@@ -1,36 +1,62 @@
-﻿using NEA.Number_Classes;
-using System;
-using System.CodeDom;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using NEA.Number_Classes;
 
-namespace NEA.Questions
+namespace NEA.Questions.MultiDivide
 {
-    public class Multiply2Complex : IQuestion
+    public class Divide2Complex : IQuestion
     {
         private Complex operand1, operand2, answer;
 
-        public Multiply2Complex()
+        public Divide2Complex()
         {
             operand1 = new Complex(false);
             operand2 = new Complex(false);
             Calculate();
-
         }
-
-        public Multiply2Complex(string filename)
+        public Divide2Complex(string filename)
         {
             if (GetQuestion(filename)) Calculate();
+            else
+            {
+                operand1 = new Complex(false);
+                operand2 = new Complex(false);
+                Calculate();
+            }
         }
 
         public void Calculate()
         {
-            double realvalue = operand1.GetRealValue() * operand2.GetRealValue() - operand1.GetImaginaryValue() * operand2.GetImaginaryValue();
-            double imagvalue = operand1.GetRealValue() * operand2.GetImaginaryValue() + operand1.GetImaginaryValue() * operand2.GetRealValue();
-            answer = new Complex(realvalue, imagvalue);
+            Fraction real = new Fraction();
+            Fraction imaginary = new Fraction();
+            Complex conjugate = new Complex(operand2.GetRealValue(), -operand2.GetImaginaryValue());
+            double realtop = operand1.GetRealValue() * conjugate.GetRealValue() - operand1.GetImaginaryValue() * conjugate.GetImaginaryValue();
+            double imagtop = operand1.GetImaginaryValue() * conjugate.GetRealValue() + operand1.GetRealValue() * conjugate.GetImaginaryValue();
+            double bottom = operand2.GetRealValue() * conjugate.GetRealValue() - operand2.GetImaginaryValue() * conjugate.GetImaginaryValue();
+            if (!realtop.ToString().Contains('.') && !imagtop.ToString().Contains('.') && !bottom.ToString().Contains('.'))
+            {
+                real = new Fraction((int)realtop, (int)bottom);
+                imaginary = new Fraction((int)imagtop, (int)bottom);
+            }
+            else
+            {
+                bool loop = true;
+                do
+                {
+                    realtop *= bottom;
+                    imagtop *= bottom;
+                    bottom *= bottom;
+                    if (!realtop.ToString().Contains('.') && !imagtop.ToString().Contains('.') && !bottom.ToString().Contains('.')) loop = false;
+                } while (loop);  
+
+               
+            }
+            answer = new Complex(real, imaginary);
         }
 
         public bool CheckAnswer(string answer)
@@ -55,7 +81,7 @@ namespace NEA.Questions
                     string line;
                     line = sr.ReadLine();
 
-                    if (line == "Multiply2Complex" && !found)
+                    if (line == "Divide2Complex" && !found)
                     {
                         string number = null;
                         bool firstneg = true;
@@ -142,24 +168,24 @@ namespace NEA.Questions
 
         public string PrintAnswer(bool correct)
         {
-            if(correct)
+            if (correct)
             {
                 return $"Correct!\nThe Answer is {answer.GetComplex()}";
             }
             return $"Incorrect!\nThe Answer was {answer.GetComplex()}";
-        } 
+        }
 
         public string PrintQuestion()
         {
-            return $"Calculate ({operand1.GetComplex()})*({operand2.GetComplex()})";
+            return $"Find the Value of ({operand1.GetComplex()})/({operand2.GetComplex()}) in the form a+bi, where a and b can be written in fractions if needed (x/y)";
         }
 
         public void SaveQuestion(string filename)
         {
-            using(StreamWriter sw = new StreamWriter(filename, append: true)) 
+            using (StreamWriter sw = new StreamWriter(filename, append: true))
             {
                 sw.WriteLine();
-                sw.WriteLine("Multiply2Complex");
+                sw.WriteLine("Divide2Complex");
                 sw.WriteLine(operand1.GetComplex());
                 sw.WriteLine(operand2.GetComplex());
             }

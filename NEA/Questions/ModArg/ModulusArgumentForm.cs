@@ -6,21 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using NEA.Number_Classes;
 
-namespace NEA.Questions
+namespace NEA.Questions.ModArg
 {
-    public class ModulusQuestion : IQuestion
+    public class ModulusArgumentForm : IQuestion
     {
         private Complex operand;
 
-        private Number answer;
+        private string answer;
 
-        public ModulusQuestion()
+        public ModulusArgumentForm()
         {
             operand = new Complex(true);
             Calculate();
         }
 
-        public ModulusQuestion(string filename)
+        public ModulusArgumentForm(string filename)
         {
             if (GetQuestion(filename)) Calculate();
             else
@@ -32,12 +32,14 @@ namespace NEA.Questions
 
         public void Calculate()
         {
-            answer = operand.GetModulus();
+            string Modulus = operand.GetModulus().GetString();
+            string arg = operand.GetArgument().ToString();
+            answer = $"{Modulus}(cos({arg})+isin({arg}))";
         }
 
         public bool CheckAnswer(string answer)
         {
-            if (answer == this.answer.GetString())
+            if (answer == this.answer)
             {
                 return true;
             }
@@ -56,7 +58,7 @@ namespace NEA.Questions
                 {
                     string line;
                     line = sr.ReadLine();
-                    if (line == "Modulus" && !found)
+                    if (line == "ModArg" && !found)
                     {
                         string number = null;
                         bool firstneg = true;
@@ -112,22 +114,22 @@ namespace NEA.Questions
         {
             if (correct)
             {
-                return $"Correct!\nThe Answer is {answer.GetString()}";
+                return $"Correct!\nThe Answer is {answer}";
             }
-            return $"Incorrect!\nThe Answer was {answer.GetString()}";
+            return $"Incorrect!\nThe Answer was {answer}";
         }
 
         public string PrintQuestion()
         {
-            return $"The Complex number z is defined as {operand.GetComplex()}. Calculate |z|"; 
+            return $"The complex number z is denoted as {operand.GetComplex()}. Write z in modulus-argument form (arguments in 3.d.p)";
         }
 
         public void SaveQuestion(string filename)
         {
-            using(StreamWriter sw = new StreamWriter(filename))
+            using (StreamWriter sw = new StreamWriter(filename))
             {
                 sw.WriteLine();
-                sw.WriteLine("Modulus");
+                sw.WriteLine("ModArg");
                 sw.WriteLine(operand.GetComplex());
             }
         }
