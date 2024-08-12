@@ -5,7 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using NEA.Number_Classes;
-using NEA.Questions;
+using NEA.Questions.MultiDivide;
+using NEA.Questions.ModArg;
+using System.Reflection;
+
 
 namespace NEA
 {
@@ -154,18 +157,18 @@ namespace NEA
                 bool loop = true;
                 while (loop)
                 {
-                    switch (rnd.Next(1, 4))
+                    switch (2)
                     {
-                        case 1:
+                        case 0:
                             question = new Multiply2Complex();
+                            AskQuestion(question, ref loop);
+                            break;
+                        case 1:
+                            question = new MultiAlg();
                             AskQuestion(question, ref loop);
                             break;
                         case 2:
-                            question = new Multiply2Complex();
-                            AskQuestion(question, ref loop);
-                            break;
-                        case 3:
-                            question = new Multiply2Complex();
+                            question = new MultiAlg2();
                             AskQuestion(question, ref loop);
                             break;
 
@@ -181,6 +184,10 @@ namespace NEA
                     {
                         case 1:
                             question = new Divide2Complex();
+                            AskQuestion(question, ref loop);
+                            break;
+                        case 2:
+                            question = new DivAlg();
                             AskQuestion(question, ref loop);
                             break;
                     }

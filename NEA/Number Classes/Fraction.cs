@@ -16,6 +16,7 @@ namespace NEA.Number_Classes
         {
             numerator = innum;
             denominator = inden;
+            if (denominator == 0) denominator = 1;
             if ((numerator < 0 && denominator > 0) ||
                 (numerator > 0 && denominator < 0))
             {

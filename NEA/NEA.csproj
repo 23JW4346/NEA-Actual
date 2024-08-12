@@ -50,6 +50,9 @@
     <Compile Include="Questions\ModArg\ModulusArgumentForm.cs" />
     <Compile Include="Questions\ModArg\ModulusPowers.cs" />
     <Compile Include="Questions\ModArg\ModulusQuestion.cs" />
+    <Compile Include="Questions\MultiDivide\DivAlg.cs" />
+    <Compile Include="Questions\MultiDivide\MultiAlg.cs" />
+    <Compile Include="Questions\MultiDivide\MultiAlg2.cs" />
     <Compile Include="Questions\MultiDivide\Multiply2Complex.cs" />
     <Compile Include="Questions\MultiDivide\Divide2Complex.cs" />
     <Compile Include="Number Classes\Complex.cs" />
