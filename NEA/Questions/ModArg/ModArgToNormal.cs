@@ -2,35 +2,30 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using NEA.Number_Classes;
 
 namespace NEA.Questions.ModArg
 {
-    public class ModulusPowers : IQuestion
+    public class ModArgToNormal : IQuestion
     {
-        private Complex operand;
-        private int exponent;
+        private Complex answer;
 
-        private int answer;
-
-        public ModulusPowers(int inexp)
+        public ModArgToNormal()
         {
-            operand = new Complex(true);
-            exponent = inexp;
-            Calculate();
+            answer = new Complex(true);
         }
 
         public void Calculate()
         {
-            answer = (int)Math.Pow(operand.GetModulus().GetValue(),exponent);
+            throw new NotImplementedException();
         }
 
         public bool CheckAnswer(string answer)
         {
-            if(answer == this.answer.ToString())
+            if (answer == this.answer.GetComplex())
             {
                 return true;
             }
@@ -40,16 +35,16 @@ namespace NEA.Questions.ModArg
 
         public bool GetQuestion(string filename)
         {
-            bool found = false;
-            string tempfile = Path.GetTempFileName();
-            using (StreamReader sr = new StreamReader(filename))
-            using (StreamWriter sw = new StreamWriter(tempfile))
-            {
+             bool found = false;
+             string tempfile = Path.GetTempFileName();
+             using (StreamReader sr = new StreamReader(filename))
+             using (StreamWriter sw = new StreamWriter(tempfile))
+             {
                 while (!sr.EndOfStream)
                 {
                     string line;
                     line = sr.ReadLine();
-                    if (line == "ModPow" && !found)
+                    if (line == "ModArgToNormal" && !found)
                     {
                         string number = null;
                         bool firstneg = true;
@@ -85,8 +80,7 @@ namespace NEA.Questions.ModArg
                                 number = null;
                             }
                         }
-                        operand = new Complex(realin, imagin);
-                        exponent = int.Parse(sr.ReadLine());
+                        answer = new Complex(realin, imagin);
                         found = true;
                     }
                     else
@@ -111,24 +105,24 @@ namespace NEA.Questions.ModArg
         {
             if (correct)
             {
-                return $"Correct!\nThe Answer is {answer}";
+                return $"Correct!\nThe Answer is {answer.GetComplex()}";
             }
-            return $"Incorrect!\nThe Answer was {answer}";
+            return $"Incorrect!\nThe Answer was {answer.GetComplex()}";
         }
 
         public string PrintQuestion()
         {
-            return $"The complex number Z is denoted as {operand.GetComplex()}.\nWithout calculating Z^5, Find|Z^5|";
+            return $"The complex number z has a modulus of {answer.GetModulus().GetValue()} and an argument of {answer.GetArgument()}\n" +
+                $"calculate z in the form a+bi, where a and b are real";
         }
 
         public void SaveQuestion(string filename)
         {
-            using(StreamWriter sw = new StreamWriter(filename))
+            using (StreamWriter sw = new StreamWriter(filename))
             {
                 sw.WriteLine();
-                sw.WriteLine("ModPow");
-                sw.WriteLine(operand.GetComplex());
-                sw.WriteLine(exponent);
+                sw.WriteLine("ModArgToNormal");
+                sw.WriteLine(answer.GetComplex());
             }
         }
     }

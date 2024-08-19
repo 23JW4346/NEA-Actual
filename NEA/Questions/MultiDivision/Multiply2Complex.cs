@@ -1,55 +1,36 @@
-﻿using System;
+﻿using NEA.Number_Classes;
+using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NEA.Number_Classes;
 
-namespace NEA.Questions.MultiDivide
+namespace NEA.Questions.MultiDivision
 {
-    public class DivAlg : IQuestion
+    public class Multiply2Complex : IQuestion
     {
         private Complex operand1, operand2, answer;
-        private int a;
 
-        public DivAlg()
+        public Multiply2Complex()
         {
             operand1 = new Complex(false);
-            answer = new Complex(false);
+            operand2 = new Complex(false);
             Calculate();
+
         }
 
-        public DivAlg(string filename)
+        public Multiply2Complex(string filename)
         {
-            if(GetQuestion(filename)) Calculate();
-            else
-            {
-                operand1 = new Complex(false);
-                answer = new Complex(false);
-                Calculate();
-            }
-
+            if (GetQuestion(filename)) Calculate();
         }
-
 
         public void Calculate()
         {
-            double realvalue = operand1.GetRealValue() * answer.GetRealValue() - operand1.GetImaginaryValue() * answer.GetImaginaryValue();
-            double imagvalue = operand1.GetRealValue() * answer.GetImaginaryValue() + operand1.GetImaginaryValue() * answer.GetRealValue();
-            a = 1;
-            int loop = (int)realvalue;
-            if (imagvalue < realvalue) loop = (int)imagvalue;
-            for (int i = 1; i <= loop; i++)
-            {
-                if ((int)realvalue % i == 0 && (int)imagvalue % i == 0)
-                {
-                    a = i;
-                }
-            }
-            Fraction real = new Fraction((int)realvalue, a);
-            Fraction imag = new Fraction((int)imagvalue, a);
-            operand2 = new Complex(real, imag);
+            double realvalue = operand1.GetRealValue() * operand2.GetRealValue() - operand1.GetImaginaryValue() * operand2.GetImaginaryValue();
+            double imagvalue = operand1.GetRealValue() * operand2.GetImaginaryValue() + operand1.GetImaginaryValue() * operand2.GetRealValue();
+            answer = new Complex(realvalue, imagvalue);
         }
 
         public bool CheckAnswer(string answer)
@@ -74,7 +55,7 @@ namespace NEA.Questions.MultiDivide
                     string line;
                     line = sr.ReadLine();
 
-                    if (line == "DivAlg" && !found)
+                    if (line == "Multiply2Complex" && !found)
                     {
                         string number = null;
                         bool firstneg = true;
@@ -143,7 +124,7 @@ namespace NEA.Questions.MultiDivide
                                 number = null;
                             }
                         }
-                        answer = new Complex(realin, imagin);
+                        this.operand2 = new Complex(realin, imagin);
                         found = true;
                     }
                     else
@@ -159,34 +140,28 @@ namespace NEA.Questions.MultiDivide
             return found;
         }
 
-        public void LoadDiagram()
-        {
-            throw new NotImplementedException();
-        }
-
         public string PrintAnswer(bool correct)
         {
-            if (correct)
+            if(correct)
             {
                 return $"Correct!\nThe Answer is {answer.GetComplex()}";
             }
             return $"Incorrect!\nThe Answer was {answer.GetComplex()}";
-        }
+        } 
 
         public string PrintQuestion()
         {
-            if(a != 1) return $"The complex number z satisfies the equation z({operand1.GetComplex()}) = {a}({operand2.GetComplex()})\nDetermine z, giving your answer in the form a+bi, where a and b are real";
-            return $"The complex number z satisfies the equation z({operand1.GetComplex()}) = ({operand2.GetComplex()})\nDetermine z, giving your answer in the form a+bi, where a and b are real";
+            return $"Calculate ({operand1.GetComplex()})*({operand2.GetComplex()})";
         }
 
         public void SaveQuestion(string filename)
         {
-            using(StreamWriter sw = new StreamWriter(filename))
+            using(StreamWriter sw = new StreamWriter(filename, append: true)) 
             {
                 sw.WriteLine();
-                sw.WriteLine("DivAlg");
+                sw.WriteLine("Multiply2Complex");
                 sw.WriteLine(operand1.GetComplex());
-                sw.WriteLine(answer.GetComplex());
+                sw.WriteLine(operand2.GetComplex());
             }
         }
     }

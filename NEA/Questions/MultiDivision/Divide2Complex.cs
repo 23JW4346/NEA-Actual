@@ -2,54 +2,55 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using NEA.Number_Classes;
 
-namespace NEA.Questions.MultiDivide
+namespace NEA.Questions.MultiDivision
 {
-    public class DivAlg : IQuestion
+    public class Divide2Complex : IQuestion
     {
         private Complex operand1, operand2, answer;
-        private int a;
 
-        public DivAlg()
+        public Divide2Complex()
         {
             operand1 = new Complex(false);
-            answer = new Complex(false);
+            operand2 = new Complex(false);
             Calculate();
         }
-
-        public DivAlg(string filename)
+        public Divide2Complex(string filename)
         {
-            if(GetQuestion(filename)) Calculate();
-            else
-            {
-                operand1 = new Complex(false);
-                answer = new Complex(false);
-                Calculate();
-            }
-
+            if (GetQuestion(filename)) Calculate();
         }
-
 
         public void Calculate()
         {
-            double realvalue = operand1.GetRealValue() * answer.GetRealValue() - operand1.GetImaginaryValue() * answer.GetImaginaryValue();
-            double imagvalue = operand1.GetRealValue() * answer.GetImaginaryValue() + operand1.GetImaginaryValue() * answer.GetRealValue();
-            a = 1;
-            int loop = (int)realvalue;
-            if (imagvalue < realvalue) loop = (int)imagvalue;
-            for (int i = 1; i <= loop; i++)
+            Fraction real = new Fraction();
+            Fraction imaginary = new Fraction();
+            Complex conjugate = new Complex(operand2.GetRealValue(), -operand2.GetImaginaryValue());
+            double realtop = operand1.GetRealValue() * conjugate.GetRealValue() - operand1.GetImaginaryValue() * conjugate.GetImaginaryValue();
+            double imagtop = operand1.GetImaginaryValue() * conjugate.GetRealValue() + operand1.GetRealValue() * conjugate.GetImaginaryValue();
+            double bottom = operand2.GetRealValue() * conjugate.GetRealValue() - operand2.GetImaginaryValue() * conjugate.GetImaginaryValue();
+            if (!realtop.ToString().Contains('.') && !imagtop.ToString().Contains('.') && !bottom.ToString().Contains('.'))
             {
-                if ((int)realvalue % i == 0 && (int)imagvalue % i == 0)
-                {
-                    a = i;
-                }
+                real = new Fraction((int)realtop, (int)bottom);
+                imaginary = new Fraction((int)imagtop, (int)bottom);
             }
-            Fraction real = new Fraction((int)realvalue, a);
-            Fraction imag = new Fraction((int)imagvalue, a);
-            operand2 = new Complex(real, imag);
+            else
+            {
+                bool loop = true;
+                do
+                {
+                    realtop *= bottom;
+                    imagtop *= bottom;
+                    bottom *= bottom;
+                    if (!realtop.ToString().Contains('.') && !imagtop.ToString().Contains('.') && !bottom.ToString().Contains('.')) loop = false;
+                } while (loop);  
+
+               
+            }
+            answer = new Complex(real, imaginary);
         }
 
         public bool CheckAnswer(string answer)
@@ -74,7 +75,7 @@ namespace NEA.Questions.MultiDivide
                     string line;
                     line = sr.ReadLine();
 
-                    if (line == "DivAlg" && !found)
+                    if (line == "Divide2Complex" && !found)
                     {
                         string number = null;
                         bool firstneg = true;
@@ -143,7 +144,7 @@ namespace NEA.Questions.MultiDivide
                                 number = null;
                             }
                         }
-                        answer = new Complex(realin, imagin);
+                        this.operand2 = new Complex(realin, imagin);
                         found = true;
                     }
                     else
@@ -159,11 +160,6 @@ namespace NEA.Questions.MultiDivide
             return found;
         }
 
-        public void LoadDiagram()
-        {
-            throw new NotImplementedException();
-        }
-
         public string PrintAnswer(bool correct)
         {
             if (correct)
@@ -175,18 +171,17 @@ namespace NEA.Questions.MultiDivide
 
         public string PrintQuestion()
         {
-            if(a != 1) return $"The complex number z satisfies the equation z({operand1.GetComplex()}) = {a}({operand2.GetComplex()})\nDetermine z, giving your answer in the form a+bi, where a and b are real";
-            return $"The complex number z satisfies the equation z({operand1.GetComplex()}) = ({operand2.GetComplex()})\nDetermine z, giving your answer in the form a+bi, where a and b are real";
+            return $"Find the Value of ({operand1.GetComplex()})/({operand2.GetComplex()}) in the form a+bi, where a and b can be written in fractions if needed (x/y)";
         }
 
         public void SaveQuestion(string filename)
         {
-            using(StreamWriter sw = new StreamWriter(filename))
+            using (StreamWriter sw = new StreamWriter(filename, append: true))
             {
                 sw.WriteLine();
-                sw.WriteLine("DivAlg");
+                sw.WriteLine("Divide2Complex");
                 sw.WriteLine(operand1.GetComplex());
-                sw.WriteLine(answer.GetComplex());
+                sw.WriteLine(operand2.GetComplex());
             }
         }
     }

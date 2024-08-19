@@ -8,7 +8,6 @@ namespace NEA
 {
     public interface IQuestion
     {
-
         string PrintQuestion();
 
         void Calculate();
@@ -20,5 +19,7 @@ namespace NEA
         void SaveQuestion(string filename);
 
         bool GetQuestion(string filename);
+
+        void LoadDiagram();
     }
 }

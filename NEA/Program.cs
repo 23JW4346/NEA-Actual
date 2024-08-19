@@ -7,6 +7,8 @@ using System.IO;
 using NEA.Number_Classes;
 using NEA.Questions.MultiDivide;
 using NEA.Questions.ModArg;
+using NEA.Questions.Loci;
+using System.Windows.Forms;
 using System.Reflection;
 
 
@@ -18,6 +20,11 @@ namespace NEA
 
         static void Main(string[] args)
         {
+            ModulusGraph d = new ModulusGraph(new Complex(2, 2), 2);
+            Application.Run(d);
+
+
+
             Menu();
         }
 
@@ -86,6 +93,7 @@ namespace NEA
             Console.WriteLine("  Complex Number Division");
             Console.WriteLine("  Modulus Argument Form");
             Console.WriteLine("  Finding Roots of a polynomial");
+            Console.WriteLine("  Complex Loci");
             Console.WriteLine("  Main Menu");
             Console.CursorLeft = 1;
             Console.CursorTop = 1;
@@ -115,6 +123,10 @@ namespace NEA
                             GenerateQs(questionSet);
                             break;
                         case 5:
+                            questionSet = 5;
+                            GenerateQs(questionSet);
+                            break;
+                        case 6:
                             exit = false;
                             break;
 
@@ -125,12 +137,13 @@ namespace NEA
                     Console.WriteLine("  Complex Number Division");
                     Console.WriteLine("  Modulus Argument Form");
                     Console.WriteLine("  Finding Roots of a polynomial");
+                    Console.WriteLine("  Complex Loci");
                     Console.WriteLine("  Main Menu");
                     Console.CursorLeft = 1;
                     Console.CursorTop = 1;
 
                 }
-                else if (choice.Key == ConsoleKey.DownArrow && Console.CursorTop != 5)
+                else if (choice.Key == ConsoleKey.DownArrow && Console.CursorTop != 6)
                 {
                     Console.CursorLeft = 0;
                     Console.Write(" ");
@@ -157,18 +170,39 @@ namespace NEA
                 bool loop = true;
                 while (loop)
                 {
-                    switch (2)
+                    switch (rnd.Next(3))
                     {
                         case 0:
-                            question = new Multiply2Complex();
+                            if (rnd.Next(1, 16) == 1)
+                            {
+                                question = new Multiply2Complex("Questions.txt");
+                            }
+                            else
+                            {
+                                question = new Multiply2Complex();
+                            }
                             AskQuestion(question, ref loop);
                             break;
                         case 1:
-                            question = new MultiAlg();
+                            if (rnd.Next(1, 16) == 1)
+                            {
+                                question = new MultiAlg("Questions.txt");
+                            }
+                            else
+                            {
+                                question = new MultiAlg();
+                            }
                             AskQuestion(question, ref loop);
                             break;
                         case 2:
-                            question = new MultiAlg2();
+                            if (rnd.Next(1, 16) == 1)
+                            {
+                                question = new MultiAlg2("Questions.txt");
+                            }
+                            else
+                            {
+                                question = new MultiAlg2();
+                            }
                             AskQuestion(question, ref loop);
                             break;
 
@@ -183,11 +217,25 @@ namespace NEA
                     switch (rnd.Next(1, 4))
                     {
                         case 1:
-                            question = new Divide2Complex();
+                            if (rnd.Next(1, 16) == 1)
+                            {
+                                question = new Divide2Complex("Questions.txt");
+                            }
+                            else
+                            {
+                                question = new Divide2Complex();
+                            }
                             AskQuestion(question, ref loop);
                             break;
                         case 2:
-                            question = new DivAlg();
+                            if (rnd.Next(1, 16) == 1)
+                            {
+                                question = new DivAlg("Questions.txt");
+                            }
+                            else
+                            {
+                                question = new DivAlg();
+                            }
                             AskQuestion(question, ref loop);
                             break;
                     }
@@ -243,6 +291,40 @@ namespace NEA
                     }
                 }
             }
+            else if (questionSet == 5)
+            {
+                bool loop = true;
+                while (loop)
+                {
+                    switch (rnd.Next(0, 3))
+                    {
+                        case 0:
+                            if (rnd.Next(1, 16)== 1)
+                            {
+                                question = new ArgtoCartesian(rnd);
+                            }
+                            else
+                            {
+                                question = new ArgtoCartesian(rnd);
+                            }
+                            AskQuestion(question, ref loop);
+                            break;
+                        case 1:
+                            if (rnd.Next(1, 16) == 1)
+                            {
+                                question = new ArgGraph(rnd);
+                            }
+                            else
+                            {
+                                question = new ArgGraph(rnd);
+                            }
+                            AskQuestion(question, ref loop);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
         }
 
         static void AskQuestion(IQuestion question, ref bool loop)
@@ -250,11 +332,19 @@ namespace NEA
             Console.Clear();
             string ans;
             Console.WriteLine(question.PrintQuestion());
-            question.Calculate();
             Console.WriteLine();
             Console.Write("Answer: ");
-            ans = Console.ReadLine();
-            Console.WriteLine();
+            try
+            {
+                question.LoadDiagram();
+                ans = Console.ReadLine();
+                Console.WriteLine();
+            }
+            catch (NotImplementedException)
+            {
+                ans = Console.ReadLine();
+                Console.WriteLine();
+            }
             if (question.CheckAnswer(ans))
             {
                 Console.WriteLine(question.PrintAnswer(true));

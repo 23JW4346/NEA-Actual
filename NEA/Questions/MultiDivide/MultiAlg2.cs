@@ -21,6 +21,17 @@ namespace NEA.Questions.MultiDivide
             Calculate();
         }
 
+        public MultiAlg2(string filename)
+        {
+            if (GetQuestion(filename)) Calculate();
+            else
+            {
+                Z = new Complex(false);
+                Zconjagute = new Complex(Z.GetRealValue(), -Z.GetImaginaryValue());
+                operand = new Complex(false);
+            }
+        }
+
         public void Calculate()
         {
             int realpart = (int)(operand.GetRealValue() * Zconjagute.GetRealValue() - operand.GetImaginaryValue() * Zconjagute.GetImaginaryValue());
@@ -39,6 +50,11 @@ namespace NEA.Questions.MultiDivide
         }
 
         public bool GetQuestion(string filename)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LoadDiagram()
         {
             throw new NotImplementedException();
         }

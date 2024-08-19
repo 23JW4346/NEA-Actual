@@ -108,6 +108,11 @@ namespace NEA.Questions.ModArg
             return found;
         }
 
+        public void LoadDiagram()
+        {
+            throw new NotImplementedException();
+        }
+
         public string PrintAnswer(bool correct)
         {
             if (correct)
