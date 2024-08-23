@@ -36,31 +36,32 @@ namespace NEA.Questions.Loci
 
         public void Calculate()
         {
+            Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
             string xpart, ypart;
             int radius = modulus * modulus;
-            if (operand.GetRealValue() < 0)
+            if (temp.GetRealValue() < 0)
             {
-                xpart = $"(x{operand.GetRealValue()})^2";
+                xpart = $"(x{temp.GetReal()})^2";
             }
-            else if (operand.GetRealValue() == 0)
+            else if (temp.GetRealValue() == 0)
             {
                 xpart = "x^2";
             }
             else
             {
-                xpart =  $"(x+{operand.GetRealValue()})^2";
+                xpart =  $"(x+{temp.GetReal()})^2";
             }
-            if (operand.GetImaginaryValue() < 0)
+            if (temp.GetImaginaryValue() < 0)
             {
-                ypart = $"(y{operand.GetImaginaryValue()})^2";
+                ypart = $"(y{temp.GetImaginaryValue()})^2";
             }
-            else if (operand.GetImaginaryValue() == 0)
+            else if (temp.GetImaginaryValue() == 0)
             {
                 ypart = "y^2";
             }
             else
             {
-                ypart = $"(y-{operand.GetImaginaryValue()})^2";
+                ypart = $"(y+{-temp.GetImaginaryValue()})^2";
             }
             answer = $"{xpart}+{ypart}={radius}";
         }

@@ -296,8 +296,7 @@ namespace NEA
                         case 0:
                             if (rnd.Next(1, 16)== 1)
                             {
-                                question = new ArgtoCartesian("Questions.txt", 
-                                    rnd);
+                                question = new ArgtoCartesian("Questions.txt", rnd);
                             }
                             else
                             {

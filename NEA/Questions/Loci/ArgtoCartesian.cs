@@ -16,8 +16,8 @@ namespace NEA.Questions.Loci
         private Complex operand;
         private Fraction argument;
         private string loci, answer;
-        private double step, grad;
-        private bool isleft, isup;
+        private double step;
+        private bool isleft;
         private ArgumentGraph diagram;
         private (int, int)[] fractions = { (1, 6), (1, 4), (1, 3), (2, 3), (3, 4), (5, 6) };
         private double[] steps = { 0.5, 1, 2, -2, -1, -0.5 };
@@ -37,13 +37,11 @@ namespace NEA.Questions.Loci
                 }
                 else loci = $"arg(z+{conj.GetComplex()})={argument.GetString()}π";
                 step = steps[rand];
-                grad = step;
                 if (argument.GetValue() >= 1 / 2)
                 {
                     isleft = true;
                 }
                 else isleft = false;
-                isup = true;
             }
             else
             {
@@ -54,14 +52,12 @@ namespace NEA.Questions.Loci
                     loci = $"arg(z{conj.GetComplex()})={argument.GetString()}π";
                 }
                 else loci = $"arg(z+{conj.GetComplex()})={argument.GetString()}π";
-                step = steps[rand];
-                grad = -step;
+                step = -steps[rand];
                 if (argument.GetValue() <= -1 / 2)
                 {
                     isleft = true;
                 }
                 else isleft = false;
-                isup = false;
             }
             Calculate();
         }
@@ -74,15 +70,12 @@ namespace NEA.Questions.Loci
                 if (argument.GetNegative())
                 {
                     Fraction temp = new Fraction((int)-argument.GetTop(), (int)argument.GetBottom());
-                    step = steps[Array.IndexOf(fractions, (temp.GetTop(), temp.GetBottom()))];
-                    grad = -step;
-                    isup = false;
+                    argument = temp; 
+                    step = -steps[Array.IndexOf(fractions, (temp.GetTop(), temp.GetBottom()))];
                 }
                 else
                 {
                     step = steps[Array.IndexOf(fractions, (argument.GetTop(), argument.GetBottom()))];
-                    grad = step;
-                    isup = true;
                 }
                 if (inanswer.GetComplex()[0] == '-')
                 {
@@ -108,7 +101,6 @@ namespace NEA.Questions.Loci
                     }
                     else loci = $"arg(z+{conj.GetComplex()})={argument.GetString()}π";
                     step = steps[rand];
-                    grad = step;
                     if (argument.GetValue() >= 1 / 2)
                     {
                         isleft = true;
@@ -124,8 +116,7 @@ namespace NEA.Questions.Loci
                         loci = $"arg(z{conj.GetComplex()})={argument.GetString()}π";
                     }
                     else loci = $"arg(z+{conj.GetComplex()})={argument.GetString()}π";
-                    step = steps[rand];
-                    grad = -step;
+                    step = -steps[rand];
                     if (argument.GetValue() <= -1 / 2)
                     {
                         isleft = true;
@@ -139,13 +130,13 @@ namespace NEA.Questions.Loci
         public void Calculate()
         {
             double yint = step*-operand.GetRealValue() + operand.GetImaginaryValue();
-            if (grad == 0.5 || grad == -0.5)
+            if (step == 0.5 || step == -0.5)
             {
-                answer += "y=" + grad * 2 + "/2x";
+                answer += "y=" + step * 2 + "/2x";
             }
-            else if (grad == 1) answer += "y=x";
+            else if (step == 1) answer += "y=x";
             else if (step == -1) answer += "y=-x";
-            else answer += "y=" + grad + "x";
+            else answer += "y=" + step + "x";
             if (yint != 0)
             {
                 string yint2;
@@ -251,7 +242,7 @@ namespace NEA.Questions.Loci
         }
         public void LoadDiagram()
         {
-            diagram = new ArgumentGraph(step, operand, isleft, isup);
+            diagram = new ArgumentGraph(step, operand, isleft);
             Application.Run(diagram);
         }
 
