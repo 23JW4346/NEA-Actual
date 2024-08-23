@@ -1,36 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using NEA.Number_Classes;
+using System.Windows.Forms;
+using System.IO;
 
-namespace NEA.Questions.ModArg
+namespace NEA.Questions.Loci
 {
-    public class ModulusPowers : IQuestion
+    public class ModToCartesian : IQuestion
     {
         private Complex operand;
-        private int exponent;
+        private string loci;
+        private string answer;
+        private int modulus;
+        private ModulusGraph diagram;
 
-        private int answer;
-
-        public ModulusPowers(int inexp)
+        public ModToCartesian(Random rnd)
         {
-            operand = new Complex(true);
-            exponent = inexp;
+            operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+            while(operand.GetComplex() == "") operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+            Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
+            modulus = rnd.Next(1, 6);
+            if (temp.GetComplex()[0] == '-')
+            {
+                loci = $"|z{temp.GetComplex()}|={modulus}";
+            }
+            else
+            {
+                loci = $"|z+{temp.GetComplex()}|={modulus}";
+            }
             Calculate();
         }
 
         public void Calculate()
         {
-            answer = (int)Math.Pow(operand.GetModulus().GetValue(),exponent);
+            string xpart, ypart;
+            int radius = modulus * modulus;
+            if (operand.GetRealValue() < 0)
+            {
+                xpart = $"(x{operand.GetRealValue()})^2";
+            }
+            else if (operand.GetRealValue() == 0)
+            {
+                xpart = "x^2";
+            }
+            else
+            {
+                xpart =  $"(x+{operand.GetRealValue()})^2";
+            }
+            if (operand.GetImaginaryValue() < 0)
+            {
+                ypart = $"(y{operand.GetImaginaryValue()})^2";
+            }
+            else if (operand.GetImaginaryValue() == 0)
+            {
+                ypart = "y^2";
+            }
+            else
+            {
+                ypart = $"(y-{operand.GetImaginaryValue()})^2";
+            }
+            answer = $"{xpart}+{ypart}={radius}";
         }
 
         public bool CheckAnswer(string answer)
         {
-            if(answer == this.answer.ToString())
+            if (answer == this.answer)
             {
                 return true;
             }
@@ -49,7 +86,7 @@ namespace NEA.Questions.ModArg
                 {
                     string line;
                     line = sr.ReadLine();
-                    if (line == "ModPow" && !found)
+                    if (line == "ModArg" && !found)
                     {
                         string number = null;
                         bool firstneg = true;
@@ -86,7 +123,7 @@ namespace NEA.Questions.ModArg
                             }
                         }
                         operand = new Complex(realin, imagin);
-                        exponent = int.Parse(sr.ReadLine());
+                        modulus = int.Parse(sr.ReadLine());
                         found = true;
                     }
                     else
@@ -104,7 +141,8 @@ namespace NEA.Questions.ModArg
 
         public void LoadDiagram()
         {
-            throw new NotImplementedException();
+            diagram = new ModulusGraph(operand, modulus);
+            Application.Run(diagram);
         }
 
         public string PrintAnswer(bool correct)
@@ -118,7 +156,7 @@ namespace NEA.Questions.ModArg
 
         public string PrintQuestion()
         {
-            return $"The complex number Z is denoted as {operand.GetComplex()}.\nWithout calculating Z^5, Find|Z^5|";
+            return $"Write This Loci {loci} in Cartesian Form (as a circle)";
         }
 
         public void SaveQuestion(string filename)
@@ -126,9 +164,10 @@ namespace NEA.Questions.ModArg
             using (StreamWriter sw = new StreamWriter(filename, true))
             {
                 sw.WriteLine();
-                sw.WriteLine("ModPow");
+                sw.WriteLine("ModToCart");
                 sw.WriteLine(operand.GetComplex());
-                sw.WriteLine(exponent);
+                sw.WriteLine(modulus);
+
             }
         }
     }

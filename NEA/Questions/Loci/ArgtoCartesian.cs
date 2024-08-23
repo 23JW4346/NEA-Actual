@@ -16,8 +16,8 @@ namespace NEA.Questions.Loci
         private Complex operand;
         private Fraction argument;
         private string loci, answer;
-        private double step;
-        private bool isleft;
+        private double step, grad;
+        private bool isleft, isup;
         private ArgumentGraph diagram;
         private (int, int)[] fractions = { (1, 6), (1, 4), (1, 3), (2, 3), (3, 4), (5, 6) };
         private double[] steps = { 0.5, 1, 2, -2, -1, -0.5 };
@@ -37,11 +37,13 @@ namespace NEA.Questions.Loci
                 }
                 else loci = $"arg(z+{conj.GetComplex()})={argument.GetString()}π";
                 step = steps[rand];
+                grad = step;
                 if (argument.GetValue() >= 1 / 2)
                 {
                     isleft = true;
                 }
                 else isleft = false;
+                isup = true;
             }
             else
             {
@@ -52,25 +54,98 @@ namespace NEA.Questions.Loci
                     loci = $"arg(z{conj.GetComplex()})={argument.GetString()}π";
                 }
                 else loci = $"arg(z+{conj.GetComplex()})={argument.GetString()}π";
-                step = -steps[rand];
+                step = steps[rand];
+                grad = -step;
                 if (argument.GetValue() <= -1 / 2)
                 {
                     isleft = true;
                 }
                 else isleft = false;
+                isup = false;
             }
             Calculate();
         }
+
+        public ArgtoCartesian(string filename, Random rnd)
+        {
+            if (GetQuestion(filename))
+            {
+                Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
+                if (argument.GetNegative())
+                {
+                    Fraction temp = new Fraction((int)-argument.GetTop(), (int)argument.GetBottom());
+                    step = steps[Array.IndexOf(fractions, (temp.GetTop(), temp.GetBottom()))];
+                    grad = -step;
+                    isup = false;
+                }
+                else
+                {
+                    step = steps[Array.IndexOf(fractions, (argument.GetTop(), argument.GetBottom()))];
+                    grad = step;
+                    isup = true;
+                }
+                if (inanswer.GetComplex()[0] == '-')
+                {
+                    answer = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
+                }
+                else answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
+                if (argument.GetNegative() && argument.GetValue() <= 1 / 2) isleft = true;
+                else if (argument.GetValue() >= 1 / 2) isleft = true;
+                else isleft = false;
+            }
+            else
+            {
+                operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+                Complex conj = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
+                while (operand.GetComplex() == null) operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+                if (rnd.Next(2) == 1)
+                {
+                    int rand = rnd.Next(fractions.Length);
+                    argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
+                    if (conj.GetComplex()[0] == '-')
+                    {
+                        loci = $"arg(z{conj.GetComplex()})={argument.GetString()}π";
+                    }
+                    else loci = $"arg(z+{conj.GetComplex()})={argument.GetString()}π";
+                    step = steps[rand];
+                    grad = step;
+                    if (argument.GetValue() >= 1 / 2)
+                    {
+                        isleft = true;
+                    }
+                    else isleft = false;
+                }
+                else
+                {
+                    int rand = rnd.Next(fractions.Length);
+                    argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
+                    if (conj.GetComplex()[0] == '-')
+                    {
+                        loci = $"arg(z{conj.GetComplex()})={argument.GetString()}π";
+                    }
+                    else loci = $"arg(z+{conj.GetComplex()})={argument.GetString()}π";
+                    step = steps[rand];
+                    grad = -step;
+                    if (argument.GetValue() <= -1 / 2)
+                    {
+                        isleft = true;
+                    }
+                    else isleft = false;
+                }
+            }
+            Calculate();
+        }
+
         public void Calculate()
         {
             double yint = step*-operand.GetRealValue() + operand.GetImaginaryValue();
-            if (step == 0.5 || step == -0.5)
+            if (grad == 0.5 || grad == -0.5)
             {
-                answer += "y=" + step * 2 + "/2x";
+                answer += "y=" + grad * 2 + "/2x";
             }
-            else if (step == 1) answer += "y=x";
+            else if (grad == 1) answer += "y=x";
             else if (step == -1) answer += "y=-x";
-            else answer += "y=" + step + "x";
+            else answer += "y=" + grad + "x";
             if (yint != 0)
             {
                 string yint2;
@@ -97,7 +172,68 @@ namespace NEA.Questions.Loci
 
         public bool GetQuestion(string filename)
         {
-            throw new NotImplementedException();
+            bool found = false;
+            string tempfile = Path.GetTempFileName();
+            using (StreamReader sr = new StreamReader(filename))
+            using (StreamWriter sw = new StreamWriter(tempfile))
+            {
+                while (!sr.EndOfStream)
+                {
+                    string line;
+                    line = sr.ReadLine();
+                    if (line == "Modulus" && !found)
+                    {
+                        string number = null;
+                        bool firstneg = true;
+                        double realin = 0, imagin = 0;
+                        string operand1 = sr.ReadLine();
+                        for (int i = 0; i < operand1.Length; i++)
+                        {
+                            if (Char.IsNumber(operand1[i]))
+                            {
+                                number += operand1[i];
+                            }
+                            if (operand1[i] == '-')
+                            {
+                                if (firstneg && number.Length < 1)
+                                {
+                                    number += operand1[i];
+                                    firstneg = false;
+                                }
+                                else
+                                {
+                                    realin = double.Parse(number);
+                                    number = "-";
+                                }
+                            }
+                            else if (operand1[i] == 'i')
+                            {
+                                imagin = double.Parse(number);
+                                break;
+                            }
+                            else if (operand1[i] == '+')
+                            {
+                                realin = double.Parse(number);
+                                number = null;
+                            }
+                        }
+                        operand = new Complex(realin, imagin);
+                        found = true;
+                        string fract = sr.ReadLine();
+                        string[] numbers = fract.Trim().Split('/');
+                        argument = new Fraction(int.Parse(numbers[0]), int.Parse(numbers[1]));
+                    }
+                    else
+                    {
+                        sw.WriteLine(line);
+                    }
+                }
+                sr.Close();
+                sw.Close();
+            }
+            File.Delete(filename);
+            File.Move(tempfile, filename);
+            return found;
         }
 
         public string PrintAnswer(bool correct)
@@ -111,18 +247,17 @@ namespace NEA.Questions.Loci
 
         public string PrintQuestion()
         {
-            string output = $"Write This Loci ({loci}) in Cartesian Form (y=mx+c)";
-            return output;
+            return $"Write This Loci {loci} in Cartesian Form (y=mx+c)";
         }
         public void LoadDiagram()
         {
-            diagram = new ArgumentGraph(step, operand, isleft);
+            diagram = new ArgumentGraph(step, operand, isleft, isup);
             Application.Run(diagram);
         }
 
         public void SaveQuestion(string filename)
         {
-            using(StreamWriter sw = new StreamWriter(filename))
+            using(StreamWriter sw = new StreamWriter(filename, true))
             {
                 sw.WriteLine();
                 sw.WriteLine("ArgToCart");

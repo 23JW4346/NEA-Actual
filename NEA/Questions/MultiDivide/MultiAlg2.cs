@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,7 +52,100 @@ namespace NEA.Questions.MultiDivide
 
         public bool GetQuestion(string filename)
         {
-            throw new NotImplementedException();
+            bool found = false;
+            string tempfile = Path.GetTempFileName();
+            using (StreamReader sr = new StreamReader(filename))
+            using (StreamWriter sw = new StreamWriter(tempfile))
+            {
+                while (!sr.EndOfStream)
+                {
+                    string line;
+                    line = sr.ReadLine();
+
+                    if (line == "Divide2Complex" && !found)
+                    {
+                        string number = null;
+                        bool firstneg = true;
+                        double realin = 0, imagin = 0;
+                        string operand1 = sr.ReadLine();
+                        for (int i = 0; i < operand1.Length; i++)
+                        {
+                            if (Char.IsNumber(operand1[i]))
+                            {
+                                number += operand1[i];
+                            }
+                            if (operand1[i] == '-')
+                            {
+                                if (firstneg && number.Length < 1)
+                                {
+                                    number += operand1[i];
+                                    firstneg = false;
+                                }
+                                else
+                                {
+                                    realin = double.Parse(number);
+                                    number = "-";
+                                }
+                            }
+                            else if (operand1[i] == 'i')
+                            {
+                                imagin = double.Parse(number);
+                                break;
+                            }
+                            else if (operand1[i] == '+')
+                            {
+                                realin = double.Parse(number);
+                                number = null;
+                            }
+                        }
+                        Z = new Complex(realin, imagin);
+                        string operand2 = sr.ReadLine();
+                        for (int i = 0; i < operand2.Length; i++)
+                        {
+                            if (Char.IsNumber(operand2[i]))
+                            {
+                                number += operand2[i];
+                            }
+                            if (operand2[i] == '-')
+                            {
+                                if (firstneg && number.Length < 1)
+                                {
+                                    number += operand2[i];
+                                    firstneg = false;
+                                }
+                                else
+                                {
+                                    realin = double.Parse(number);
+                                    number = "-";
+                                }
+                            }
+                            else if (operand2[i] == 'i')
+                            {
+                                imagin = double.Parse(number);
+                                break;
+                            }
+                            else if (operand2[i] == '+')
+                            {
+
+                                realin = double.Parse(number);
+                                number = null;
+                            }
+                        }
+                        operand = new Complex(realin, imagin);
+                        found = true;
+                    }
+                    else
+                    {
+                        sw.WriteLine(line);
+                    }
+                }
+                sr.Close();
+                sw.Close();
+            }
+            File.Delete(filename);
+            File.Move(tempfile, filename);
+            Zconjagute = new Complex(Z.GetRealValue(), -Z.GetImaginaryValue());
+            return found;
         }
 
         public void LoadDiagram()
@@ -76,7 +170,13 @@ namespace NEA.Questions.MultiDivide
 
         public void SaveQuestion(string filename)
         {
-            throw new NotImplementedException();
+            using (StreamWriter sw = new StreamWriter(filename, true))
+            {
+                sw.WriteLine();
+                sw.WriteLine("MultiAlg2");
+                sw.WriteLine(Z.GetComplex());
+                sw.WriteLine(operand.GetComplex());
+            }
         }
     }
 }

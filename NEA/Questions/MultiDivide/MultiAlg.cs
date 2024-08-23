@@ -119,7 +119,7 @@ namespace NEA.Questions.MultiDivide
 
         public void SaveQuestion(string filename)
         {
-            using (StreamWriter sw = new StreamWriter(filename))
+            using (StreamWriter sw = new StreamWriter(filename, true))
             {
                 sw.WriteLine();
                 sw.WriteLine("MultiAlg");

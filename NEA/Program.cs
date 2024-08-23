@@ -20,11 +20,6 @@ namespace NEA
 
         static void Main(string[] args)
         {
-            ModulusGraph d = new ModulusGraph(new Complex(2, 2), 2);
-            Application.Run(d);
-
-
-
             Menu();
         }
 
@@ -301,7 +296,8 @@ namespace NEA
                         case 0:
                             if (rnd.Next(1, 16)== 1)
                             {
-                                question = new ArgtoCartesian(rnd);
+                                question = new ArgtoCartesian("Questions.txt", 
+                                    rnd);
                             }
                             else
                             {
@@ -312,11 +308,22 @@ namespace NEA
                         case 1:
                             if (rnd.Next(1, 16) == 1)
                             {
-                                question = new ArgGraph(rnd);
+                                question = new ArgGraph("Questions.txt", rnd);
                             }
                             else
                             {
                                 question = new ArgGraph(rnd);
+                            }
+                            AskQuestion(question, ref loop);
+                            break;
+                        case 2:
+                            if (rnd.Next(1,16) == 1)
+                            {
+                                question = new ModToCartesian(rnd);
+                            }
+                            else
+                            {
+                                question = new ModToCartesian(rnd);
                             }
                             AskQuestion(question, ref loop);
                             break;

@@ -187,7 +187,7 @@ namespace NEA.Questions.MultiDivide
 
         public void SaveQuestion(string filename)
         {
-            using (StreamWriter sw = new StreamWriter(filename, append: true))
+            using (StreamWriter sw = new StreamWriter(filename, true))
             {
                 sw.WriteLine();
                 sw.WriteLine("Divide2Complex");

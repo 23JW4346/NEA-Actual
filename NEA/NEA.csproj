@@ -55,6 +55,7 @@
     <Compile Include="Questions\Loci\ArgumentGraph.Designer.cs">
       <DependentUpon>ArgumentGraph.cs</DependentUpon>
     </Compile>
+    <Compile Include="Questions\Loci\ModToCartesian.cs" />
     <Compile Include="Questions\Loci\ModulusGraph.cs">
       <SubType>Form</SubType>
     </Compile>

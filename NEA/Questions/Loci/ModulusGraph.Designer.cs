@@ -73,7 +73,6 @@
             series3.Color = System.Drawing.Color.Black;
             series3.Legend = "Legend1";
             series3.Name = "Imaginary";
-            series4.BorderWidth = 2;
             series4.ChartArea = "ChartArea1";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series4.Color = System.Drawing.Color.Red;

@@ -65,6 +65,10 @@ namespace NEA.Number_Classes
             return $"{numerator}/{denominator}";
         }
 
+        public double GetTop() => numerator;
+
+        public double GetBottom() => denominator;
+
         public override double GetValue()
         {
             if (isnegative) return (double)-(numerator / denominator);
