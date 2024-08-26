@@ -164,7 +164,7 @@ namespace NEA.Questions.MultiDivide
 
         public string PrintQuestion()
         {
-            string bracket1 = "(Z" + (constant < 0 ? "" : "+") + constant;
+            string bracket1 = "(Z" + (constant < 0 ? "" : "+") + constant+"i";
             return $"The complex number z satisfies the equation {bracket1}) = ({operand.GetComplex()})Z*\nDetermine z, giving your answer in the form a+bi, where a and b are real";
         }
 

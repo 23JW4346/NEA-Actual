@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using NEA.Number_Classes;
-using NEA.Questions.MultiDivide;
-using NEA.Questions.ModArg;
+using System.Security.Authentication.ExtendedProtection;
 using NEA.Questions.Loci;
-using System.Windows.Forms;
-using System.Reflection;
+using NEA.Questions.ModArg;
+using NEA.Questions.MultiDivide;
+using NEA.Questions.Polynomial_Roots;
 
 
 namespace NEA
@@ -87,7 +82,7 @@ namespace NEA
             Console.WriteLine("> Complex Number Multiplication");
             Console.WriteLine("  Complex Number Division");
             Console.WriteLine("  Modulus Argument Form");
-            Console.WriteLine("  Finding Roots of a polynomial");
+            Console.WriteLine("  Roots of polynomials");
             Console.WriteLine("  Complex Loci");
             Console.WriteLine("  Main Menu");
             Console.CursorLeft = 1;
@@ -98,33 +93,35 @@ namespace NEA
                 ConsoleKeyInfo choice = Console.ReadKey(true);
                 if (choice.Key == ConsoleKey.Enter)
                 {
-                    int questionSet;
-                    switch (Console.CursorTop)
+                    bool loop = true;
+                    int placeholder = 0, questionset = Console.CursorTop;
+                    while (loop)
                     {
-                        case 1:
-                            questionSet = 1;
-                            GenerateQs(questionSet);
-                            break;
-                        case 2:
-                            questionSet = 2;
-                            GenerateQs(questionSet);
-                            break;
-                        case 3:
-                            questionSet = 3;
-                            GenerateQs(questionSet);
-                            break;
-                        case 4:
-                            questionSet = 4;
-                            GenerateQs(questionSet);
-                            break;
-                        case 5:
-                            questionSet = 5;
-                            GenerateQs(questionSet);
-                            break;
-                        case 6:
-                            exit = false;
-                            break;
+                        switch (questionset)
+                        {
+                            case 1:
+                                AskQuestion(GenQ(1), ref loop, ref placeholder);
+                                break;
+                            case 2:
+                                AskQuestion(GenQ(2), ref loop, ref placeholder);
+                                break;
+                            case 3:
+                                AskQuestion(GenQ(3), ref loop, ref placeholder);
+                                break;
+                            case 4:
+                                AskQuestion(GenQ(4), ref loop, ref placeholder);
+                                break;
+                            case 5:
+                                AskQuestion(GenQ(5), ref loop, ref placeholder);
+                                break;
+                            case 6:
+                                AskQuestion(GenQ(rnd.Next(6)), ref loop, ref placeholder);
+                                break;
+                            default:
+                                exit = false;
+                                break;
 
+                        }
                     }
                     Console.Clear();
                     Console.WriteLine("Which Topic:");
@@ -133,12 +130,13 @@ namespace NEA
                     Console.WriteLine("  Modulus Argument Form");
                     Console.WriteLine("  Finding Roots of a polynomial");
                     Console.WriteLine("  Complex Loci");
+                    Console.WriteLine("  Random");
                     Console.WriteLine("  Main Menu");
                     Console.CursorLeft = 1;
                     Console.CursorTop = 1;
 
                 }
-                else if (choice.Key == ConsoleKey.DownArrow && Console.CursorTop != 6)
+                else if (choice.Key == ConsoleKey.DownArrow && Console.CursorTop != 7)
                 {
                     Console.CursorLeft = 0;
                     Console.Write(" ");
@@ -157,183 +155,149 @@ namespace NEA
             }
         }
 
-        static void GenerateQs(int questionSet)
+        static IQuestion GenQ(int questionSet)
         {
-            IQuestion question;
-            if (questionSet == 1)
+            switch (questionSet)
             {
-                bool loop = true;
-                while (loop)
-                {
+                case 1:
                     switch (rnd.Next(3))
                     {
                         case 0:
                             if (rnd.Next(1, 16) == 1)
                             {
-                                question = new Multiply2Complex("Questions.txt");
+                                return new Multiply2Complex("Questions.txt");
                             }
                             else
                             {
-                                question = new Multiply2Complex();
+                                return new Multiply2Complex();
                             }
-                            AskQuestion(question, ref loop);
-                            break;
                         case 1:
                             if (rnd.Next(1, 16) == 1)
                             {
-                                question = new MultiAlg("Questions.txt");
+                                return new MultiAlg("Questions.txt");
                             }
                             else
                             {
-                                question = new MultiAlg();
+                                return new MultiAlg();
                             }
-                            AskQuestion(question, ref loop);
-                            break;
                         case 2:
                             if (rnd.Next(1, 16) == 1)
                             {
-                                question = new MultiAlg2("Questions.txt");
+                                return new MultiAlg2("Questions.txt");
                             }
                             else
                             {
-                                question = new MultiAlg2();
+                                return new MultiAlg2();
                             }
-                            AskQuestion(question, ref loop);
-                            break;
 
                     }
-                }
-            }
-            else if (questionSet == 2)
-            {
-                bool loop = true;
-                while (loop)
-                {
+                    break;
+                case 2:
                     switch (rnd.Next(1, 4))
                     {
                         case 1:
                             if (rnd.Next(1, 16) == 1)
                             {
-                                question = new Divide2Complex("Questions.txt");
+                                return new Divide2Complex("Questions.txt");
                             }
                             else
                             {
-                                question = new Divide2Complex();
+                                return new Divide2Complex();
                             }
-                            AskQuestion(question, ref loop);
-                            break;
                         case 2:
                             if (rnd.Next(1, 16) == 1)
                             {
-                                question = new DivAlg("Questions.txt");
+                                return new DivAlg("Questions.txt");
                             }
                             else
                             {
-                                question = new DivAlg();
+                                return new DivAlg();
                             }
-                            AskQuestion(question, ref loop);
-                            break;
                     }
-                }
-            }
-            else if (questionSet == 3)
-            {
-                bool loop = true;
-                while (loop)
-                {
+                    break;
+                case 3:
                     switch (rnd.Next(7, 10))
                     {
                         case 7:
-                            if(rnd.Next(1, 16) == 1)
+                            if (rnd.Next(1, 16) == 1)
                             {
-                                question = new ModulusQuestion("Questions.txt");
+                                return new ModulusQuestion("Questions.txt");
                             }
                             else
                             {
-                                question = new ModulusQuestion();
+                                return new ModulusQuestion();
                             }
-                            AskQuestion(question, ref loop);
-
-                            break;
                         case 8:
                             if (rnd.Next(1, 16) == 1)
                             {
-                                question = new ArgumentQuestion("Questions.txt");
+                                return new ArgumentQuestion("Questions.txt");
                             }
                             else
                             {
-                                question = new ArgumentQuestion();
+                                return new ArgumentQuestion();
                             }
-                            AskQuestion(question, ref loop);
-                            break;
                         case 9:
-
                             break;
                     }
-                }
-            }
-            else if (questionSet == 4)
-            {
-                bool loop = true;
-                while (loop)
-                {
-                    switch (rnd.Next(10, 13))
+
+                    break;
+                case 4:
+                    switch (rnd.Next(3))
                     {
-                        case 10:
-
-                            break;
-
+                        case 0:
+                            if(rnd.Next(1,16) == 1)
+                            {
+                                return new Quadratic(rnd, "Questions.txt");
+                            }
+                            else
+                            {
+                                return new Quadratic(rnd);
+                            }
                     }
-                }
-            }
-            else if (questionSet == 5)
-            {
-                bool loop = true;
-                while (loop)
-                {
+                    break;
+                case 5:
+
                     switch (rnd.Next(0, 3))
                     {
                         case 0:
-                            if (rnd.Next(1, 16)== 1)
+                            if (rnd.Next(1, 16) == 1)
                             {
-                                question = new ArgtoCartesian("Questions.txt", rnd);
+                                return new ArgtoCartesian("Questions.txt", rnd);
                             }
                             else
                             {
-                                question = new ArgtoCartesian(rnd);
+                                return new ArgtoCartesian(rnd);
                             }
-                            AskQuestion(question, ref loop);
-                            break;
                         case 1:
                             if (rnd.Next(1, 16) == 1)
                             {
-                                question = new ArgGraph("Questions.txt", rnd);
+                                return new ArgGraph("Questions.txt", rnd);
                             }
                             else
                             {
-                                question = new ArgGraph(rnd);
+                                return new ArgGraph(rnd);
                             }
-                            AskQuestion(question, ref loop);
-                            break;
                         case 2:
-                            if (rnd.Next(1,16) == 1)
+                            if (rnd.Next(1, 16) == 1)
                             {
-                                question = new ModToCartesian(rnd);
+                                return new ModToCartesian(rnd);
                             }
                             else
                             {
-                                question = new ModToCartesian(rnd);
+                                return new ModToCartesian(rnd);
                             }
-                            AskQuestion(question, ref loop);
-                            break;
                         default:
                             break;
                     }
-                }
+                    break;
+                default:
+                    break;
+
             }
+            return new Quadratic(rnd);
         }
 
-        static void AskQuestion(IQuestion question, ref bool loop)
+        static void AskQuestion(IQuestion question, ref bool loop, ref int score)
         {
             Console.Clear();
             string ans;
@@ -351,58 +315,160 @@ namespace NEA
                 ans = Console.ReadLine();
                 Console.WriteLine();
             }
-            if (question.CheckAnswer(ans))
+            Console.WriteLine(question.PrintAnswer(question.CheckAnswer(ans)));
+            if (loop)
             {
-                Console.WriteLine(question.PrintAnswer(true));
+                Console.WriteLine();
+                Console.WriteLine("Would you like another question?");
+                Console.WriteLine("> yes");
+                Console.WriteLine("  no");
+                bool exit = true;
+                Console.CursorLeft = 1;
+                Console.CursorTop -= 2;
+                int currentposition = Console.CursorTop, newposition = 0;
+                while (exit)
+                {
+                    ConsoleKeyInfo choice = Console.ReadKey(true);
+                    if (choice.Key == ConsoleKey.Enter)
+                    {
+                        if (newposition == 1)
+                        {
+                            loop = false;
+                        }
+                        else
+                        {
+                            loop = true;
+                        }
+                        exit = false;
+                    }
+                    else if (choice.Key == ConsoleKey.DownArrow && newposition != 1)
+                    {
+                        Console.CursorLeft = 0;
+                        Console.Write(" ");
+                        newposition++;
+                        Console.CursorTop = currentposition + newposition;
+                        Console.CursorLeft = 0;
+                        Console.Write(">");
+                    }
+                    else if (choice.Key == ConsoleKey.UpArrow && newposition != 0)
+                    {
+                        Console.CursorLeft = 0;
+                        Console.Write(" ");
+                        newposition--;
+                        Console.CursorTop = currentposition + newposition;
+                        Console.CursorLeft = 0;
+                        Console.Write(">");
+                    }
+                }
             }
             else
             {
-                Console.WriteLine(question.PrintAnswer(false));
-            }
-            Console.WriteLine();
-            Console.WriteLine("Would you like another question?");
-            Console.WriteLine("> yes");
-            Console.WriteLine("  no");
-            bool exit = true;
-            Console.CursorLeft = 1;
-            Console.CursorTop -= 2;
-            int currentposition = Console.CursorTop, newposition = 0;
-            while (exit)
-            {
-                ConsoleKeyInfo choice = Console.ReadKey(true);
-                if (choice.Key == ConsoleKey.Enter)
+                if (question.CheckAnswer(ans))
                 {
-                    if (newposition == 1)
-                    {
-                        loop = false;
-                    }
-                    exit = false;
+                    score++;
                 }
-                else if (choice.Key == ConsoleKey.DownArrow && newposition != 1)
-                {
-                    Console.CursorLeft = 0;
-                    Console.Write(" ");
-                    newposition++;
-                    Console.CursorTop = currentposition + newposition;
-                    Console.CursorLeft = 0;
-                    Console.Write(">");
-                }
-                else if (choice.Key == ConsoleKey.UpArrow && newposition != 0)
-                {
-                    Console.CursorLeft = 0;
-                    Console.Write(" ");
-                    newposition--;
-                    Console.CursorTop = currentposition + newposition;
-                    Console.CursorLeft = 0;
-                    Console.Write(">");
-                }
+                Console.WriteLine();
+                Console.WriteLine("Click any button for Next Question");
+                Console.ReadKey();
+
             }
             Console.Clear();
         }
 
         static void CreateQuiz()
         {
-            throw new NotImplementedException();
+            Console.Clear();
+            int quizScore = 0, scoreForQuestion = 0;
+            IQuestion[] quizQuestions = new IQuestion[10];
+            int[] questionSets = new int[10];
+            bool[] questionWrong = new bool[10];
+            int[] numberwrong = new int[5];
+            for (int i = 0; i < quizQuestions.Length; i++)
+            {
+                questionSets[i] = rnd.Next(1, 6);
+                quizQuestions[i] = GenQ(questionSets[i]);
+                questionWrong[i] = true;
+            }
+            Shuffle(quizQuestions);
+            foreach(IQuestion question in quizQuestions)
+            {
+                bool repeat = false;
+                AskQuestion(question,ref repeat, ref scoreForQuestion);
+                if (scoreForQuestion > 0)
+                {
+                    quizScore += scoreForQuestion;
+                    scoreForQuestion = 0;
+                    questionWrong[Array.IndexOf(quizQuestions, question)] = false;
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine("You have reached the end of the quiz");
+            Console.WriteLine($"Your final score was {quizScore}");
+            if(questionWrong.Contains(false))
+            {
+                for(int i = 0; i < questionWrong.Length; i++)
+                {
+                    if (!questionWrong[i])
+                    {
+                        switch (questionSets[i])
+                        {
+                            case 1:
+                                numberwrong[0]++;
+                                break;
+                            case 2:
+                                numberwrong[1]++;
+                                break;
+                            case 3:
+                                numberwrong[2]++;
+                                break;
+                            case 4:
+                                numberwrong[3]++;
+                                break;
+                            case 5:
+                                numberwrong[4]++;
+                                break;
+                        }
+                    }
+                }
+                Console.Write("due to your results, We suggest Revising: ");
+                switch(Array.IndexOf(numberwrong, numberwrong.Max()))
+                {
+                    case 0:
+                        Console.WriteLine("Complex number multiplication");
+                        break;
+                    case 1:
+                        Console.WriteLine("Complex number division");
+                        break;
+                    case 2:
+                        Console.WriteLine("Modulus-Argument form");
+                        break;
+                    case 3:
+                        Console.WriteLine("Roots of polynomails");
+                        break;
+                    case 4:
+                        Console.WriteLine("Complex Loci");
+                        break;
+
+                }
+            }
+            Console.WriteLine();
+            Console.Write("> Main Menu");
+            Console.CursorLeft = 1;
+            Console.ReadKey();
+        }
+
+        static void Shuffle(IQuestion[] questions)
+        {
+            for(int i = 0; i < 1000; i++)
+            {
+                int index = rnd.Next(questions.Length);
+                IQuestion temp = questions[index];
+                int index2 = index;
+                while (index == index2) index2 = rnd.Next(questions.Length);
+                questions[index] = questions[index2];
+                questions[index2] = temp;
+            }
         }
     }
 }
+
