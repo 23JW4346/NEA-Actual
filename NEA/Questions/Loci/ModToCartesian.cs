@@ -16,7 +16,7 @@ namespace NEA.Questions.Loci
         private string loci;
         private string answer;
         private int modulus;
-        private ModulusGraph diagram;
+        private ArgandDiagram diagram;
 
         public ModToCartesian(Random rnd)
         {
@@ -175,7 +175,8 @@ namespace NEA.Questions.Loci
 
         public void LoadDiagram()
         {
-            diagram = new ModulusGraph(operand, modulus);
+            diagram = new ArgandDiagram();
+            diagram.CreateCircle(operand, modulus);
             Application.Run(diagram);
         }
 

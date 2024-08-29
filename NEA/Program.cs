@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Authentication.ExtendedProtection;
+using NEA.Number_Classes;
 using NEA.Questions.Loci;
 using NEA.Questions.ModArg;
 using NEA.Questions.MultiDivide;
 using NEA.Questions.Polynomial_Roots;
+using System.Windows.Forms;
 
 
 namespace NEA
@@ -15,6 +17,12 @@ namespace NEA
 
         static void Main(string[] args)
         {
+            ArgandDiagram diagram = new ArgandDiagram();
+            Complex one = new Complex(2, 2);
+            Complex two = new Complex(4, 4);
+            diagram.CreateModLine(one, two);
+            Application.Run(diagram);   
+
             Menu();
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace NEA.Questions.Loci
 {
-    partial class ArgumentGraph
+    partial class ArgandDiagram
     {
         /// <summary>
         /// Required designer variable.
@@ -46,11 +46,12 @@
             chartArea1.AxisY.Interval = 1D;
             chartArea1.AxisY.Maximum = 10D;
             chartArea1.AxisY.Minimum = -10D;
+            chartArea1.BorderWidth = 0;
             chartArea1.Name = "ChartArea1";
             this.Diagram.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.Diagram.Legends.Add(legend1);
-            this.Diagram.Location = new System.Drawing.Point(-1, 0);
+            this.Diagram.Location = new System.Drawing.Point(104, -2);
             this.Diagram.Name = "Diagram";
             series1.BorderWidth = 2;
             series1.ChartArea = "ChartArea1";
@@ -76,18 +77,18 @@
             this.Diagram.Series.Add(series1);
             this.Diagram.Series.Add(series2);
             this.Diagram.Series.Add(series3);
-            this.Diagram.Size = new System.Drawing.Size(800, 454);
+            this.Diagram.Size = new System.Drawing.Size(588, 454);
             this.Diagram.TabIndex = 0;
             this.Diagram.Text = "chart";
             this.Diagram.TextAntiAliasingQuality = System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.SystemDefault;
             // 
-            // ArgumentGraph
+            // ArgandDiagram
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.Diagram);
-            this.Name = "ArgumentGraph";
+            this.Name = "ArgandDiagram";
             this.Text = "Graph";
             ((System.ComponentModel.ISupportInitialize)(this.Diagram)).EndInit();
             this.ResumeLayout(false);

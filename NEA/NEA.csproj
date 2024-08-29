@@ -49,19 +49,13 @@
     <Compile Include="Number Classes\Radian.cs" />
     <Compile Include="Questions\Loci\ArgGraph.cs" />
     <Compile Include="Questions\Loci\ArgtoCartesian.cs" />
-    <Compile Include="Questions\Loci\ArgumentGraph.cs">
+    <Compile Include="Questions\Loci\ArgandDiagram.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Questions\Loci\ArgumentGraph.Designer.cs">
-      <DependentUpon>ArgumentGraph.cs</DependentUpon>
+    <Compile Include="Questions\Loci\ArgandDiagram.Designer.cs">
+      <DependentUpon>ArgandDiagram.cs</DependentUpon>
     </Compile>
     <Compile Include="Questions\Loci\ModToCartesian.cs" />
-    <Compile Include="Questions\Loci\ModulusGraph.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Questions\Loci\ModulusGraph.Designer.cs">
-      <DependentUpon>ModulusGraph.cs</DependentUpon>
-    </Compile>
     <Compile Include="Questions\ModArg\ArgumentPowers.cs" />
     <Compile Include="Questions\ModArg\ArgumentQuestion.cs" />
     <Compile Include="Questions\IQuestion.cs" />
@@ -87,11 +81,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Questions\Loci\ArgumentGraph.resx">
-      <DependentUpon>ArgumentGraph.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Questions\Loci\ModulusGraph.resx">
-      <DependentUpon>ModulusGraph.cs</DependentUpon>
+    <EmbeddedResource Include="Questions\Loci\ArgandDiagram.resx">
+      <DependentUpon>ArgandDiagram.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
