@@ -80,6 +80,7 @@
     <Compile Include="Number Classes\Surd.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Questions\Polynomial Roots\Cubic1rootgiven.cs" />
     <Compile Include="Questions\Polynomial Roots\Quadratic.cs" />
   </ItemGroup>
   <ItemGroup>

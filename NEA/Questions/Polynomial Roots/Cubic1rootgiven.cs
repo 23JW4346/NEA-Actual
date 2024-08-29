@@ -1,51 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NEA.Number_Classes;
-using System.IO;
-using System.Reflection;
 
 namespace NEA.Questions.Polynomial_Roots
 {
-    public class Quadratic : IQuestion 
+    public class Cubic1rootgiven : IQuestion
     {
         private Complex root, conjugate;
-        private int coef;
-        private string quadratic;
-        
-        public Quadratic(Random rnd)
+        private int root2, coef;
+        private string cubic;
+
+        public Cubic1rootgiven(Random rnd)
         {
             root = new Complex(false);
             conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
+            root2 = rnd.Next(2,5);
             coef = rnd.Next(1,4);
             Calculate();
         }
 
-        public Quadratic(Random rnd, string filename)
+        public Cubic1rootgiven(Random rnd, string filename)
         {
             if (!GetQuestion(filename))
             {
                 root = new Complex(false);
                 conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
-                coef = rnd.Next(1,4);
+                root2 = rnd.Next(2, 5);
+                coef = rnd.Next(1, 4);
             }
             Calculate();
         }
 
-
         public void Calculate()
         {
-            int b = -coef * (int)(root.GetRealValue() + conjugate.GetRealValue());
-            int c = coef * (int)(root.GetRealValue() *  conjugate.GetRealValue() - root.GetImaginaryValue() * conjugate.GetImaginaryValue());
-            if (coef != 1) quadratic += $"{coef}z^2";
-            else quadratic += "z^2";
-            if (b < 0) quadratic += $"{b}z";
-            else quadratic += $"+{b}z";
-            if (c < 0) quadratic += c;
-            else quadratic += $"+{c}";
-            quadratic += "=0";
+            int b = -coef * (int)(root.GetRealValue() + conjugate.GetRealValue() + root2);
+            int c = coef * (int)(root.GetRealValue() * conjugate.GetRealValue() - root.GetImaginaryValue() * conjugate.GetImaginaryValue() + root.GetRealValue() * root2 + conjugate.GetRealValue() * root2);
+            int d = -coef * (int)((root.GetRealValue() * conjugate.GetRealValue() - root.GetImaginaryValue() * conjugate.GetImaginaryValue()) * root2);
+            if(coef != 1)
+            {
+                cubic += coef.ToString();
+            }
+            cubic += "z^3";
+            if(b > 0)
+            {
+                cubic += "+";
+            }
+            cubic += $"{b}z^2";
+            if (c > 0)
+            {
+                cubic += "+";
+            }
+            cubic += $"{c}z";
+            if (d > 0)
+            {
+                cubic += "+";
+            }
+            cubic += $"{d}=0";
         }
 
         public bool CheckAnswer(string answer)
@@ -54,13 +68,15 @@ namespace NEA.Questions.Polynomial_Roots
             try
             {
                 answers = answer.Split(',');
-            } catch
+            }
+            catch 
             {
+                SaveQuestion("Questions.txt");
                 return false;
             }
-            if (answers[0] == root.GetComplex() || answers[1] == root.GetComplex() && answers[1] != answers[0])
+            if (answers[0] == conjugate.GetComplex() || answers[1] == root.GetComplex() && answers[1] != answers[0])
             {
-                if (answers[0] == conjugate.GetComplex() || answers[1] == conjugate.GetComplex())
+                if (answers[0] == root2.ToString() || answers[1] == root2.ToString())
                 {
                     return true;
                 }
@@ -118,6 +134,7 @@ namespace NEA.Questions.Polynomial_Roots
                         }
                         root = new Complex(realin, imagin);
                         conjugate = new Complex(realin, -imagin);
+                        root2 = int.Parse(sr.ReadLine());
                         coef = int.Parse(sr.ReadLine());
                         found = true;
                     }
@@ -143,27 +160,27 @@ namespace NEA.Questions.Polynomial_Roots
         {
             if (correct)
             {
-                return $"incorrect, the answer was {root.GetComplex()},{conjugate.GetComplex()}";
+                return $"incorrect, the answer was {conjugate.GetComplex()},{root2}";
             }
             else
             {
-                return $"correct! The answer is {root.GetComplex()},{conjugate.GetComplex()}";
+                return $"correct! The answer is {conjugate.GetComplex()},{root2}";
             }
-
         }
 
         public string PrintQuestion()
         {
-            return $"find the roots of the quadradic with the equation {quadratic}. write the roots out next to each other, with a comma seperating them";
+            return $"{root} is a root of the equation {cubic}. find the other 2 roots (write them out with a comma seperating them)";
         }
 
         public void SaveQuestion(string filename)
         {
-            using (StreamWriter sw = new StreamWriter(filename, true)) 
+            using (StreamWriter sw = new StreamWriter(filename, true))
             {
                 sw.WriteLine();
-                sw.WriteLine("Quadratic");
+                sw.WriteLine("Cubic1root");
                 sw.WriteLine(root.GetComplex());
+                sw.WriteLine(root2);
                 sw.WriteLine(coef);
             }
         }

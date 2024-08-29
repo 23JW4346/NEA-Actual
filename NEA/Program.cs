@@ -253,6 +253,15 @@ namespace NEA
                             {
                                 return new Quadratic(rnd);
                             }
+                        case 1:
+                            if(rnd.Next(1, 16) == 1)
+                            {
+                                return new Cubic1rootgiven(rnd, "Questions.txt");
+                            }
+                            else
+                            {
+                                return new Cubic1rootgiven(rnd);
+                            }
                     }
                     break;
                 case 5:

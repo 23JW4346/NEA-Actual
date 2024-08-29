@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using NEA.Number_Classes;
 using System.Windows.Forms;
 using System.IO;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace NEA.Questions.Loci
 {
@@ -20,45 +19,48 @@ namespace NEA.Questions.Loci
         private bool isleft;
         private ArgumentGraph diagram;
         private (int, int)[] fractions = { (1, 6), (1, 4), (1, 3), (2, 3), (3, 4), (5, 6) };
-        private double[] steps = { 0.5, 1, 2, -2, -1, -0.5 };
+        private double[] steps = { 0.5, 1, 2, 2, 1, 0.5 };
 
         public ArgGraph(Random rnd)
         {
+            
+
             operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-            while (operand.GetComplex() == null) operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+            while(operand.GetComplex() == null) operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
             Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
-            if (rnd.Next(2) == 1)
+            if(rnd.Next(2) == 1)
             {
-                int rand = rnd.Next(0,fractions.Length);
+                int rand = rnd.Next(fractions.Length); ;
                 argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
+                step = steps[rand];
                 if (inanswer.GetComplex()[0] == '-')
                 {
                     answer = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
                 }
-                else answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
-                step = steps[rand];
-                if (argument.GetValue() >= 1 / 2)
+                else
                 {
-                    isleft = true;
+                    answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                 }
-                else isleft = false;
+                if (argument.GetValue() >= 1 / 2 || argument.GetValue() >= -1 / 2) isleft = false;
+                else isleft = true;
             }
             else
             {
-                int rand = rnd.Next(0,fractions.Length);
+                int rand = rnd.Next(fractions.Length);
                 argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
+                step = -steps[rand];
                 if (inanswer.GetComplex()[0] == '-')
                 {
                     answer = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
                 }
-                else answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
-                step = -steps[rand];
-                if (argument.GetValue() <= -1 / 2)
+                else
                 {
-                    isleft = true;
+                    answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                 }
-                else isleft = false;
+                if (argument.GetValue() >= 1 / 2 || argument.GetValue() >= -1 / 2) isleft = false;
+                else isleft = true;
             }
+            
         }
 
         public ArgGraph(string filename, Random rnd)
@@ -71,35 +73,35 @@ namespace NEA.Questions.Loci
                 Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
                 if (rnd.Next(2) == 1)
                 {
-                    int rand = rnd.Next(0, fractions.Length);
+                    int rand = rnd.Next(fractions.Length); ;
                     argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
+                    step = steps[rand];
                     if (inanswer.GetComplex()[0] == '-')
                     {
                         answer = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
                     }
-                    else answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
-                    step = steps[rand];
-                    if (argument.GetValue() >= 1 / 2)
+                    else
                     {
-                        isleft = true;
+                        answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                     }
-                    else isleft = false;
+                    if (argument.GetValue() >= 1 / 2 || argument.GetValue() >= -1 / 2) isleft =false;
+                    else isleft = true;
                 }
                 else
                 {
-                    int rand = rnd.Next(0, fractions.Length);
+                    int rand = rnd.Next(fractions.Length);
                     argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
+                    step = -steps[rand];
                     if (inanswer.GetComplex()[0] == '-')
                     {
                         answer = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
                     }
-                    else answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
-                    step = -steps[rand];
-                    if (argument.GetValue() <= -1 / 2)
+                    else
                     {
-                        isleft = true;
+                        answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                     }
-                    else isleft = false;
+                    if (argument.GetValue() >= 1 / 2 || argument.GetValue() >= -1 / 2) isleft = false;
+                    else isleft = true;
                 }
             }
         }
@@ -121,9 +123,8 @@ namespace NEA.Questions.Loci
                 answer = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
             }
             else answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
-            if(argument.GetNegative() && argument.GetValue() <= 1 / 2) isleft = true;
-            else if (argument.GetValue() >= 1 / 2) isleft = true;
-            else isleft = false;
+            if (argument.GetValue() >= 1 / 2 || argument.GetValue() >= -1 / 2) isleft = false;
+            else isleft = true;
         }
 
         public bool CheckAnswer(string answer)
@@ -147,7 +148,7 @@ namespace NEA.Questions.Loci
                 {
                     string line;
                     line = sr.ReadLine();
-                    if (line == "Modulus" && !found)
+                    if (line == "ArgGraph" && !found)
                     {
                         string number = null;
                         bool firstneg = true;

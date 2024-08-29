@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NEA.Number_Classes;
 using System.Windows.Forms;
 using System.IO;
+using System.CodeDom.Compiler;
 
 namespace NEA.Questions.Loci
 {
@@ -30,6 +31,38 @@ namespace NEA.Questions.Loci
             else
             {
                 loci = $"|z+{temp.GetComplex()}|={modulus}";
+            }
+            Calculate();
+        }
+
+        public ModToCartesian(Random rnd, string filename)
+        {
+            if (GetQuestion(filename))
+            {
+                Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
+                if (temp.GetComplex()[0] == '-')
+                {
+                    loci = $"|z{temp.GetComplex()}|={modulus}";
+                }
+                else
+                {
+                    loci = $"|z+{temp.GetComplex()}|={modulus}";
+                }
+            }
+            else
+            {
+                operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+                while (operand.GetComplex() == "") operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+                Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
+                modulus = rnd.Next(1, 6);
+                if (temp.GetComplex()[0] == '-')
+                {
+                    loci = $"|z{temp.GetComplex()}|={modulus}";
+                }
+                else
+                {
+                    loci = $"|z+{temp.GetComplex()}|={modulus}";
+                }
             }
             Calculate();
         }
@@ -87,7 +120,7 @@ namespace NEA.Questions.Loci
                 {
                     string line;
                     line = sr.ReadLine();
-                    if (line == "ModArg" && !found)
+                    if (line == "ModToCart" && !found)
                     {
                         string number = null;
                         bool firstneg = true;

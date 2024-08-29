@@ -34,6 +34,7 @@ namespace NEA.Questions.Loci
                 Diagram.Series["line"].Points.AddXY(real, imag);
             }
             
+
         }
     }
 }
