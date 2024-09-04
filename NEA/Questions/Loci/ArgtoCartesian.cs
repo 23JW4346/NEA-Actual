@@ -43,7 +43,7 @@ namespace NEA.Questions.Loci
                 {
                     loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                 }
-                if (argument.GetValue() >= 1 / 2 || argument.GetValue() <= -1 / 2) isleft = true;
+                if (Math.Abs(argument.GetValue()) >= 1 / 2)  isleft = true;
                 else isleft = false;
             }
             else
@@ -62,7 +62,7 @@ namespace NEA.Questions.Loci
                 {
                     loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                 }
-                if (argument.GetValue() >= 1 / 2 || argument.GetValue() <= -1 / 2) isleft = true;
+                if (Math.Abs(argument.GetValue()) >= 1 / 2) isleft = true;
                 else isleft = false;
             }
             Calculate();
@@ -94,7 +94,7 @@ namespace NEA.Questions.Loci
                     loci = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
                 }
                 else loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
-                if (argument.GetValue() >= 1 / 2 || argument.GetValue() <= -1 / 2) isleft = true;
+                if (Math.Abs(argument.GetValue()) >= 1 / 2) isleft = true;
                 else isleft = false;
             }
             else
@@ -118,7 +118,7 @@ namespace NEA.Questions.Loci
                     {
                         loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                     }
-                    if (argument.GetValue() >= 1 / 2 || argument.GetValue() <= -1 / 2) isleft = true;
+                    if (Math.Abs(argument.GetValue()) >= 1 / 2) isleft = true;
                     else isleft = false;
                 }
                 else
@@ -137,7 +137,7 @@ namespace NEA.Questions.Loci
                     {
                         loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                     }
-                    if (argument.GetValue() >= 1 / 2 || argument.GetValue() <= -1 / 2) isleft = true;
+                    if (Math.Abs(argument.GetValue()) >= 1 / 2) isleft = true;
                     else isleft = false;
                 }
             }

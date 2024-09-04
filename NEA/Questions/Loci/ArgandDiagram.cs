@@ -46,8 +46,8 @@ namespace NEA.Questions.Loci
             while (real >= -10 && real <= 10 && imag <= 10 && imag >= -10)
             {
                 imag += step;
-                if (isleft) real++;
-                else real--;
+                if (isleft) real--;
+                else real++;
                 Diagram.Series["line"].Points.AddXY(real, imag);
             }
         }
