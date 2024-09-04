@@ -21,6 +21,16 @@ namespace NEA.Questions.ModArg
             Calculate();
         }
 
+        public ArgumentPowers(int inexp, string filename)
+        {
+            if (!GetQuestion(filename))
+            {
+                operand = new Complex(false);
+                exponent = inexp;
+            }
+            Calculate();
+        }
+
         public void Calculate()
         {
             double arg = operand.GetArgument();

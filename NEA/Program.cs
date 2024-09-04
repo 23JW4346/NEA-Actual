@@ -17,12 +17,6 @@ namespace NEA
 
         static void Main(string[] args)
         {
-            ArgandDiagram diagram = new ArgandDiagram();
-            Complex one = new Complex(2, 2);
-            Complex two = new Complex(4, 4);
-            diagram.CreateModLine(one, two);
-            Application.Run(diagram);   
-
             Menu();
         }
 
@@ -123,7 +117,7 @@ namespace NEA
                                 AskQuestion(GenQ(5), ref loop, ref placeholder);
                                 break;
                             case 6:
-                                AskQuestion(GenQ(rnd.Next(6)), ref loop, ref placeholder);
+                                AskQuestion(GenQ(rnd.Next(1, 6)), ref loop, ref placeholder);
                                 break;
                             default:
                                 exit = false;
@@ -197,13 +191,12 @@ namespace NEA
                             {
                                 return new MultiAlg2();
                             }
-
                     }
                     break;
                 case 2:
-                    switch (rnd.Next(1, 4))
+                    switch (rnd.Next(2))
                     {
-                        case 1:
+                        case 0:
                             if (rnd.Next(1, 16) == 1)
                             {
                                 return new Divide2Complex("Questions.txt");
@@ -212,7 +205,7 @@ namespace NEA
                             {
                                 return new Divide2Complex();
                             }
-                        case 2:
+                        case 1:
                             if (rnd.Next(1, 16) == 1)
                             {
                                 return new DivAlg("Questions.txt");
@@ -224,9 +217,9 @@ namespace NEA
                     }
                     break;
                 case 3:
-                    switch (rnd.Next(7, 10))
+                    switch (rnd.Next(6))
                     {
-                        case 7:
+                        case 0:
                             if (rnd.Next(1, 16) == 1)
                             {
                                 return new ModulusQuestion("Questions.txt");
@@ -235,7 +228,7 @@ namespace NEA
                             {
                                 return new ModulusQuestion();
                             }
-                        case 8:
+                        case 1:
                             if (rnd.Next(1, 16) == 1)
                             {
                                 return new ArgumentQuestion("Questions.txt");
@@ -244,10 +237,43 @@ namespace NEA
                             {
                                 return new ArgumentQuestion();
                             }
-                        case 9:
-                            break;
+                        case 2:
+                            if (rnd.Next(1, 16) == 1)
+                            {
+                                return new ModulusArgumentForm("Questions.txt");
+                            }
+                            else
+                            {
+                                return new ModulusArgumentForm();
+                            }
+                        case 3:
+                            if (rnd.Next(1, 16) == 1)
+                            {
+                                return new ModArgToNormal("Questions.txt");
+                            }
+                            else
+                            {
+                                return new ModArgToNormal();
+                            }
+                        case 4:
+                            if (rnd.Next(1, 16) == 1)
+                            {
+                                return new ModulusPowers(rnd.Next(0, 4), "Questions.txt");
+                            }
+                            else
+                            {
+                                return new ModulusPowers(rnd.Next(0, 4));
+                            }
+                        case 5:
+                            if (rnd.Next(1, 16) == 1)
+                            {
+                                return new ArgumentPowers(rnd.Next(0, 4), "Questions.txt");
+                            }
+                            else
+                            {
+                                return new ArgumentPowers(rnd.Next(0, 4));
+                            }
                     }
-
                     break;
                 case 4:
                     switch (rnd.Next(3))
@@ -255,11 +281,11 @@ namespace NEA
                         case 0:
                             if(rnd.Next(1,16) == 1)
                             {
-                                return new Quadratic(rnd, "Questions.txt");
+                                return new Quadratic(rnd.Next(1, 4), "Questions.txt");
                             }
                             else
                             {
-                                return new Quadratic(rnd);
+                                return new Quadratic(rnd.Next(1, 4));
                             }
                         case 1:
                             if(rnd.Next(1, 16) == 1)
@@ -274,7 +300,7 @@ namespace NEA
                     break;
                 case 5:
 
-                    switch (rnd.Next(0, 3))
+                    switch (rnd.Next(4))
                     {
                         case 0:
                             if (rnd.Next(1, 16) == 1)
@@ -297,11 +323,20 @@ namespace NEA
                         case 2:
                             if (rnd.Next(1, 16) == 1)
                             {
-                                return new ModToCartesian(rnd);
+                                return new ModToCartesian(rnd, "Questions.txt");
                             }
                             else
                             {
                                 return new ModToCartesian(rnd);
+                            }
+                        case 3:
+                            if(rnd.Next(1, 16) == 1)
+                            {
+                                return new ModGraph(rnd, "Questions.txt");
+                            }
+                            else
+                            {
+                                return new ModGraph(rnd);
                             }
                         default:
                             break;
@@ -311,7 +346,7 @@ namespace NEA
                     break;
 
             }
-            return new Quadratic(rnd);
+            return new Quadratic(rnd.Next(1, 4));
         }
 
         static void AskQuestion(IQuestion question, ref bool loop, ref int score)

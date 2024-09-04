@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using NEA.Number_Classes;
 
 namespace NEA.Questions.ModArg
@@ -16,6 +18,11 @@ namespace NEA.Questions.ModArg
         public ModArgToNormal()
         {
             answer = new Complex(true);
+        }
+
+        public ModArgToNormal(string filename)
+        {
+            if (!GetQuestion(filename)) answer = new Complex(true);
         }
 
         public void Calculate()

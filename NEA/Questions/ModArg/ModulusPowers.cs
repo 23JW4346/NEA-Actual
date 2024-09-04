@@ -23,6 +23,16 @@ namespace NEA.Questions.ModArg
             Calculate();
         }
 
+        public ModulusPowers(int inexp, string filename)
+        {
+            if (!GetQuestion(filename))
+            {
+                operand = new Complex(true);
+                exponent = inexp;
+            }
+            Calculate();
+        }
+
         public void Calculate()
         {
             answer = (int)Math.Pow(operand.GetModulus().GetValue(),exponent);

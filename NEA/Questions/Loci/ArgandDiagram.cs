@@ -90,7 +90,7 @@ namespace NEA.Questions.Loci
             }
             else
             {
-                gradient = (operand1.GetImaginaryValue() - operand2.GetImaginaryValue()) / (operand1.GetRealValue() - operand2.GetRealValue());
+                gradient = -1 / (operand1.GetImaginaryValue() - operand2.GetImaginaryValue()) / (operand1.GetRealValue() - operand2.GetRealValue());
                 while (midpoint.Item1 >= -10 && midpoint.Item2 <= 10 && midpoint.Item2 >= -10)
                 {
                     midpoint.Item1--;

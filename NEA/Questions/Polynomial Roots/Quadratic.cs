@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NEA.Number_Classes;
 using System.IO;
 using System.Reflection;
+using System.Data.SqlTypes;
 
 namespace NEA.Questions.Polynomial_Roots
 {
@@ -15,21 +16,21 @@ namespace NEA.Questions.Polynomial_Roots
         private int coef;
         private string quadratic;
         
-        public Quadratic(Random rnd)
+        public Quadratic(int incoef)
         {
             root = new Complex(false);
             conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
-            coef = rnd.Next(1,4);
+            coef = incoef;
             Calculate();
         }
 
-        public Quadratic(Random rnd, string filename)
+        public Quadratic(int incoef, string filename)
         {
             if (!GetQuestion(filename))
             {
                 root = new Complex(false);
                 conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
-                coef = rnd.Next(1,4);
+                coef = incoef;
             }
             Calculate();
         }

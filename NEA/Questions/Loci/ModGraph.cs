@@ -6,22 +6,21 @@ using System.Threading.Tasks;
 using NEA.Number_Classes;
 using System.Windows.Forms;
 using System.IO;
-using System.CodeDom.Compiler;
 
 namespace NEA.Questions.Loci
 {
-    public class ModToCartesian : IQuestion
+    public class ModGraph : IQuestion
     {
+
         private Complex operand;
         private string loci;
-        private string answer;
         private int modulus;
         private ArgandDiagram diagram;
 
-        public ModToCartesian(Random rnd)
+        public ModGraph(Random rnd)
         {
             operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-            while(operand.GetComplex() == "") operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+            while (operand.GetComplex() == "") operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
             Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
             modulus = rnd.Next(1, 6);
             if (temp.GetComplex()[0] == '-')
@@ -32,10 +31,9 @@ namespace NEA.Questions.Loci
             {
                 loci = $"|z+{temp.GetComplex()}|={modulus}";
             }
-            Calculate();
         }
 
-        public ModToCartesian(Random rnd, string filename)
+        public ModGraph(Random rnd, string filename)
         {
             if (GetQuestion(filename))
             {
@@ -64,44 +62,15 @@ namespace NEA.Questions.Loci
                     loci = $"|z+{temp.GetComplex()}|={modulus}";
                 }
             }
-            Calculate();
         }
-
         public void Calculate()
         {
-            Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
-            string xpart, ypart;
-            int radius = modulus * modulus;
-            if (temp.GetRealValue() < 0)
-            {
-                xpart = $"(x{temp.GetReal()})^2";
-            }
-            else if (temp.GetRealValue() == 0)
-            {
-                xpart = "x^2";
-            }
-            else
-            {
-                xpart =  $"(x+{temp.GetReal()})^2";
-            }
-            if (temp.GetImaginaryValue() < 0)
-            {
-                ypart = $"(y{temp.GetImaginaryValue()})^2";
-            }
-            else if (temp.GetImaginaryValue() == 0)
-            {
-                ypart = "y^2";
-            }
-            else
-            {
-                ypart = $"(y+{temp.GetImaginaryValue()})^2";
-            }
-            answer = $"{xpart}+{ypart}={radius}";
+            throw new NotImplementedException();
         }
 
         public bool CheckAnswer(string answer)
         {
-            if (answer == this.answer)
+            if (answer == loci)
             {
                 return true;
             }
@@ -184,14 +153,14 @@ namespace NEA.Questions.Loci
         {
             if (correct)
             {
-                return $"Correct!\nThe Answer is {answer}";
+                return $"Correct!\nThe Answer is {loci}";
             }
-            return $"Incorrect!\nThe Answer was {answer}";
+            return $"Incorrect!\nThe Answer was {loci}";
         }
 
         public string PrintQuestion()
         {
-            return $"Write This Loci {loci} in Cartesian Form (as a circle)";
+            return $"What is the equation for this Complex loci?";
         }
 
         public void SaveQuestion(string filename)
@@ -199,10 +168,9 @@ namespace NEA.Questions.Loci
             using (StreamWriter sw = new StreamWriter(filename, true))
             {
                 sw.WriteLine();
-                sw.WriteLine("ModToCart");
+                sw.WriteLine("ModGraph");
                 sw.WriteLine(operand.GetComplex());
                 sw.WriteLine(modulus);
-
             }
         }
     }
