@@ -144,12 +144,9 @@ namespace NEA.Questions.Polynomial_Roots
         {
             if (correct)
             {
-                return $"incorrect, the answer was {root.GetComplex()},{conjugate.GetComplex()}";
-            }
-            else
-            {
                 return $"correct! The answer is {root.GetComplex()},{conjugate.GetComplex()}";
             }
+            return $"incorrect, the answer was {root.GetComplex()},{conjugate.GetComplex()}";
 
         }
 

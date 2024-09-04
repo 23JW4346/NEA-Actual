@@ -80,24 +80,25 @@ namespace NEA.Questions.Loci
             (double, double) midpoint = ((operand1.GetRealValue() + operand2.GetRealValue()) / 2, (operand1.GetImaginaryValue() + operand2.GetImaginaryValue()) / 2);
             if (operand1.GetImaginaryValue() - operand2.GetImaginaryValue() == 0)
             {
-                Diagram.Series["line"].Points.AddXY(-10, midpoint.Item2);
-                Diagram.Series["line"].Points.AddXY(10, midpoint.Item2);
+                Diagram.Series["line"].Points.AddXY(midpoint.Item1, -10);
+                Diagram.Series["line"].Points.AddXY(midpoint.Item1, 10);
+
             }
             else if (operand1.GetRealValue() - operand2.GetRealValue() == 0)
             {
-                Diagram.Series["line"].Points.AddXY(midpoint.Item1, -10);
-                Diagram.Series["line"].Points.AddXY(midpoint.Item1, 10);
+                Diagram.Series["line"].Points.AddXY(-10, midpoint.Item2);
+                Diagram.Series["line"].Points.AddXY(10, midpoint.Item2);
             }
             else
             {
-                gradient = -1 / (operand1.GetImaginaryValue() - operand2.GetImaginaryValue()) / (operand1.GetRealValue() - operand2.GetRealValue());
+                gradient = -(operand1.GetRealValue() - operand2.GetRealValue()) / (operand1.GetImaginaryValue() - operand2.GetImaginaryValue());
                 while (midpoint.Item1 >= -10 && midpoint.Item2 <= 10 && midpoint.Item2 >= -10)
                 {
                     midpoint.Item1--;
                     midpoint.Item2 -= gradient;
                     Diagram.Series["line"].Points.AddXY(midpoint.Item1, midpoint.Item2);
                 }
-                while (midpoint.Item1 <= 10 && midpoint.Item2 <= 10 && midpoint.Item2 >= -10)
+                for(int i = 0; i < 21; i++)
                 {
                     midpoint.Item1++;
                     midpoint.Item2 += gradient;

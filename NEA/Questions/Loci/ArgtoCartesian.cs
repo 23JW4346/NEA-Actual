@@ -32,8 +32,7 @@ namespace NEA.Questions.Loci
                 int rand = rnd.Next(fractions.Length); ;
                 argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
                 step = steps[rand];
-                if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0 ||
-                   argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
+                if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0 ) grad = step;
                 else grad = -step;
                 if (inanswer.GetComplex()[0] == '-')
                 {
@@ -43,7 +42,7 @@ namespace NEA.Questions.Loci
                 {
                     loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                 }
-                if (Math.Abs(argument.GetValue()) >= 1 / 2)  isleft = true;
+                if (rand > 2)  isleft = true;
                 else isleft = false;
             }
             else
@@ -51,8 +50,7 @@ namespace NEA.Questions.Loci
                 int rand = rnd.Next(fractions.Length);
                 argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
                 step = -steps[rand];
-                if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0 ||
-                   argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
+                if (argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
                 else grad = -step;
                 if (inanswer.GetComplex()[0] == '-')
                 {
@@ -62,7 +60,7 @@ namespace NEA.Questions.Loci
                 {
                     loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                 }
-                if (Math.Abs(argument.GetValue()) >= 1 / 2) isleft = true;
+                if (rand > 2) isleft = true;
                 else isleft = false;
             }
             Calculate();
@@ -76,7 +74,6 @@ namespace NEA.Questions.Loci
                 if (argument.GetNegative())
                 {
                     Fraction temp = new Fraction((int)-argument.GetTop(), (int)argument.GetBottom());
-                    argument = temp; 
                     step = -steps[Array.IndexOf(fractions, (temp.GetTop(), temp.GetBottom()))];
                     if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0 ||
                    argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
@@ -94,7 +91,7 @@ namespace NEA.Questions.Loci
                     loci = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
                 }
                 else loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
-                if (Math.Abs(argument.GetValue()) >= 1 / 2) isleft = true;
+                if (Math.Abs(argument.GetValue()) >= 0.5) isleft = true;
                 else isleft = false;
             }
             else
@@ -107,8 +104,7 @@ namespace NEA.Questions.Loci
                     int rand = rnd.Next(fractions.Length); ;
                     argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
                     step = steps[rand];
-                    if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0 ||
-                   argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
+                    if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0) grad = step;
                     else grad = -step;
                     if (inanswer.GetComplex()[0] == '-')
                     {
@@ -118,7 +114,7 @@ namespace NEA.Questions.Loci
                     {
                         loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                     }
-                    if (Math.Abs(argument.GetValue()) >= 1 / 2) isleft = true;
+                    if (rand > 2) isleft = true;
                     else isleft = false;
                 }
                 else
@@ -126,8 +122,7 @@ namespace NEA.Questions.Loci
                     int rand = rnd.Next(fractions.Length);
                     argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
                     step = -steps[rand];
-                    if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0 ||
-                   argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
+                    if (argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
                     else grad = -step;
                     if (inanswer.GetComplex()[0] == '-')
                     {
@@ -137,7 +132,7 @@ namespace NEA.Questions.Loci
                     {
                         loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                     }
-                    if (Math.Abs(argument.GetValue()) >= 1 / 2) isleft = true;
+                    if (rand > 2) isleft = true;
                     else isleft = false;
                 }
             }
@@ -191,7 +186,7 @@ namespace NEA.Questions.Loci
                     line = sr.ReadLine();
                     if (line == "ArgToCart" && !found)
                     {
-                        string number = null;
+                        string number = "";
                         bool firstneg = true;
                         double realin = 0, imagin = 0;
                         string operand1 = sr.ReadLine();
@@ -222,7 +217,7 @@ namespace NEA.Questions.Loci
                             else if (operand1[i] == '+')
                             {
                                 realin = double.Parse(number);
-                                number = null;
+                                number = "";
                             }
                         }
                         operand = new Complex(realin, imagin);

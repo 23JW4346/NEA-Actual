@@ -56,6 +56,7 @@
       <DependentUpon>ArgandDiagram.cs</DependentUpon>
     </Compile>
     <Compile Include="Questions\Loci\ModGraph.cs" />
+    <Compile Include="Questions\Loci\ModLine.cs" />
     <Compile Include="Questions\Loci\ModToCartesian.cs" />
     <Compile Include="Questions\ModArg\ArgumentPowers.cs" />
     <Compile Include="Questions\ModArg\ArgumentQuestion.cs" />

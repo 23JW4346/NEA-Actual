@@ -86,6 +86,7 @@ namespace NEA
             Console.WriteLine("  Modulus Argument Form");
             Console.WriteLine("  Roots of polynomials");
             Console.WriteLine("  Complex Loci");
+            Console.WriteLine("  Random");
             Console.WriteLine("  Main Menu");
             Console.CursorLeft = 1;
             Console.CursorTop = 1;
@@ -119,9 +120,8 @@ namespace NEA
                             case 6:
                                 AskQuestion(GenQ(rnd.Next( 6)), ref loop, ref placeholder);
                                 break;
-                            default:
-                                exit = false;
-                                break;
+                            case 7:
+                                return;
 
                         }
                     }
@@ -300,7 +300,7 @@ namespace NEA
                     break;
                 case 4:
 
-                    switch (rnd.Next(4))
+                    switch (rnd.Next(5))
                     {
                         case 0:
                             if (rnd.Next(1, 16) == 1)
@@ -337,6 +337,15 @@ namespace NEA
                             else
                             {
                                 return new ModGraph(rnd);
+                            }
+                        case 4:
+                            if(rnd.Next(1,16) == 1)
+                            {
+                                return new ModLine("Questions.txt");
+                            }
+                            else
+                            {
+                                return new ModLine();
                             }
                         default:
                             break;

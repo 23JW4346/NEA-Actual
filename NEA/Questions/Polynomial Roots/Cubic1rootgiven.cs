@@ -170,7 +170,7 @@ namespace NEA.Questions.Polynomial_Roots
 
         public string PrintQuestion()
         {
-            return $"{root} is a root of the equation {cubic}. find the other 2 roots (write them out with a comma seperating them)";
+            return $"{root.GetComplex()} is a root of the equation {cubic}. find the other 2 roots (write them out with a comma seperating them)";
         }
 
         public void SaveQuestion(string filename)

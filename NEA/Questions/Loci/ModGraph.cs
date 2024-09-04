@@ -91,7 +91,7 @@ namespace NEA.Questions.Loci
                     line = sr.ReadLine();
                     if (line == "ModToCart" && !found)
                     {
-                        string number = null;
+                        string number = "";
                         bool firstneg = true;
                         double realin = 0, imagin = 0;
                         string operand1 = sr.ReadLine();
@@ -122,7 +122,7 @@ namespace NEA.Questions.Loci
                             else if (operand1[i] == '+')
                             {
                                 realin = double.Parse(number);
-                                number = null;
+                                number = "";
                             }
                         }
                         operand = new Complex(realin, imagin);

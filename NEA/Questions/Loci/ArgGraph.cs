@@ -19,12 +19,10 @@ namespace NEA.Questions.Loci
         private bool isleft;
         private ArgandDiagram diagram;
         private (int, int)[] fractions = { (1, 6), (1, 4), (1, 3), (2, 3), (3, 4), (5, 6) };
-        private double[] steps = { 0.5, 1, 2, 2, 1, 0.5 };
+        private double[] steps = { 0.5,  1, 2, 2, 1, 0.5 };
 
         public ArgGraph(Random rnd)
         {
-            
-
             operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
             while(operand.GetComplex() == null) operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
             Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
@@ -41,7 +39,7 @@ namespace NEA.Questions.Loci
                 {
                     answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                 }
-                if (Math.Abs(argument.GetValue()) >= 1 / 2) isleft = true;
+                if (rand > 2) isleft = true;
                 else isleft = false;
             }
             else
@@ -57,7 +55,7 @@ namespace NEA.Questions.Loci
                 {
                     answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                 }
-                if (Math.Abs(argument.GetValue()) >= 1 / 2) isleft = true;
+                if (rand > 2) isleft = true;
                 else isleft = false;
             }
             
@@ -84,7 +82,7 @@ namespace NEA.Questions.Loci
                     {
                         answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                     }
-                    if (Math.Abs(argument.GetValue()) >= 1 / 2) isleft = true;
+                    if (rand > 2) isleft = true;
                     else isleft = false;
                 }
                 else
@@ -100,7 +98,7 @@ namespace NEA.Questions.Loci
                     {
                         answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
                     }
-                    if (Math.Abs(argument.GetValue()) >= 1 / 2) isleft = true;
+                    if (rand > 2) isleft = true;
                     else isleft = false;
                 }
             }
@@ -109,21 +107,24 @@ namespace NEA.Questions.Loci
         public void Calculate()
         {
             Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
+            int placeholder = 0;
             if (argument.GetNegative())
             {
                 Fraction temp = new Fraction((int)-argument.GetTop(), (int)argument.GetBottom());
-                step = -steps[Array.IndexOf(fractions, (temp.GetTop(), temp.GetBottom()))];
+                placeholder =Array.IndexOf(fractions, (temp.GetTop(), temp.GetBottom()));
+                step = steps[placeholder];
             }
             else
             {
-                step = steps[Array.IndexOf(fractions, (argument.GetTop(), argument.GetBottom()))];
+                placeholder = Array.IndexOf(fractions, (argument.GetTop(), argument.GetBottom()));
+                step = steps[placeholder];
             }
             if (inanswer.GetComplex()[0] == '-')
             {
                 answer = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
             }
             else answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
-            if (Math.Abs(argument.GetValue()) >= 1 / 2) isleft = true;
+            if (placeholder > 2) isleft = true;
             else isleft = false;
         }
 
@@ -150,7 +151,7 @@ namespace NEA.Questions.Loci
                     line = sr.ReadLine();
                     if (line == "ArgGraph" && !found)
                     {
-                        string number = null;
+                        string number = "";
                         bool firstneg = true;
                         double realin = 0, imagin = 0;
                         string operand1 = sr.ReadLine();
