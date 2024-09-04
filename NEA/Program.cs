@@ -102,22 +102,22 @@ namespace NEA
                         switch (questionset)
                         {
                             case 1:
-                                AskQuestion(GenQ(1), ref loop, ref placeholder);
+                                AskQuestion(GenQ(0), ref loop, ref placeholder);
                                 break;
                             case 2:
-                                AskQuestion(GenQ(2), ref loop, ref placeholder);
+                                AskQuestion(GenQ(1), ref loop, ref placeholder);
                                 break;
                             case 3:
-                                AskQuestion(GenQ(3), ref loop, ref placeholder);
+                                AskQuestion(GenQ(2), ref loop, ref placeholder);
                                 break;
                             case 4:
-                                AskQuestion(GenQ(4), ref loop, ref placeholder);
+                                AskQuestion(GenQ(3), ref loop, ref placeholder);
                                 break;
                             case 5:
-                                AskQuestion(GenQ(5), ref loop, ref placeholder);
+                                AskQuestion(GenQ(4), ref loop, ref placeholder);
                                 break;
                             case 6:
-                                AskQuestion(GenQ(rnd.Next(1, 6)), ref loop, ref placeholder);
+                                AskQuestion(GenQ(rnd.Next( 6)), ref loop, ref placeholder);
                                 break;
                             default:
                                 exit = false;
@@ -161,7 +161,7 @@ namespace NEA
         {
             switch (questionSet)
             {
-                case 1:
+                case 0:
                     switch (rnd.Next(3))
                     {
                         case 0:
@@ -193,7 +193,7 @@ namespace NEA
                             }
                     }
                     break;
-                case 2:
+                case 1:
                     switch (rnd.Next(2))
                     {
                         case 0:
@@ -216,7 +216,7 @@ namespace NEA
                             }
                     }
                     break;
-                case 3:
+                case 2:
                     switch (rnd.Next(6))
                     {
                         case 0:
@@ -275,7 +275,7 @@ namespace NEA
                             }
                     }
                     break;
-                case 4:
+                case 3:
                     switch (rnd.Next(3))
                     {
                         case 0:
@@ -298,7 +298,7 @@ namespace NEA
                             }
                     }
                     break;
-                case 5:
+                case 4:
 
                     switch (rnd.Next(4))
                     {
@@ -437,7 +437,7 @@ namespace NEA
             int[] numberwrong = new int[5];
             for (int i = 0; i < quizQuestions.Length; i++)
             {
-                questionSets[i] = rnd.Next(1, 6);
+                questionSets[i] = rnd.Next(6);
                 quizQuestions[i] = GenQ(questionSets[i]);
                 questionWrong[i] = true;
             }
