@@ -6,7 +6,6 @@ using NEA.Questions.Loci;
 using NEA.Questions.ModArg;
 using NEA.Questions.MultiDivide;
 using NEA.Questions.Polynomial_Roots;
-using System.Windows.Forms;
 
 
 namespace NEA

@@ -1,4 +1,4 @@
-﻿using System;
+﻿  using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.IO;
@@ -222,7 +222,7 @@ namespace NEA.Questions.Loci
         {
             diagram = new ArgandDiagram();
             diagram.CreateLine(step, operand, isleft);
-            Application.Run(diagram);
+            Task.Run(() => Application.Run(diagram));
         }
 
         public void SaveQuestion(string filename)

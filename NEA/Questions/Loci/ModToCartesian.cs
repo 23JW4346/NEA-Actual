@@ -143,7 +143,7 @@ namespace NEA.Questions.Loci
         {
             diagram = new ArgandDiagram();
             diagram.CreateCircle(operand, modulus);
-            Application.Run(diagram);
+            Task.Run(() => Application.Run(diagram));
         }
 
         public string PrintAnswer(bool correct)

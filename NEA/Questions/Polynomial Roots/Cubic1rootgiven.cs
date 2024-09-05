@@ -13,13 +13,17 @@ namespace NEA.Questions.Polynomial_Roots
         private Complex root, conjugate;
         private int root2, coef;
         private string cubic;
-
+        private bool hide1, hide2;
         public Cubic1rootgiven(Random rnd)
         {
             root = new Complex(false);
             conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
             root2 = rnd.Next(2,5);
             coef = rnd.Next(1,4);
+            if(rnd.Next(3) == 0) hide1 = true;
+            else hide1 = false;
+            if(rnd.Next(3) == 0) hide2 = true;
+            else hide2 = false;
             Calculate();
         }
 
@@ -29,7 +33,11 @@ namespace NEA.Questions.Polynomial_Roots
             {
                 root = new Complex(false);
                 conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
-                root2 = rnd.Next(2, 5);
+                if (rnd.Next(3) == 0) hide1 = true;
+                else hide1 = false;
+                if (rnd.Next(3) == 0) hide2 = true;
+                else hide2 = false;
+                root2 = rnd.Next(2, 9);
                 coef = rnd.Next(1, 4);
             }
             Calculate();
@@ -37,48 +45,35 @@ namespace NEA.Questions.Polynomial_Roots
 
         public void Calculate()
         {
-            int b = -coef * (int)(root.GetRealValue() + conjugate.GetRealValue() + root2);
-            int c = coef * (int)(root.GetRealValue() * conjugate.GetRealValue() - root.GetImaginaryValue() * conjugate.GetImaginaryValue() + root.GetRealValue() * root2 + conjugate.GetRealValue() * root2);
-            int d = -coef * (int)((root.GetRealValue() * conjugate.GetRealValue() - root.GetImaginaryValue() * conjugate.GetImaginaryValue()) * root2);
-            if(coef != 1)
-            {
-                cubic += coef.ToString();
-            }
+            string b, c, d;
+            if (!hide1) b = (-coef * (int)(root.GetRealValue() + conjugate.GetRealValue() + root2)).ToString();
+            else b = "a";
+            if (!hide2) c = (coef * (int)(root.GetRealValue() * conjugate.GetRealValue() - root.GetImaginaryValue() * conjugate.GetImaginaryValue() + root.GetRealValue() * root2 + conjugate.GetRealValue() * root2)).ToString();
+            else if (hide2 && hide1) c = "b";
+            else c = "a";
+            d = (-coef * (int)((root.GetRealValue() * conjugate.GetRealValue() - root.GetImaginaryValue() * conjugate.GetImaginaryValue()) * root2)).ToString();
+            if (coef != 1) cubic += coef;
             cubic += "z^3";
-            if(b > 0)
-            {
-                cubic += "+";
-            }
-            cubic += $"{b}z^2";
-            if (c > 0)
-            {
-                cubic += "+";
-            }
-            cubic += $"{c}z";
-            if (d > 0)
-            {
-                cubic += "+";
-            }
-            cubic += $"{d}=0";
+            if (!b.Contains('-')) cubic += "+";
+            cubic += b + "z^2";
+            if (!c.Contains('-')) cubic += "+";
+            cubic += c + "z";
+            if(!d.Contains('-')) cubic += "+";
+            cubic += d;
         }
 
         public bool CheckAnswer(string answer)
         {
-            string[] answers;
-            try
+            if (answer.Contains(','))
             {
-                answers = answer.Split(',');
-            }
-            catch 
-            {
-                SaveQuestion("Questions.txt");
-                return false;
-            }
-            if (answers[0] == conjugate.GetComplex() || answers[1] == root.GetComplex() && answers[1] != answers[0])
-            {
-                if (answers[0] == root2.ToString() || answers[1] == root2.ToString())
+                string[] answers = answer.Split(',');
+
+                if (answers[0] == root2.ToString() || answers[1] == root2.ToString() && answers[1] != answers[0])
                 {
-                    return true;
+                    if (answers[0] == conjugate.GetComplex() || answers[1] == conjugate.GetComplex())
+                    {
+                        return true;
+                    }
                 }
             }
             SaveQuestion("Questions.txt");
@@ -102,6 +97,10 @@ namespace NEA.Questions.Polynomial_Roots
                         conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
                         root2 = int.Parse(sr.ReadLine());
                         coef = int.Parse(sr.ReadLine());
+                        if (sr.ReadLine() == "1") hide1 = true;
+                        else hide1 = false;
+                        if(sr.ReadLine() == "1") hide2 = true;
+                        else hide2 = false;
                         found = true;
                     }
                     else
@@ -148,6 +147,10 @@ namespace NEA.Questions.Polynomial_Roots
                 sw.WriteLine(root.GetComplex());
                 sw.WriteLine(root2);
                 sw.WriteLine(coef);
+                if (hide1) sw.WriteLine("1");
+                else sw.WriteLine("0");
+                if (hide2) sw.WriteLine("1");
+                else sw.WriteLine("0");
             }
         }
     }

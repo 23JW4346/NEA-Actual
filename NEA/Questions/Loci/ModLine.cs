@@ -148,7 +148,7 @@ namespace NEA.Questions.Loci
         {
             diagram = new ArgandDiagram();
             diagram.CreateModLine(operand1, operand2);
-            Application.Run(diagram);
+            Task.Run(() => Application.Run(diagram));
         }
 
         public string PrintAnswer(bool correct)

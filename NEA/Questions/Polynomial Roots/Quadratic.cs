@@ -51,19 +51,16 @@ namespace NEA.Questions.Polynomial_Roots
 
         public bool CheckAnswer(string answer)
         {
-            string[] answers;
-            try
+            if (answer.Contains(','))
             {
-                answers = answer.Split(',');
-            } catch
-            {
-                return false;
-            }
-            if (answers[0] == root.GetComplex() || answers[1] == root.GetComplex() && answers[1] != answers[0])
-            {
-                if (answers[0] == conjugate.GetComplex() || answers[1] == conjugate.GetComplex())
+                string[] answers = answer.Split(',');
+
+                if (answers[0] == root.GetComplex() || answers[1] == root.GetComplex() && answers[1] != answers[0])
                 {
-                    return true;
+                    if (answers[0] == conjugate.GetComplex() || answers[1] == conjugate.GetComplex())
+                    {
+                        return true;
+                    }
                 }
             }
             SaveQuestion("Questions.txt");
@@ -110,9 +107,9 @@ namespace NEA.Questions.Polynomial_Roots
         {
             if (correct)
             {
-                return $"correct! The answer is {root.GetComplex()},{conjugate.GetComplex()}";
+                return $"Correct! The answer is {root.GetComplex()},{conjugate.GetComplex()}";
             }
-            return $"incorrect, the answer was {root.GetComplex()},{conjugate.GetComplex()}";
+            return $"Incorrect, the answer was {root.GetComplex()},{conjugate.GetComplex()}";
 
         }
 
