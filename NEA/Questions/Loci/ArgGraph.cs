@@ -151,42 +151,8 @@ namespace NEA.Questions.Loci
                     line = sr.ReadLine();
                     if (line == "ArgGraph" && !found)
                     {
-                        string number = "";
-                        bool firstneg = true;
-                        double realin = 0, imagin = 0;
-                        string operand1 = sr.ReadLine();
-                        for (int i = 0; i < operand1.Length; i++)
-                        {
-                            if (Char.IsNumber(operand1[i]))
-                            {
-                                number += operand1[i];
-                            }
-                            if (operand1[i] == '-')
-                            {
-                                if (firstneg && number.Length < 1)
-                                {
-                                    number += operand1[i];
-                                    firstneg = false;
-                                }
-                                else
-                                {
-                                    realin = double.Parse(number);
-                                    number = "-";
-                                }
-                            }
-                            else if (operand1[i] == 'i')
-                            {
-                                imagin = double.Parse(number);
-                                break;
-                            }
-                            else if (operand1[i] == '+')
-                            {
-                                realin = double.Parse(number);
-                                number = null;
-                            }
-                        }
-                        operand = new Complex(realin, imagin);
                         found = true;
+                        operand = new Complex(sr.ReadLine());
                         string fract = sr.ReadLine();
                         string[] numbers = fract.Trim().Split('/');
                         argument = new Fraction(int.Parse(numbers[0]), int.Parse(numbers[1]));
@@ -208,7 +174,7 @@ namespace NEA.Questions.Loci
         {
             diagram = new ArgandDiagram();
             diagram.CreateLine(step, operand, isleft);
-            Application.Run(diagram);
+            Task.Run(() => Application.Run(diagram));
         }
 
         public string PrintAnswer(bool correct)

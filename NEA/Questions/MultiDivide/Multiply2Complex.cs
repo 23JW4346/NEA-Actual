@@ -63,74 +63,8 @@ namespace NEA.Questions.MultiDivide
 
                     if (line == "Multiply2Complex" && !found)
                     {
-                        string number = null;
-                        bool firstneg = true;
-                        double realin = 0, imagin = 0;
-                        string operand1 = sr.ReadLine();
-                        for (int i = 0; i < operand1.Length; i++)
-                        {
-                            if (Char.IsNumber(operand1[i]))
-                            {
-                                number += operand1[i];
-                            }
-                            if (operand1[i] == '-')
-                            {
-                                if (firstneg && number.Length < 1)
-                                {
-                                    number += operand1[i];
-                                    firstneg = false;
-                                }
-                                else
-                                {
-                                    realin = double.Parse(number);
-                                    number = "-";
-                                }
-                            }
-                            else if (operand1[i] == 'i')
-                            {
-                                imagin = double.Parse(number);
-                                break;
-                            }
-                            else if (operand1[i] == '+')
-                            {
-                                realin = double.Parse(number);
-                                number = null;
-                            }
-                        }
-                        this.operand1 = new Complex(realin, imagin);
-                        string operand2 = sr.ReadLine();
-                        for (int i = 0; i < operand2.Length; i++)
-                        {
-                            if (Char.IsNumber(operand2[i]))
-                            {
-                                number += operand2[i];
-                            }
-                            if (operand2[i] == '-')
-                            {
-                                if (firstneg && number.Length < 1)
-                                {
-                                    number += operand2[i];
-                                    firstneg = false;
-                                }
-                                else
-                                {
-                                    realin = double.Parse(number);
-                                    number = "-";
-                                }
-                            }
-                            else if (operand2[i] == 'i')
-                            {
-                                imagin = double.Parse(number);
-                                break;
-                            }
-                            else if (operand2[i] == '+')
-                            {
-
-                                realin = double.Parse(number);
-                                number = null;
-                            }
-                        }
-                        this.operand2 = new Complex(realin, imagin);
+                        operand1 = new Complex(sr.ReadLine());
+                        operand2 = new Complex(sr.ReadLine());
                         found = true;
                     }
                     else

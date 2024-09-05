@@ -56,6 +56,33 @@ namespace NEA.Number_Classes
             }
         }
 
+        public Complex(string strcomp)
+        {
+            string temp = "";
+            bool firstneg = true;
+            foreach(char c in strcomp)
+            {
+                if (Char.IsNumber(c))
+                {
+                    temp += c;
+                }
+                else if(c == '-' && firstneg)
+                {
+                    temp += c;
+                    firstneg = false;
+                }
+                else if (c == '+' || c == '-')
+                {
+                    real = new Number(double.Parse(temp));
+                    temp = "";
+                }
+                else if (c == 'i')
+                {
+                    imaginary = new Number(double.Parse(temp));
+                }
+            }
+        }
+
         public string GetReal() => real.GetString();
 
         public double GetRealValue() => real.GetValue();

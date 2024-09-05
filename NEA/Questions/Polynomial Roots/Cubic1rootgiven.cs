@@ -98,42 +98,8 @@ namespace NEA.Questions.Polynomial_Roots
                     line = sr.ReadLine();
                     if (line == "Quadratic" && !found)
                     {
-                        string number = "";
-                        bool firstneg = true;
-                        double realin = 0, imagin = 0;
-                        string operand1 = sr.ReadLine();
-                        for (int i = 0; i < operand1.Length; i++)
-                        {
-                            if (Char.IsNumber(operand1[i]))
-                            {
-                                number += operand1[i];
-                            }
-                            if (operand1[i] == '-')
-                            {
-                                if (firstneg && number.Length < 1)
-                                {
-                                    number += operand1[i];
-                                    firstneg = false;
-                                }
-                                else
-                                {
-                                    realin = double.Parse(number);
-                                    number = "-";
-                                }
-                            }
-                            else if (operand1[i] == 'i')
-                            {
-                                imagin = double.Parse(number);
-                                break;
-                            }
-                            else if (operand1[i] == '+')
-                            {
-                                realin = double.Parse(number);
-                                number = null;
-                            }
-                        }
-                        root = new Complex(realin, imagin);
-                        conjugate = new Complex(realin, -imagin);
+                        root = new Complex(sr.ReadLine());
+                        conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
                         root2 = int.Parse(sr.ReadLine());
                         coef = int.Parse(sr.ReadLine());
                         found = true;
@@ -160,11 +126,11 @@ namespace NEA.Questions.Polynomial_Roots
         {
             if (correct)
             {
-                return $"incorrect, the answer was {conjugate.GetComplex()},{root2}";
+                return $"Correct, the answer was {conjugate.GetComplex()},{root2}";
             }
             else
             {
-                return $"correct! The answer is {conjugate.GetComplex()},{root2}";
+                return $"Incorrect! The answer is {conjugate.GetComplex()},{root2}";
             }
         }
 
