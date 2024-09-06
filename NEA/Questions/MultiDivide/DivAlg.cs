@@ -100,11 +100,19 @@ namespace NEA.Questions.MultiDivide
 
         public string PrintAnswer(bool correct)
         {
+            string output = "";
             if (correct)
             {
-                return $"Correct!\nThe Answer is {answer.GetComplex()}";
+                output +=  $"Correct!\nThe answer is {answer.GetComplex()}";
             }
-            return $"Incorrect!\nThe Answer was {answer.GetComplex()}";
+            else output += $"Incorrect!\nThe answer was {answer.GetComplex()}";
+            output += $"\n Model answer: \n" +
+                      $"This question requires you to rearange the equation to get Z on one side.\n" +
+                      $"This would give you the equation of ";
+            if (a != 1) output += $"z = ({a}({operand2.GetComplex()}))/({operand1.GetComplex()})\n";
+            else output += $"z = ({operand2.GetComplex()})/({operand1.GetComplex()})\n";
+            output += $"With this you can now solve it, giving you an answer of {answer.GetComplex()}";
+            return output;
         }
 
         public string PrintQuestion()

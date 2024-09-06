@@ -107,11 +107,20 @@ namespace NEA.Questions.MultiDivide
 
         public string PrintAnswer(bool correct)
         {
+            string output = "";
             if (correct)
             {
-                return $"Correct!\nThe Answer is {answer.GetComplex()}";
+                output += $"Correct!\nThe Answer is {answer.GetComplex()}";
             }
-            return $"Incorrect!\nThe Answer was {answer.GetComplex()}";
+            else output += $"Incorrect!\nThe Answer was {answer.GetComplex()}";
+            output += $"\nModel answer\n" +
+                      $"To divide 2 complex numbers, you have to rationalise the denominator, as it is a surd (i = root of -1)\n" +
+                      $"So you must multiply both numerator and denominator by the conjugate of the denominator.\n" +
+                      $"Numerator: ({operand1.GetComplex()})*({new Complex(operand2.GetRealValue(), -operand2.GetRealValue()).GetComplex()}) = {new Complex(operand1.GetRealValue() * operand2.GetRealValue() - operand1.GetImaginaryValue() * (-operand2.GetImaginaryValue()), operand1.GetRealValue() * (-operand2.GetImaginaryValue()) + operand1.GetImaginaryValue() * operand2.GetRealValue()).GetComplex()}\n" +
+                      $"Denominator: ({operand1.GetComplex()})*({new Complex(operand2.GetRealValue(), -operand2.GetRealValue()).GetComplex()}) = {new Number(operand2.GetRealValue() * operand2.GetRealValue() - operand2.GetImaginaryValue() * (-operand2.GetImaginaryValue())).GetString()}\n" +
+                      $"The you divide both the real and the imaginary parts of the numerator by the denominator, which gives you the answer of {answer.GetComplex()}\n";
+            return output;
+
         }
 
         public string PrintQuestion()

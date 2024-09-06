@@ -161,7 +161,7 @@ namespace NEA
             switch (questionSet)
             {
                 case 0:
-                    switch (rnd.Next(3))
+                    switch (rnd.Next(2))
                     {
                         case 0:
                             if (rnd.Next(1, 16) == 1)
@@ -181,19 +181,10 @@ namespace NEA
                             {
                                 return new MultiAlg();
                             }
-                        case 2:
-                            if (rnd.Next(1, 16) == 1)
-                            {
-                                return new MultiAlg2("Questions.txt");
-                            }
-                            else
-                            {
-                                return new MultiAlg2();
-                            }
                     }
                     break;
                 case 1:
-                    switch (rnd.Next(2))
+                    switch (rnd.Next(3))
                     {
                         case 0:
                             if (rnd.Next(1, 16) == 1)
@@ -208,6 +199,15 @@ namespace NEA
                             if (rnd.Next(1, 16) == 1)
                             {
                                 return new DivAlg("Questions.txt");
+                            }
+                            else
+                            {
+                                return new DivAlg();
+                            }
+                        case 2:
+                            if(rnd.Next(1,16) == 1)
+                            {
+                                return new DivAlg2("Questions.txt");
                             }
                             else
                             {

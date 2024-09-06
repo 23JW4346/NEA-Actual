@@ -87,12 +87,24 @@ namespace NEA.Questions.MultiDivide
 
         public string PrintAnswer(bool correct)
         {
-            if(correct)
+            string output = "";
+            if (correct)
             {
-                return $"Correct!\nThe Answer is {answer.GetComplex()}";
+                output += $"Correct!\nThe Answer is {answer.GetComplex()}";
             }
-            return $"Incorrect!\nThe Answer was {answer.GetComplex()}";
-        } 
+            else
+            {
+                output += $"Incorrect!\nThe Answer was {answer.GetComplex()}";
+            }
+            output += "\nModel answer:\n";
+            output += $"(a+bi)*(c+di) = (ac-bd) + (ad+bc)i\n" +
+                      $"                 Real     Imaginary  \n" + 
+                      $"So in the case of this question: ({operand1.GetComplex()})*({operand2.GetComplex()})\n" +
+                      $"The real part = ({operand1.GetReal()}*{operand2.GetReal()}) - ({operand1.GetImaginary()}*{operand2.GetImaginary()}) = {answer.GetReal()}\n" +
+                      $"The Imaginary part = ({operand1.GetReal()}*{operand2.GetImaginary()}) + ({operand1.GetImaginary()}*{operand2.GetReal()}) = {answer.GetImaginary()}\n" +
+                      $"Which ends in the final answer, {answer.GetComplex()}\n";
+            return output;
+        }
 
         public string PrintQuestion()
         {

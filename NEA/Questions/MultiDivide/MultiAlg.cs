@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Remoting;
 using System.Text;
 using System.Threading.Tasks;
 using NEA.Number_Classes;
@@ -102,11 +103,19 @@ namespace NEA.Questions.MultiDivide
 
         public string PrintAnswer(bool correct)
         {
+            string output = "";
             if (correct)
             {
-                return $"Correct!\nThe Answer is {answer}";
+                output += $"Correct!\nThe Answer is {answer}";
             }
-            return $"Incorrect!\nThe Answer was {answer}";
+            else output += $"Incorrect!\nThe Answer was {answer}";
+            output += $"\nModel answer: \n" +
+                      $"You can treat this question as a Simultaneous Equation\n" +
+                      $"with the real part being one of the equations and the imaginary part being another one of the equations\n" +
+                      $"So for example: b = ((a*{known[1]}) - ({known[0]}*{known[2]}))\n" +
+                      $"and {known[3]} = ((a*{known[2]}) + ({known[1]}*{known[0]}))\n" +
+                      $"With that we can find out what a in, which is {algA}, and with a, we can calculate b ({algB})";
+            return output;
         }
 
         public string PrintQuestion()

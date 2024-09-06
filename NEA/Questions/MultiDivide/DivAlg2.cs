@@ -8,13 +8,13 @@ using NEA.Number_Classes;
 
 namespace NEA.Questions.MultiDivide
 {
-    public class MultiAlg2 : IQuestion
+    public class DivAlg2 : IQuestion
     {
         private Complex Z, Zconjagute, operand;
 
         private int constant;
 
-        public MultiAlg2()
+        public DivAlg2()
         {
             Z = new Complex(false);
             Zconjagute = new Complex(Z.GetRealValue(), -Z.GetImaginaryValue());
@@ -22,7 +22,7 @@ namespace NEA.Questions.MultiDivide
             Calculate();
         }
 
-        public MultiAlg2(string filename)
+        public DivAlg2(string filename)
         {
             if (GetQuestion(filename)) Calculate();
             else
@@ -90,11 +90,12 @@ namespace NEA.Questions.MultiDivide
 
         public string PrintAnswer(bool correct)
         {
+            string output = "";
             if (correct)
             {
-                return $"Correct!\nThe Answer is {Z.GetComplex()}";
+                output += $"Correct!\nThe Answer is {Z.GetComplex()}\n";
             }
-            return $"Incorrect!\nThe Answer was {Z.GetComplex()}";
+            else output += $"Incorrect!\nThe Answer was {Z.GetComplex()}\n";
         }
 
         public string PrintQuestion()
