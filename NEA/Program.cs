@@ -211,7 +211,7 @@ namespace NEA
                             }
                             else
                             {
-                                return new DivAlg();
+                                return new DivAlg2();
                             }
                     }
                     break;

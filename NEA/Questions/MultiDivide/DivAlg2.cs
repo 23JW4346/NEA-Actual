@@ -30,6 +30,7 @@ namespace NEA.Questions.MultiDivide
                 Z = new Complex(false);
                 Zconjagute = new Complex(Z.GetRealValue(), -Z.GetImaginaryValue());
                 operand = new Complex(false);
+                Calculate();
             }
         }
 
@@ -96,12 +97,19 @@ namespace NEA.Questions.MultiDivide
                 output += $"Correct!\nThe Answer is {Z.GetComplex()}\n";
             }
             else output += $"Incorrect!\nThe Answer was {Z.GetComplex()}\n";
+            output += $"Model answer: \n" +
+                      $"This question requires you to rearange the equation to get z* on one side.\n" +
+                      $"This would give you the equation of";
+            if (constant < 0) output += $"(z{constant}i)/({operand.GetComplex()})";
+            else output += $"(z{constant}i)/({operand.GetComplex()})";
+            output += $"With this you can now solve it, giving you an answer of {Z.GetComplex()}";
+            return output;
         }
 
         public string PrintQuestion()
         {
-            string bracket1 = "(Z" + (constant < 0 ? "" : "+") + constant+"i";
-            return $"The complex number z satisfies the equation {bracket1}) = ({operand.GetComplex()})Z*\nDetermine z, giving your answer in the form a+bi, where a and b are real";
+            string bracket1 = "(z" + (constant < 0 ? "" : "+") + constant+"i";
+            return $"The complex number z satisfies the equation {bracket1}) = ({operand.GetComplex()})z*\nDetermine z, giving your answer in the form a+bi, where a and b are real";
         }
 
         public void SaveQuestion(string filename)
