@@ -41,7 +41,6 @@ namespace NEA.Questions.ModArg
             {
                 return true;
             }
-            SaveQuestion("Questions.txt");
             return false;
         }
 
@@ -93,14 +92,14 @@ namespace NEA.Questions.ModArg
             return $"The Complex number z is defined as {operand.GetComplex()}. Calculate |z|"; 
         }
 
-        public void SaveQuestion(string filename)
+
+        public List<string> SaveQuestion()
         {
-            using (StreamWriter sw = new StreamWriter(filename, true))
+            return new List<string>
             {
-                sw.WriteLine();
-                sw.WriteLine("Modulus");
-                sw.WriteLine(operand.GetComplex());
-            }
+                "Modulus",
+                operand.GetComplex()
+            };
         }
     }
 }

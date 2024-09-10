@@ -65,7 +65,6 @@ namespace NEA.Questions.MultiDivide
             {
                 return true;
             }
-            SaveQuestion("Questions.txt");
             return false;
         }
 
@@ -128,15 +127,14 @@ namespace NEA.Questions.MultiDivide
             return $"Find the Value of ({operand1.GetComplex()})/({operand2.GetComplex()}) in the form a+bi, where a and b can be written in fractions if needed (x/y)";
         }
 
-        public void SaveQuestion(string filename)
+        public List<string> SaveQuestion()
         {
-            using (StreamWriter sw = new StreamWriter(filename, true))
+            return new List<string>
             {
-                sw.WriteLine();
-                sw.WriteLine("Divide2Complex");
-                sw.WriteLine(operand1.GetComplex());
-                sw.WriteLine(operand2.GetComplex());
-            }
+                "Divide2Complex",
+                operand1.GetComplex(),
+                operand2.GetComplex()
+            };
         }
     }
 }

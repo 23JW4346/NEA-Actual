@@ -16,7 +16,7 @@ namespace NEA
 
         bool CheckAnswer(string answer);
 
-        void SaveQuestion(string filename);
+        List<string> SaveQuestion();
 
         bool GetQuestion(string filename);
 

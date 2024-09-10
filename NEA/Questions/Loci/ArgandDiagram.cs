@@ -15,6 +15,9 @@ namespace NEA.Questions.Loci
 {
     public partial class ArgandDiagram : Form
     {
+
+        private static int instance = 1;
+
         public ArgandDiagram()
         {
             InitializeComponent();
@@ -36,20 +39,21 @@ namespace NEA.Questions.Loci
 
         public void CreateLine(double step, Complex operand, bool isleft)
         {
-            Diagram.Series.Add("line");
-            Diagram.Series["line"].BorderWidth = 2;
-            Diagram.Series["line"].Color = Color.Red;
-            Diagram.Series["line"].ChartType = SeriesChartType.Line;
-            Diagram.Series["line"].Points.AddXY(operand.GetRealValue(), operand.GetImaginaryValue());
+            Diagram.Series.Add("line" + instance);
+            Diagram.Series["line" + instance].BorderWidth = 2;
+            Diagram.Series["line" + instance].Color = Color.Red;
+            Diagram.Series["line" + instance].ChartType = SeriesChartType.Line;
+            Diagram.Series["line" + instance].Points.AddXY(operand.GetRealValue(), operand.GetImaginaryValue());
             double real = operand.GetRealValue();
             double imag = operand.GetImaginaryValue();
-            while (real >= -10 && real <= 10 && imag <= 10 && imag >= -10)
+            for(int i = 0; i < 20;i++)
             {
                 imag += step;
                 if (isleft) real--;
                 else real++;
-                Diagram.Series["line"].Points.AddXY(real, imag);
+                Diagram.Series["line" + instance].Points.AddXY(real, imag);
             }
+            instance++;
         }
 
         public void CreateCircle(Complex operand, int modulus)
@@ -72,22 +76,22 @@ namespace NEA.Questions.Loci
 
         public void CreateModLine(Complex operand1, Complex operand2)
         {
-            Diagram.Series.Add("line");
-            Diagram.Series["line"].BorderWidth = 2;
-            Diagram.Series["line"].Color = Color.Red;
-            Diagram.Series["line"].ChartType = SeriesChartType.Line;
+            Diagram.Series.Add("line" + instance);
+            Diagram.Series["line" + instance   ].BorderWidth = 2;
+            Diagram.Series["line" + instance].Color = Color.Red;
+            Diagram.Series["line" + instance].ChartType = SeriesChartType.Line;
             double gradient;
             (double, double) midpoint = ((operand1.GetRealValue() + operand2.GetRealValue()) / 2, (operand1.GetImaginaryValue() + operand2.GetImaginaryValue()) / 2);
             if (operand1.GetImaginaryValue() - operand2.GetImaginaryValue() == 0)
             {
-                Diagram.Series["line"].Points.AddXY(midpoint.Item1, -10);
-                Diagram.Series["line"].Points.AddXY(midpoint.Item1, 10);
+                Diagram.Series["line" + instance].Points.AddXY(midpoint.Item1, -10);
+                Diagram.Series["line" + instance].Points.AddXY(midpoint.Item1, 10);
 
             }
             else if (operand1.GetRealValue() - operand2.GetRealValue() == 0)
             {
-                Diagram.Series["line"].Points.AddXY(-10, midpoint.Item2);
-                Diagram.Series["line"].Points.AddXY(10, midpoint.Item2);
+                Diagram.Series["line" + instance].Points.AddXY(-10, midpoint.Item2);
+                Diagram.Series["line" + instance].Points.AddXY(10, midpoint.Item2);
             }
             else
             {
@@ -96,15 +100,16 @@ namespace NEA.Questions.Loci
                 {
                     midpoint.Item1--;
                     midpoint.Item2 -= gradient;
-                    Diagram.Series["line"].Points.AddXY(midpoint.Item1, midpoint.Item2);
+                    Diagram.Series["line" + instance].Points.AddXY(midpoint.Item1, midpoint.Item2);
                 }
                 for(int i = 0; i < 21; i++)
                 {
                     midpoint.Item1++;
                     midpoint.Item2 += gradient;
-                    Diagram.Series["line"].Points.AddXY(midpoint.Item1, midpoint.Item2);
+                    Diagram.Series["line" + instance].Points.AddXY(midpoint.Item1, midpoint.Item2);
                 }
             }
+            instance++;
         }
     }
 }

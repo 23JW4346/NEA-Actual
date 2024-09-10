@@ -45,7 +45,6 @@ namespace NEA.Questions.MultiDivide
             {
                 return true;
             }
-            SaveQuestion("Questions.txt");
             return false;
         }
 
@@ -111,15 +110,14 @@ namespace NEA.Questions.MultiDivide
             return $"Calculate ({operand1.GetComplex()})*({operand2.GetComplex()})";
         }
 
-        public void SaveQuestion(string filename)
+        public List<string> SaveQuestion()
         {
-            using(StreamWriter sw = new StreamWriter(filename, true)) 
+            return new List<string>
             {
-                sw.WriteLine();
-                sw.WriteLine("Multiply2Complex");
-                sw.WriteLine(operand1.GetComplex());
-                sw.WriteLine(operand2.GetComplex());
-            }
+                "Multiply2Complex",
+                operand1.GetComplex(),
+                operand2.GetComplex()
+            };
         }
     }
 }

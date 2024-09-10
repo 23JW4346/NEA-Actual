@@ -43,7 +43,6 @@ namespace NEA.Questions.ModArg
             {
                 return true;
             }
-            SaveQuestion("Questions.txt");
             return false;
         }
 
@@ -95,14 +94,14 @@ namespace NEA.Questions.ModArg
             return $"The complex number z is denoted as {operand.GetComplex()}. Write z in modulus-argument form (arguments in 3.d.p)";
         }
 
-        public void SaveQuestion(string filename)
+
+        public List<string> SaveQuestion()
         {
-            using (StreamWriter sw = new StreamWriter(filename, true))
+            return new List<string>
             {
-                sw.WriteLine();
-                sw.WriteLine("ModArg");
-                sw.WriteLine(operand.GetComplex());
-            }
+                "ModArg",
+                operand.GetComplex()
+            };
         }
     }
 }

@@ -47,7 +47,6 @@ namespace NEA.Questions.MultiDivide
             {
                 return true;
             }
-            SaveQuestion("Questions.txt");
             return false;
         }
 
@@ -101,7 +100,7 @@ namespace NEA.Questions.MultiDivide
                       $"This question requires you to rearange the equation to get z* on one side.\n" +
                       $"This would give you the equation of";
             if (constant < 0) output += $"(z{constant}i)/({operand.GetComplex()})";
-            else output += $"(z{constant}i)/({operand.GetComplex()})";
+            else output += $"(z+{constant}i)/({operand.GetComplex()})";
             output += $"With this you can now solve it, giving you an answer of {Z.GetComplex()}";
             return output;
         }
@@ -112,15 +111,14 @@ namespace NEA.Questions.MultiDivide
             return $"The complex number z satisfies the equation {bracket1}) = ({operand.GetComplex()})z*\nDetermine z, giving your answer in the form a+bi, where a and b are real";
         }
 
-        public void SaveQuestion(string filename)
+        public List<string> SaveQuestion()
         {
-            using (StreamWriter sw = new StreamWriter(filename, true))
+            return new List<string>
             {
-                sw.WriteLine();
-                sw.WriteLine("MultiAlg2");
-                sw.WriteLine(Z.GetComplex());
-                sw.WriteLine(operand.GetComplex());
-            }
+                "MulitAlg2",
+                Z.GetComplex(),
+                operand.GetComplex()
+            };
         }
     }
 }

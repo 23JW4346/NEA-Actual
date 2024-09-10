@@ -74,7 +74,6 @@ namespace NEA.Questions.Loci
             {
                 return true;
             }
-            SaveQuestion("Questions.txt");
             return false;
         }
 
@@ -129,15 +128,14 @@ namespace NEA.Questions.Loci
             return $"What is the equation for this Complex loci?";
         }
 
-        public void SaveQuestion(string filename)
+        public List<string> SaveQuestion()
         {
-            using (StreamWriter sw = new StreamWriter(filename, true))
+            return new List<string>
             {
-                sw.WriteLine();
-                sw.WriteLine("ModGraph");
-                sw.WriteLine(operand.GetComplex());
-                sw.WriteLine(modulus);
-            }
+                "ModGraph",
+                operand.GetComplex(),
+                modulus.ToString()
+            };
         }
     }
 }

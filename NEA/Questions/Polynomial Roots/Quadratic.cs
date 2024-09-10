@@ -63,7 +63,6 @@ namespace NEA.Questions.Polynomial_Roots
                     }
                 }
             }
-            SaveQuestion("Questions.txt");
             return false;
         }
 
@@ -118,15 +117,14 @@ namespace NEA.Questions.Polynomial_Roots
             return $"find the roots of the quadradic with the equation {quadratic}. write the roots out next to each other, with a comma seperating them";
         }
 
-        public void SaveQuestion(string filename)
+        public List<string> SaveQuestion()
         {
-            using (StreamWriter sw = new StreamWriter(filename, true)) 
+            return new List<string>
             {
-                sw.WriteLine();
-                sw.WriteLine("Quadratic");
-                sw.WriteLine(root.GetComplex());
-                sw.WriteLine(coef);
-            }
+                "Quadratic",
+                root.GetComplex(),
+                coef.ToString()
+            };
         }
     }
 }

@@ -36,7 +36,6 @@ namespace NEA.Questions.ModArg
             {
                 return true;
             }
-            SaveQuestion("Questions.txt");
             return false;
         }
 
@@ -89,14 +88,13 @@ namespace NEA.Questions.ModArg
                 $"calculate z in the form a+bi, where a and b are real";
         }
 
-        public void SaveQuestion(string filename)
+        public List<string> SaveQuestion()
         {
-            using (StreamWriter sw = new StreamWriter(filename, true))
+            return new List<string>
             {
-                sw.WriteLine();
-                sw.WriteLine("ModArgToNormal");
-                sw.WriteLine(answer.GetComplex());
-            }
+                "ModArgToNormal",
+                answer.GetComplex()
+            };
         }
     }
 }

@@ -109,7 +109,6 @@ namespace NEA.Questions.Loci
             {
                 return true;
             }
-            SaveQuestion("Questions.txt");
             return false;
         }
 
@@ -165,15 +164,14 @@ namespace NEA.Questions.Loci
             return $"Write This Loci {equation} in Cartesian Form (y=mx+c)";
         }
 
-        public void SaveQuestion(string filename)
+        public List<string> SaveQuestion()
         {
-            using (StreamWriter sw = new StreamWriter(filename, true))
+            return new List<string>
             {
-                sw.WriteLine();
-                sw.WriteLine("ModLine");
-                sw.WriteLine(operand1.GetComplex());
-                sw.WriteLine(operand2.GetComplex());
-            }
+                "ModLine",
+                operand1.GetComplex(),
+                operand2.GetComplex()
+            };
         }
     }
 }

@@ -101,7 +101,7 @@ namespace NEA.Questions.Loci
                 $"(if there are none, type 'no')";
         }
 
-        public void SaveQuestion(string filename)
+        public List<string> SaveQuestion()
         {
             throw new NotImplementedException();
         }

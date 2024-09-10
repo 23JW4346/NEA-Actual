@@ -44,7 +44,6 @@ namespace NEA.Questions.ModArg
             {
                 return true;
             }
-            SaveQuestion("Questions.txt");
             return false;
         }
 
@@ -97,15 +96,14 @@ namespace NEA.Questions.ModArg
             return $"The complex number Z is denoted as {operand.GetComplex()}.\nWithout calculating Z^5, Find|Z^5|";
         }
 
-        public void SaveQuestion(string filename)
+        public List<string> SaveQuestion()
         {
-            using (StreamWriter sw = new StreamWriter(filename, true))
+            return new List<string>
             {
-                sw.WriteLine();
-                sw.WriteLine("ModPow");
-                sw.WriteLine(operand.GetComplex());
-                sw.WriteLine(exponent);
-            }
+                "ModPow",
+                operand.GetComplex(),
+                exponent.ToString()
+            };
         }
     }
 }

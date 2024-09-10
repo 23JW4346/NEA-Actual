@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Number Classes\Radian.cs" />
     <Compile Include="Questions\Loci\ArgGraph.cs" />
+    <Compile Include="Questions\Loci\ArgIntersect.cs" />
     <Compile Include="Questions\Loci\ArgModIntersect.cs" />
     <Compile Include="Questions\Loci\ArgtoCartesian.cs" />
     <Compile Include="Questions\Loci\ArgandDiagram.cs">

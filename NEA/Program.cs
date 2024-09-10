@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Security.Authentication.ExtendedProtection;
-using NEA.Number_Classes;
 using NEA.Questions.Loci;
 using NEA.Questions.ModArg;
 using NEA.Questions.MultiDivide;
@@ -10,13 +10,26 @@ using NEA.Questions.Polynomial_Roots;
 
 namespace NEA
 {
+
     internal class Program
     {
         static Random rnd = new Random();
+        static List<List<string>> savequests = new List<List<string>>();
 
         static void Main(string[] args)
         {
             Menu();
+            using (StreamWriter sw = new StreamWriter("Questions.txt", true))
+            {
+                foreach (List<string> strings in savequests)
+                {
+                    foreach (string s in strings)
+                    {
+                        sw.WriteLine(s);
+                    }
+                }
+                sw.Close();
+            }
         }
 
         static void Menu()
@@ -299,7 +312,7 @@ namespace NEA
                     break;
                 case 4:
 
-                    switch (rnd.Next(5))
+                    switch (rnd.Next(6))
                     {
                         case 0:
                             if (rnd.Next(1, 16) == 1)
@@ -346,6 +359,15 @@ namespace NEA
                             {
                                 return new ModLine();
                             }
+                        case 5:
+                            if(rnd.Next(1,16) == 1)
+                            {
+                                return new ArgIntersect(rnd, "Questions.txt");
+                            }
+                            else
+                            {
+                                return new ArgIntersect(rnd);
+                            }
                         default:
                             break;
                     }
@@ -360,22 +382,77 @@ namespace NEA
         static void AskQuestion(IQuestion question, ref bool loop, ref int score)
         {
             Console.Clear();
-            string ans;
+            string ans = "";
+            bool cantypeans = true;
             Console.WriteLine(question.PrintQuestion());
             Console.WriteLine();
             Console.Write("Answer: ");
+            ConsoleKeyInfo choice;
+            int CursorforAns = Console.CursorLeft;
+            Console.Write("\n  Click for hint");
+            Console.CursorTop--;
+            Console.CursorLeft = CursorforAns;
+            int currentposition = Console.CursorTop, newposition = 0;
             try
             {
                 question.LoadDiagram();
-                ans = Console.ReadLine();
-                Console.WriteLine();
             }
-            catch (NotImplementedException)
+            catch { }
+            do
             {
-                ans = Console.ReadLine();
-                Console.WriteLine();
-            }
-            Console.WriteLine(question.PrintAnswer(question.CheckAnswer(ans)));
+                choice = Console.ReadKey(true);
+                if (choice.Key == ConsoleKey.Enter && cantypeans)
+                {
+                    Console.CursorTop += 2;
+                    Console.CursorLeft = 0;
+                    if (!question.CheckAnswer(ans))
+                    {
+                        savequests.Add(question.SaveQuestion());
+                    }
+                    Console.WriteLine(question.PrintAnswer(question.CheckAnswer(ans)));
+                }
+                else if (choice.Key == ConsoleKey.DownArrow && newposition != 1)
+                {
+                    Console.CursorLeft = 0;
+                    Console.Write("A");
+                    newposition++;
+                    Console.CursorTop = currentposition + newposition;
+                    Console.CursorLeft = 0;
+                    Console.Write(">");
+                    cantypeans = false;
+                }
+                else if (choice.Key == ConsoleKey.UpArrow && newposition != 0)
+                {
+                    Console.CursorLeft = 0;
+                    Console.Write(" ");
+                    newposition--;
+                    Console.CursorTop = currentposition + newposition;
+                    Console.CursorLeft = CursorforAns;
+                    cantypeans = true;
+                }
+                else if (choice.Key == ConsoleKey.Backspace && cantypeans && Console.CursorLeft > 8)
+                {
+                    if (ans.Length > 0)
+                    {
+                        CursorforAns--;
+                        Console.CursorLeft--;
+                        Console.Write(" ");
+                        Console.CursorLeft--;
+                        ans.Remove(ans.Length - 1);
+                    }
+                    else
+                    {
+                        Console.CursorLeft++;
+                        Console.CursorLeft--;
+                    }
+                }
+                else if (cantypeans && choice.Key != ConsoleKey.Backspace)
+                {
+                    Console.Write(choice.KeyChar);
+                    ans += choice.KeyChar;
+                    CursorforAns++;
+                }
+            } while (choice.Key != ConsoleKey.Enter);
             if (loop)
             {
                 Console.WriteLine();
@@ -385,10 +462,11 @@ namespace NEA
                 bool exit = true;
                 Console.CursorLeft = 1;
                 Console.CursorTop -= 2;
-                int currentposition = Console.CursorTop, newposition = 0;
+                currentposition = Console.CursorTop;
+                newposition = 0;
                 while (exit)
                 {
-                    ConsoleKeyInfo choice = Console.ReadKey(true);
+                    choice = Console.ReadKey(true);
                     if (choice.Key == ConsoleKey.Enter)
                     {
                         if (newposition == 1)

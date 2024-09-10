@@ -58,7 +58,6 @@ namespace NEA.Questions.MultiDivide
             {
                 return true;
             }
-            SaveQuestion("Questions.txt");
             return false;
         }
 
@@ -107,7 +106,7 @@ namespace NEA.Questions.MultiDivide
             }
             else output += $"Incorrect!\nThe answer was {answer.GetComplex()}";
             output += $"\n Model answer: \n" +
-                      $"This question requires you to rearange the equation to get Z on one side.\n" +
+                      $"This question requires you to rearange the equation to get z on one side.\n" +
                       $"This would give you the equation of ";
             if (a != 1) output += $"z = ({a}({operand2.GetComplex()}))/({operand1.GetComplex()})\n";
             else output += $"z = ({operand2.GetComplex()})/({operand1.GetComplex()})\n";
@@ -121,15 +120,14 @@ namespace NEA.Questions.MultiDivide
             return $"The complex number z satisfies the equation z({operand1.GetComplex()}) = ({operand2.GetComplex()})\nDetermine z, giving your answer in the form a+bi, where a and b are real";
         }
 
-        public void SaveQuestion(string filename)
+        public List<string> SaveQuestion()
         {
-            using (StreamWriter sw = new StreamWriter(filename, true))
+            return new List<string>
             {
-                sw.WriteLine();
-                sw.WriteLine("DivAlg");
-                sw.WriteLine(operand1.GetComplex());
-                sw.WriteLine(answer.GetComplex());
-            }
+                "DivAlg",
+                operand1.GetComplex(),
+                answer.GetComplex()
+            };
         }
     }
 }

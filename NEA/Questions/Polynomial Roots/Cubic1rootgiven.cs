@@ -76,7 +76,6 @@ namespace NEA.Questions.Polynomial_Roots
                     }
                 }
             }
-            SaveQuestion("Questions.txt");
             return false;
         }
 
@@ -138,20 +137,17 @@ namespace NEA.Questions.Polynomial_Roots
             return $"{root.GetComplex()} is a root of the equation {cubic}. find the other 2 roots (write them out with a comma seperating them)";
         }
 
-        public void SaveQuestion(string filename)
+        public List<string> SaveQuestion()
         {
-            using (StreamWriter sw = new StreamWriter(filename, true))
+            return new List<string>
             {
-                sw.WriteLine();
-                sw.WriteLine("Cubic1root");
-                sw.WriteLine(root.GetComplex());
-                sw.WriteLine(root2);
-                sw.WriteLine(coef);
-                if (hide1) sw.WriteLine("1");
-                else sw.WriteLine("0");
-                if (hide2) sw.WriteLine("1");
-                else sw.WriteLine("0");
-            }
+                "Cubic1Root",
+                root.GetComplex(),
+                root2.ToString(),
+                coef.ToString(),
+                hide1? "1" : "0",
+                hide2? "1" : "0",              
+            };
         }
     }
 }

@@ -57,7 +57,6 @@ namespace NEA.Questions.MultiDivide
             {
                 return true;
             }
-            SaveQuestion("Questions.txt");
             return false;
         }
 
@@ -126,19 +125,18 @@ namespace NEA.Questions.MultiDivide
             return $"Find real numbers a and b such that ({complex1}i)({complex2.GetComplex()}) = {answer}i \nPlease seperate a and b with a comma, no spaces.";
         }
 
-        public void SaveQuestion(string filename)
+        public List<string> SaveQuestion()
         {
-            using (StreamWriter sw = new StreamWriter(filename, true))
+            return new List<string>
             {
-                sw.WriteLine();
-                sw.WriteLine("MultiAlg");
-                sw.WriteLine(algA);
-                sw.WriteLine(algB);
-                foreach(int i in known)
-                {
-                    sw.WriteLine(i);
-                }
-            }
+                "MultiAlg",
+                algA.ToString(),
+                algB.ToString(),
+                known[0].ToString(),
+                known[1].ToString(),
+                known[2].ToString(),
+                known[3].ToString()
+            };
         }
     }
 }

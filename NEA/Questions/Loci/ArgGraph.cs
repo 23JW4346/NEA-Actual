@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NEA.Number_Classes;
 using System.Windows.Forms;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace NEA.Questions.Loci
 {
@@ -134,7 +135,6 @@ namespace NEA.Questions.Loci
             {
                 return true;
             }
-            SaveQuestion("Questions.txt");
             return false;
         }
 
@@ -191,15 +191,15 @@ namespace NEA.Questions.Loci
             return $"What is the equation for this Complex loci? (no spaces, use Pi symbol π)";
         }
 
-        public void SaveQuestion(string filename)
+
+        public List<string> SaveQuestion()
         {
-            using (StreamWriter sw = new StreamWriter(filename, true))
+            return new List<string>
             {
-                sw.WriteLine();
-                sw.WriteLine("ArgGraph");
-                sw.WriteLine(operand.GetComplex());
-                sw.WriteLine(argument.GetString());
-            }
+                "ArgGraph",
+                operand.GetComplex(),
+                argument.GetString()
+            };
         }
     }
 }
