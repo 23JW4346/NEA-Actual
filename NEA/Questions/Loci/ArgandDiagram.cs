@@ -39,11 +39,11 @@ namespace NEA.Questions.Loci
 
         public void CreateLine(double step, Complex operand, bool isleft)
         {
-            Diagram.Series.Add("line" + instance);
-            Diagram.Series["line" + instance].BorderWidth = 2;
-            Diagram.Series["line" + instance].Color = Color.Red;
-            Diagram.Series["line" + instance].ChartType = SeriesChartType.Line;
-            Diagram.Series["line" + instance].Points.AddXY(operand.GetRealValue(), operand.GetImaginaryValue());
+            Diagram.Series.Add("line " + instance);
+            Diagram.Series["line " + instance].BorderWidth = 2;
+            Diagram.Series["line " + instance].Color = Color.Red;
+            Diagram.Series["line " + instance].ChartType = SeriesChartType.Line;
+            Diagram.Series["line " + instance].Points.AddXY(operand.GetRealValue(), operand.GetImaginaryValue());
             double real = operand.GetRealValue();
             double imag = operand.GetImaginaryValue();
             for(int i = 0; i < 20;i++)
@@ -51,7 +51,7 @@ namespace NEA.Questions.Loci
                 imag += step;
                 if (isleft) real--;
                 else real++;
-                Diagram.Series["line" + instance].Points.AddXY(real, imag);
+                Diagram.Series["line " + instance].Points.AddXY(real, imag);
             }
             instance++;
         }
@@ -74,41 +74,31 @@ namespace NEA.Questions.Loci
             }
         }
 
-        public void CreateModLine(Complex operand1, Complex operand2)
+        public void CreateModLine(Complex midpoint, double gradient)
         {
-            Diagram.Series.Add("line" + instance);
-            Diagram.Series["line" + instance   ].BorderWidth = 2;
-            Diagram.Series["line" + instance].Color = Color.Red;
-            Diagram.Series["line" + instance].ChartType = SeriesChartType.Line;
-            double gradient;
-            (double, double) midpoint = ((operand1.GetRealValue() + operand2.GetRealValue()) / 2, (operand1.GetImaginaryValue() + operand2.GetImaginaryValue()) / 2);
-            if (operand1.GetImaginaryValue() - operand2.GetImaginaryValue() == 0)
+            Diagram.Series.Add("line " + instance);
+            Diagram.Series["line " + instance   ].BorderWidth = 2;
+            Diagram.Series["line " + instance].Color = Color.Red;
+            Diagram.Series["line " + instance].ChartType = SeriesChartType.Line;
+            double x = midpoint.GetRealValue(), y = midpoint.GetImaginaryValue();
+            bool isleft = false;
+            if (gradient < 0) isleft = true;
+            for(int i = 0; i < 20; i++)
             {
-                Diagram.Series["line" + instance].Points.AddXY(midpoint.Item1, -10);
-                Diagram.Series["line" + instance].Points.AddXY(midpoint.Item1, 10);
-
+                if (isleft) x++;
+                else x--;
+                y -= gradient;
             }
-            else if (operand1.GetRealValue() - operand2.GetRealValue() == 0)
+            Diagram.Series["line " + instance].Points.AddXY(x, y);
+            x = midpoint.GetRealValue();
+            y = midpoint.GetImaginaryValue();
+            for(int i = 0; i < 40; i++)
             {
-                Diagram.Series["line" + instance].Points.AddXY(-10, midpoint.Item2);
-                Diagram.Series["line" + instance].Points.AddXY(10, midpoint.Item2);
+                if (isleft) x--;
+                else x++;
+                y += gradient;
             }
-            else
-            {
-                gradient = -(operand1.GetRealValue() - operand2.GetRealValue()) / (operand1.GetImaginaryValue() - operand2.GetImaginaryValue());
-                while (midpoint.Item1 >= -10 && midpoint.Item2 <= 10 && midpoint.Item2 >= -10)
-                {
-                    midpoint.Item1--;
-                    midpoint.Item2 -= gradient;
-                    Diagram.Series["line" + instance].Points.AddXY(midpoint.Item1, midpoint.Item2);
-                }
-                for(int i = 0; i < 21; i++)
-                {
-                    midpoint.Item1++;
-                    midpoint.Item2 += gradient;
-                    Diagram.Series["line" + instance].Points.AddXY(midpoint.Item1, midpoint.Item2);
-                }
-            }
+            Diagram.Series["line " + instance].Points.AddXY(x, y);
             instance++;
         }
     }

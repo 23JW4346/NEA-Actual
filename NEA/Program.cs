@@ -18,6 +18,7 @@ namespace NEA
 
         static void Main(string[] args)
         {
+            Console.OutputEncoding = System.Text.Encoding.Unicode; //thank you Ed (Stack Overflow)
             Menu();
             using (StreamWriter sw = new StreamWriter("Questions.txt", true))
             {
@@ -37,7 +38,7 @@ namespace NEA
             bool loop = true;
             while (loop)
             {
-                Console.WriteLine("Welcome to the Complex Number Revision Tool");
+                Console.WriteLine("Welcome to the Complex Number Revision Tool (Use up and down arrows to navigate)");
                 Console.WriteLine("> Choose Topic");
                 Console.WriteLine("  Create Quiz");
                 Console.WriteLine("  Exit");
@@ -357,7 +358,7 @@ namespace NEA
                             }
                             else
                             {
-                                return new ModLine();
+                                return new ModLine(rnd);
                             }
                         case 5:
                             if(rnd.Next(1,16) == 1)
@@ -609,4 +610,3 @@ namespace NEA
         }
     }
 }
-

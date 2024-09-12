@@ -14,17 +14,42 @@ namespace NEA.Questions.Loci
     public class ModLine : IQuestion
     {
         private ArgandDiagram diagram;
-        private Complex operand1, operand2;
+        private Complex midpoint, operand1, operand2;
+        private Number gradient;
         private string answer, equation;
 
-        public ModLine()
+        public ModLine(Random rnd)
         {
-            operand1 = new Complex(false);
-            do
+            int rand = rnd.Next(3);
+            if(rand == 1)
             {
-                operand2 = new Complex(false);
+                gradient = new Fraction(rnd.Next(3), rnd.Next(4)); 
             }
-            while (operand1.GetComplex() == operand2.GetComplex());
+            else if (rand == 2)
+            {
+                gradient = new Fraction(rnd.Next(-3), rnd.Next(4));
+            }
+            else 
+            {
+                gradient = new Number(rnd.Next(-4, 6));
+            }
+            midpoint = new Complex(rnd.Next(6), rnd.Next(6));
+            if(gradient.GetValue() == 0)
+            {
+                rand = rnd.Next(5);
+                operand1 = new Complex(midpoint.GetRealValue(), midpoint.GetImaginaryValue() + rand);
+                operand2 = new Complex(midpoint.GetRealValue(), midpoint.GetImaginaryValue() - rand);
+            }
+            else if (gradient.GetValue() == 5)
+            {
+                rand = rnd.Next(5);
+                operand1 = new Complex(midpoint.GetRealValue() + rand, midpoint.GetImaginaryValue() );
+                operand2 = new Complex(midpoint.GetRealValue() - rand, midpoint.GetImaginaryValue() );
+            }
+            else
+            {
+                GetPoints(rnd.Next(5));
+            }
             Calculate();
         }
 
@@ -40,6 +65,27 @@ namespace NEA.Questions.Loci
                 while (operand1.GetComplex() == operand2.GetComplex());
             }
             Calculate();
+        }
+
+        private void GetPoints(int space)
+        {
+            Complex temp = midpoint;
+            double negRec = Math.Pow(gradient.GetValue(), -1);
+            bool isleft = false;
+            if(negRec < 0) isleft = true;
+            for(int i = 0; i < space; i++)
+            {
+                if (isleft) temp = new Complex(temp.GetRealValue() - 1, temp.GetImaginaryValue() + negRec);
+                else temp = new Complex(temp.GetRealValue() + 1, temp.GetImaginaryValue() + negRec);
+            }
+            operand1 = temp;
+            temp = midpoint;
+            for (int i = 0; i < space; i++)
+            {
+                if (isleft) temp = new Complex(temp.GetRealValue() + 1, temp.GetImaginaryValue() - negRec);
+                else temp = new Complex(temp.GetRealValue() - 1, temp.GetImaginaryValue() - negRec);
+            }
+            operand2 = temp;
         }
 
 
@@ -60,16 +106,13 @@ namespace NEA.Questions.Loci
             }
             else equation += "+" + temp.GetComplex();
             equation += "|";
-
-
-            (double, double) midpoint = ((operand1.GetRealValue() + operand2.GetRealValue()) / 2, (operand1.GetImaginaryValue() + operand2.GetImaginaryValue()) / 2);
-            if (operand1.GetImaginaryValue() - operand2.GetImaginaryValue() == 0)
+            if (gradient.GetValue() == 0)
             {
-                answer = "x=" + midpoint.Item1;
+                answer = "x=" + midpoint.GetReal();
             }
-            else if (operand1.GetRealValue() - operand2.GetRealValue() == 0)
+            else if (gradient.GetValue() == 5)
             {
-                answer = "y=" + midpoint.Item2;
+                answer = "y=" + midpoint.GetImaginary();
             }
             else if (operand1.GetImaginaryValue() - operand2.GetImaginaryValue() == 0 && operand1.GetRealValue() - operand2.GetRealValue() == 0)
             {
@@ -77,16 +120,6 @@ namespace NEA.Questions.Loci
             }
             else
             {
-                Fraction gradient = new Fraction(-((int)operand2.GetRealValue() - (int)operand1.GetRealValue()),
-                    (int)operand2.GetImaginaryValue() - (int)operand1.GetImaginaryValue());
-                double yintTop = (gradient.GetTop() * midpoint.Item1) - midpoint.Item2;
-                double yintBottom = gradient.GetBottom();
-                while (yintTop.ToString().Contains('.'))
-                {
-                    yintTop *= 10;
-                    yintBottom *= 10;
-                }
-                Fraction yintf = new Fraction((int)yintTop, (int)yintBottom);
                 answer += "y=";
                 if (gradient.GetString()[0] == '-')
                 {
@@ -95,11 +128,11 @@ namespace NEA.Questions.Loci
                 else if (gradient.GetString() == "1") answer += "x";
                 else if (gradient.GetString() == "-1") answer += "-x";
                 else answer += gradient.GetString() + "x";
-                if (yintf.GetString()[0] == '-')
+                if (midpoint.GetImaginaryValue() < 0)
                 {
-                    answer += yintf.GetString();
+                    answer += midpoint.GetImaginary();
                 }
-                else answer += "+" + yintf.GetString();
+                else answer += "+" + midpoint.GetImaginary();
             }
         }
 
@@ -128,6 +161,15 @@ namespace NEA.Questions.Loci
                     {
                         operand1 = new Complex(sr.ReadLine());
                         operand2 = new Complex(sr.ReadLine());
+                        string line2 = sr.ReadLine();
+                        if (line2.Contains('/'))
+                        {
+                            string[] fract = line.Split('/');
+                            gradient = new Fraction(int.Parse(fract[0]), int.Parse(fract[1]));
+                        }
+                        else gradient = new Number(int.Parse(line2));
+                        equation = sr.ReadLine();
+                        answer = sr.ReadLine();
                         found = true;
                     }
                     else
@@ -146,7 +188,7 @@ namespace NEA.Questions.Loci
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();
-            diagram.CreateModLine(operand1, operand2);
+            diagram.CreateModLine(midpoint, gradient.GetValue());
             Task.Run(() => Application.Run(diagram));
         }
 
@@ -170,7 +212,10 @@ namespace NEA.Questions.Loci
             {
                 "ModLine",
                 operand1.GetComplex(),
-                operand2.GetComplex()
+                operand2.GetComplex(),
+                gradient.GetString(),
+                equation,
+                answer
             };
         }
     }
