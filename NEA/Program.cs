@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using NEA.Questions;
 using NEA.Questions.Loci;
 using NEA.Questions.ModArg;
 using NEA.Questions.MultiDivide;
 using NEA.Questions.Polynomial_Roots;
-
+using System.Windows.Forms;
 
 namespace NEA
 {
@@ -18,6 +20,13 @@ namespace NEA
 
         static void Main(string[] args)
         {
+            Console.WindowHeight = 63;
+            Console.WindowWidth = 240;
+            IQuestion temp = new MultiAlg();
+            QuestionForm form = new QuestionForm(temp);
+            Task.Run(() => Application.Run(form));
+            Console.ReadKey();
+
             Console.OutputEncoding = System.Text.Encoding.Unicode; //thank you Ed (Stack Overflow)
             Menu();
             using (StreamWriter sw = new StreamWriter("Questions.txt", true))
@@ -385,6 +394,7 @@ namespace NEA
             Console.Clear();
             string ans = "";
             bool cantypeans = true;
+            char lastTyped = ' ';
             Console.WriteLine(question.PrintQuestion());
             Console.WriteLine();
             Console.Write("Answer: ");
@@ -439,7 +449,7 @@ namespace NEA
                         Console.CursorLeft--;
                         Console.Write(" ");
                         Console.CursorLeft--;
-                        ans.Remove(ans.Length - 1);
+                        ans.Remove(ans.Length - 1); 
                     }
                     else
                     {
@@ -450,6 +460,7 @@ namespace NEA
                 else if (cantypeans && choice.Key != ConsoleKey.Backspace)
                 {
                     Console.Write(choice.KeyChar);
+                    lastTyped = choice.KeyChar;
                     ans += choice.KeyChar;
                     CursorforAns++;
                 }
@@ -598,7 +609,7 @@ namespace NEA
 
         static void Shuffle(IQuestion[] questions)
         {
-            for(int i = 0; i < 1000; i++)
+            for(int i = 0; i < 100; i++)
             {
                 int index = rnd.Next(questions.Length);
                 IQuestion temp = questions[index];

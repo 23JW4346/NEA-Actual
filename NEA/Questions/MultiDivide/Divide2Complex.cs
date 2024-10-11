@@ -99,6 +99,11 @@ namespace NEA.Questions.MultiDivide
             return found;
         }
 
+        public string Hint()
+        {
+            throw new NotImplementedException();
+        }
+
         public void LoadDiagram()
         {
             throw new NotImplementedException();

@@ -36,11 +36,25 @@ namespace NEA.Questions.Loci
                 else grad = -step;
                 if (inanswer.GetComplex()[0] == '-')
                 {
-                    loci = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
+                    if (argument.GetTop() != 1)
+                    {
+                        loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
+                    else
+                    {
+                        loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
                 }
                 else
                 {
-                    loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
+                    if (argument.GetTop() != 1)
+                    {
+                        loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
+                    else
+                    {
+                        loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
                 }
                 if (rand > 2)  isleft = true;
                 else isleft = false;
@@ -54,11 +68,25 @@ namespace NEA.Questions.Loci
                 else grad = -step;
                 if (inanswer.GetComplex()[0] == '-')
                 {
-                    loci = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
+                    if (argument.GetTop() != 1)
+                    {
+                        loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
+                    else
+                    {
+                        loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
                 }
                 else
                 {
-                    loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
+                    if (argument.GetTop() != 1)
+                    {
+                        loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
+                    else
+                    {
+                        loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
                 }
                 if (rand > 2) isleft = true;
                 else isleft = false;
@@ -88,9 +116,26 @@ namespace NEA.Questions.Loci
                 }
                 if (inanswer.GetComplex()[0] == '-')
                 {
-                    loci = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
+                    if (argument.GetTop() != 1)
+                    {
+                        loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
+                    else
+                    {
+                        loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
                 }
-                else loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
+                else
+                {
+                    if (argument.GetTop() != 1)
+                    {
+                        loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
+                    else
+                    {
+                        loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
+                }
                 if (Math.Abs(argument.GetValue()) >= 0.5) isleft = true;
                 else isleft = false;
             }
@@ -108,11 +153,25 @@ namespace NEA.Questions.Loci
                     else grad = -step;
                     if (inanswer.GetComplex()[0] == '-')
                     {
-                        loci = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
+                        if (argument.GetTop() != 1)
+                        {
+                            loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
+                        else
+                        {
+                            loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
                     }
                     else
                     {
-                        loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
+                        if (argument.GetTop() != 1)
+                        {
+                            loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
+                        else
+                        {
+                            loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
                     }
                     if (rand > 2) isleft = true;
                     else isleft = false;
@@ -126,11 +185,25 @@ namespace NEA.Questions.Loci
                     else grad = -step;
                     if (inanswer.GetComplex()[0] == '-')
                     {
-                        loci = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
+                        if (argument.GetTop() != 1)
+                        {
+                            loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
+                        else
+                        {
+                            loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
                     }
                     else
                     {
-                        loci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
+                        if (argument.GetTop() != 1)
+                        {
+                            loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
+                        else
+                        {
+                            loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
                     }
                     if (rand > 2) isleft = true;
                     else isleft = false;
@@ -144,7 +217,7 @@ namespace NEA.Questions.Loci
             double yint = grad*-operand.GetRealValue() + operand.GetImaginaryValue();
             if (grad == 0.5 || grad == -0.5)
             {
-                answer += "y=" + grad * 2 + "/2x";
+                answer += "y=x/2";
             }
             else if (grad == 1) answer += "y=x";
             else if (grad == -1) answer += "y=-x";
@@ -232,6 +305,11 @@ namespace NEA.Questions.Loci
                 operand.GetComplex(),
                 argument.GetString()
             };
+        }
+
+        public string Hint()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,9 +1,6 @@
-﻿using System;
+﻿using NEA.Number_Classes;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NEA.Number_Classes;
 
 namespace NEA.Questions.Loci
 {
@@ -85,6 +82,11 @@ namespace NEA.Questions.Loci
             throw new NotImplementedException();
         }
 
+        public string Hint()
+        {
+            throw new NotImplementedException();
+        }
+
         public void LoadDiagram()
         {
             throw new NotImplementedException();
@@ -107,4 +109,3 @@ namespace NEA.Questions.Loci
         }
     }
 }
-  

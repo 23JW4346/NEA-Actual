@@ -1,11 +1,10 @@
-﻿using System;
+﻿using NEA.Number_Classes;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NEA.Number_Classes;
-using System.Windows.Forms;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NEA.Questions.Loci
 {
@@ -70,11 +69,25 @@ namespace NEA.Questions.Loci
             point1 = new Complex(-real.GetValue(), -imag.GetValue());
             if (point1.GetComplex()[0] == '-')
             {
-                loci1 = $"arg(z{point1.GetComplex()})={angle1.GetString()}π";
+                if (angle1.GetTop() != 1)
+                {
+                    loci1 = $"arg(z{point1.GetComplex()})={angle1.GetTop()}π/{angle1.GetBottom()}";
+                }
+                else
+                {
+                    loci1 = $"arg(z{point1.GetComplex()})=π/{angle1.GetBottom()}";
+                }
             }
             else
             {
-                loci1 = $"arg(z+{point1.GetComplex()})={angle1.GetString()}π";
+                if (angle1.GetTop() != 1)
+                {
+                    loci1 = $"arg(z+{point1.GetComplex()})={angle1.GetTop()}π/{angle1.GetBottom()}";
+                }
+                else
+                {
+                    loci1 = $"arg(z+{point1.GetComplex()})=π/{angle1.GetBottom()}";
+                }
             }
             point1 = new Complex(real.GetValue(), imag.GetValue());
             int rand2 = rnd.Next(fractions.Length);
@@ -108,11 +121,25 @@ namespace NEA.Questions.Loci
             point2 = new Complex(-real.GetValue(), -imag.GetValue());
             if (point2.GetComplex()[0] == '-')
             {
-                loci2 = $"arg(z{point2.GetComplex()})={angle2.GetString()}π";
+                if (angle2.GetTop() != 1)
+                {
+                    loci2 = $"arg(z{point2.GetComplex()})={angle2.GetTop()}π/{angle2.GetBottom()}";
+                }
+                else
+                {
+                    loci2 = $"arg(z{point2.GetComplex()})=π/{angle2.GetBottom()}";
+                }
             }
             else
             {
-                loci2 = $"arg(z+{point2.GetComplex()})={angle2.GetString()}π";
+                if (angle2.GetTop() != 1)
+                {
+                    loci2 = $"arg(z+{point2.GetComplex()})={angle2.GetTop()}π/{angle2.GetBottom()}";
+                }
+                else
+                {
+                    loci2 = $"arg(z+{point2.GetComplex()})=π/{angle2.GetBottom()}";
+                }
             }
             point2 = new Complex(real.GetValue(), imag.GetValue());
         }
@@ -171,24 +198,29 @@ namespace NEA.Questions.Loci
             return found;
         }
 
+        public string Hint()
+        {
+            throw new NotImplementedException();
+        }
+
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();
             diagram.CreateLine(step1, point1, isleft1);
             diagram.CreateLine(step2, point2, isleft2);
-            Task.Run( () => Application.Run(diagram) );    
+            Task.Run(() => Application.Run(diagram));
         }
 
         public string PrintAnswer(bool correct)
         {
-            if(correct)
+            if (correct)
             {
                 return $"Correct, the answer is {answerpoint.GetComplex()}";
             }
             else
             {
                 return $"Incorrect, the answer was {answerpoint.GetComplex()}";
-            } 
+            }
         }
 
         public string PrintQuestion()

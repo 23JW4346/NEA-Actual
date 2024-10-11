@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NEA.Number_Classes
 {
@@ -14,7 +10,7 @@ namespace NEA.Number_Classes
 
         private static Random rnd = new Random();
 
-        private Dictionary<int, (int ,int)> modpairs = new Dictionary<int, (int, int)> { {0, (3,4) }, {1, (5,12) },
+        private Dictionary<int, (int, int)> modpairs = new Dictionary<int, (int, int)> { {0, (3,4) }, {1, (5,12) },
                                                                                        {2 , (8, 15)}, {3 , (7, 24) },
                                                                                        {4 , (9, 40)}
                                                                                        };
@@ -60,13 +56,13 @@ namespace NEA.Number_Classes
         {
             string temp = "";
             bool firstneg = true;
-            foreach(char c in strcomp)
+            foreach (char c in strcomp)
             {
                 if (Char.IsNumber(c))
                 {
                     temp += c;
                 }
-                else if(c == '-' && firstneg)
+                else if (c == '-' && firstneg)
                 {
                     temp += c;
                     firstneg = false;
@@ -90,7 +86,7 @@ namespace NEA.Number_Classes
         public string GetImaginary() => imaginary.GetString();
 
         public double GetImaginaryValue() => imaginary.GetValue();
-        
+
         public string GetComplex()
         {
             string outputreal = "";
@@ -110,14 +106,14 @@ namespace NEA.Number_Classes
                 else if (imaginary.GetString() == "-1") outputimag += "-i";
                 else
                 {
-                    outputimag += imaginary.GetString()+"i";
+                    outputimag += imaginary.GetString() + "i";
                 }
             }
             if (outputimag.Length == 0) return outputreal;
-            else if(outputimag[0] == '-') return outputreal + outputimag;
+            else if (outputimag[0] == '-') return outputreal + outputimag;
             else if (outputreal.Length == 0) return outputimag;
-            return outputreal + "+" +outputimag;
-            
+            return outputreal + "+" + outputimag;
+
 
         }
 

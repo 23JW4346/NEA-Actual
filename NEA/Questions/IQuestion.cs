@@ -18,6 +18,8 @@ namespace NEA
 
         List<string> SaveQuestion();
 
+        string Hint();
+
         bool GetQuestion(string filename);
 
         void LoadDiagram();

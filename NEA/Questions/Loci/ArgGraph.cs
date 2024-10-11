@@ -1,13 +1,9 @@
-﻿using System;
+﻿using NEA.Number_Classes;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NEA.Number_Classes;
-using System.Windows.Forms;
 using System.IO;
-using System.Security.Cryptography;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NEA.Questions.Loci
 {
@@ -20,25 +16,39 @@ namespace NEA.Questions.Loci
         private bool isleft;
         private ArgandDiagram diagram;
         private (int, int)[] fractions = { (1, 6), (1, 4), (1, 3), (2, 3), (3, 4), (5, 6) };
-        private double[] steps = { 0.5,  1, 2, 2, 1, 0.5 };
+        private double[] steps = { 0.5, 1, 2, 2, 1, 0.5 };
 
         public ArgGraph(Random rnd)
         {
             operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-            while(operand.GetComplex() == null) operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+            while (operand.GetComplex() == null) operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
             Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
-            if(rnd.Next(2) == 1)
+            if (rnd.Next(2) == 1)
             {
                 int rand = rnd.Next(fractions.Length); ;
                 argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
                 step = steps[rand];
                 if (inanswer.GetComplex()[0] == '-')
                 {
-                    answer = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
+                    if (argument.GetTop() != 1)
+                    {
+                        answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
+                    else
+                    {
+                        answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
                 }
                 else
                 {
-                    answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
+                    if (argument.GetTop() != 1)
+                    {
+                        answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
+                    else
+                    {
+                        answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
                 }
                 if (rand > 2) isleft = true;
                 else isleft = false;
@@ -50,16 +60,30 @@ namespace NEA.Questions.Loci
                 step = -steps[rand];
                 if (inanswer.GetComplex()[0] == '-')
                 {
-                    answer = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
+                    if (argument.GetTop() != 1)
+                    {
+                        answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
+                    else
+                    {
+                        answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
                 }
                 else
                 {
-                    answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
+                    if (argument.GetTop() != 1)
+                    {
+                        answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
+                    else
+                    {
+                        answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                    }
                 }
                 if (rand > 2) isleft = true;
                 else isleft = false;
             }
-            
+
         }
 
         public ArgGraph(string filename, Random rnd)
@@ -77,11 +101,25 @@ namespace NEA.Questions.Loci
                     step = steps[rand];
                     if (inanswer.GetComplex()[0] == '-')
                     {
-                        answer = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
+                        if (argument.GetTop() != 1)
+                        {
+                            answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
+                        else
+                        {
+                            answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
                     }
                     else
                     {
-                        answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
+                        if (argument.GetTop() != 1)
+                        {
+                            answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
+                        else
+                        {
+                            answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
                     }
                     if (rand > 2) isleft = true;
                     else isleft = false;
@@ -93,11 +131,25 @@ namespace NEA.Questions.Loci
                     step = -steps[rand];
                     if (inanswer.GetComplex()[0] == '-')
                     {
-                        answer = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
+                        if (argument.GetTop() != 1)
+                        {
+                            answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
+                        else
+                        {
+                            answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
                     }
                     else
                     {
-                        answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
+                        if (argument.GetTop() != 1)
+                        {
+                            answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
+                        else
+                        {
+                            answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                        }
                     }
                     if (rand > 2) isleft = true;
                     else isleft = false;
@@ -112,7 +164,7 @@ namespace NEA.Questions.Loci
             if (argument.GetNegative())
             {
                 Fraction temp = new Fraction((int)-argument.GetTop(), (int)argument.GetBottom());
-                placeholder =Array.IndexOf(fractions, (temp.GetTop(), temp.GetBottom()));
+                placeholder = Array.IndexOf(fractions, (temp.GetTop(), temp.GetBottom()));
                 step = steps[placeholder];
             }
             else
@@ -122,9 +174,26 @@ namespace NEA.Questions.Loci
             }
             if (inanswer.GetComplex()[0] == '-')
             {
-                answer = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
+                if (argument.GetTop() != 1)
+                {
+                    answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                }
+                else
+                {
+                    answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                }
             }
-            else answer = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
+            else
+            {
+                if (argument.GetTop() != 1)
+                {
+                    answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                }
+                else
+                {
+                    answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
+                }
+            }
             if (placeholder > 2) isleft = true;
             else isleft = false;
         }
@@ -168,6 +237,11 @@ namespace NEA.Questions.Loci
             File.Delete(filename);
             File.Move(tempfile, filename);
             return found;
+        }
+
+        public string Hint()
+        {
+            throw new NotImplementedException();
         }
 
         public void LoadDiagram()

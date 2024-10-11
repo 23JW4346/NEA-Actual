@@ -139,6 +139,11 @@ namespace NEA.Questions.Loci
             return found;
         }
 
+        public string Hint()
+        {
+            throw new NotImplementedException();
+        }
+
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();

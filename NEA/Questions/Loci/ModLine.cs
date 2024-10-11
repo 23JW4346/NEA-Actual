@@ -1,13 +1,10 @@
-﻿using System;
+﻿using NEA.Number_Classes;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NEA.Number_Classes;
-using System.Windows.Forms;
 using System.IO;
-using System.Linq.Expressions;
-using System.CodeDom.Compiler;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NEA.Questions.Loci
 {
@@ -21,20 +18,20 @@ namespace NEA.Questions.Loci
         public ModLine(Random rnd)
         {
             int rand = rnd.Next(3);
-            if(rand == 1)
+            if (rand == 1)
             {
-                gradient = new Fraction(rnd.Next(3), rnd.Next(4)); 
+                gradient = new Fraction(rnd.Next(3), rnd.Next(4));
             }
             else if (rand == 2)
             {
                 gradient = new Fraction(rnd.Next(-3), rnd.Next(4));
             }
-            else 
+            else
             {
                 gradient = new Number(rnd.Next(-4, 6));
             }
             midpoint = new Complex(rnd.Next(6), rnd.Next(6));
-            if(gradient.GetValue() == 0)
+            if (gradient.GetValue() == 0)
             {
                 rand = rnd.Next(5);
                 operand1 = new Complex(midpoint.GetRealValue(), midpoint.GetImaginaryValue() + rand);
@@ -43,8 +40,8 @@ namespace NEA.Questions.Loci
             else if (gradient.GetValue() == 5)
             {
                 rand = rnd.Next(5);
-                operand1 = new Complex(midpoint.GetRealValue() + rand, midpoint.GetImaginaryValue() );
-                operand2 = new Complex(midpoint.GetRealValue() - rand, midpoint.GetImaginaryValue() );
+                operand1 = new Complex(midpoint.GetRealValue() + rand, midpoint.GetImaginaryValue());
+                operand2 = new Complex(midpoint.GetRealValue() - rand, midpoint.GetImaginaryValue());
             }
             else
             {
@@ -72,8 +69,8 @@ namespace NEA.Questions.Loci
             Complex temp = midpoint;
             double negRec = Math.Pow(gradient.GetValue(), -1);
             bool isleft = false;
-            if(negRec < 0) isleft = true;
-            for(int i = 0; i < space; i++)
+            if (negRec < 0) isleft = true;
+            for (int i = 0; i < space; i++)
             {
                 if (isleft) temp = new Complex(temp.GetRealValue() - 1, temp.GetImaginaryValue() + negRec);
                 else temp = new Complex(temp.GetRealValue() + 1, temp.GetImaginaryValue() + negRec);
@@ -217,6 +214,10 @@ namespace NEA.Questions.Loci
                 equation,
                 answer
             };
+        }
+        public string Hint()
+        {
+            throw new NotImplementedException();
         }
     }
 }

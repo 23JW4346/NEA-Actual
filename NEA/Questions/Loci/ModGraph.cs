@@ -1,11 +1,9 @@
-﻿using System;
+﻿using NEA.Number_Classes;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NEA.Number_Classes;
-using System.Windows.Forms;
 using System.IO;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NEA.Questions.Loci
 {
@@ -105,6 +103,11 @@ namespace NEA.Questions.Loci
             File.Delete(filename);
             File.Move(tempfile, filename);
             return found;
+        }
+
+        public string Hint()
+        {
+            throw new NotImplementedException();
         }
 
         public void LoadDiagram()
