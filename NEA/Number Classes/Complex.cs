@@ -129,6 +129,7 @@ namespace NEA.Number_Classes
             {
                 if (pythag % (int)Math.Pow(i, 2) == 0)
                 {
+
                     coef = i;
                 }
             }
@@ -141,24 +142,17 @@ namespace NEA.Number_Classes
             double tantheta = imaginary.GetValue() / real.GetValue();
             if (tantheta < 0) tantheta = -tantheta;
             double arg;
-            if (!imaginary.GetNegative())
+            arg = Math.Atan(tantheta);
+            if (imaginary.GetValue() > 0 && real.GetValue() < 0)
             {
-                arg = Math.Atan(tantheta);
-                if (real.GetNegative() && arg < Math.PI / 2)
-                {
-                    arg = Math.PI - arg;
-                }
+                arg += Math.PI;
             }
-            else
+            else if (imaginary.GetValue() < 0 && real.GetValue() < 0)
             {
-                arg = -Math.Atan(tantheta);
-                if (real.GetNegative() && arg > -Math.PI / 2)
-                {
-                    arg = -Math.PI + arg;
-                }
-                if (arg > 0) arg -= Math.PI;
+                arg -= Math.PI;
             }
-            return Math.Round(arg, 2);
+            return Math.Round(arg, 3);
         }
     }
 }
+

@@ -39,7 +39,8 @@ namespace NEA.Questions
             {
                 correctAnswerText.Text = question.PrintAnswer(false);
             }
-
         }
+
+
     }
 }

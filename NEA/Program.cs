@@ -9,6 +9,9 @@ using NEA.Questions.ModArg;
 using NEA.Questions.MultiDivide;
 using NEA.Questions.Polynomial_Roots;
 using System.Windows.Forms;
+using NEA.Number_Classes;
+using System.Windows.Forms.DataVisualization.Charting;
+using System.Drawing.Imaging;
 
 namespace NEA
 {
@@ -27,7 +30,7 @@ namespace NEA
             Task.Run(() => Application.Run(form));
             Console.ReadKey();
 
-            Console.OutputEncoding = System.Text.Encoding.Unicode; //thank you Ed (Stack Overflow)
+            Console.OutputEncoding = System.Text.Encoding.Unicode; 
             Menu();
             using (StreamWriter sw = new StreamWriter("Questions.txt", true))
             {
@@ -40,6 +43,127 @@ namespace NEA
                 }
                 sw.Close();
             }
+        }
+
+        public static Complex TimesComplex(Complex a, Complex b)
+        {
+            return new Complex(a.GetRealValue() * b.GetRealValue() - a.GetImaginaryValue() * b.GetImaginaryValue(), a.GetImaginaryValue() * b.GetRealValue() + a.GetRealValue() * b.GetImaginaryValue());
+        }
+
+        public static Complex DivideComplex(Complex a, Complex b)
+        {
+            Fraction RealPart = new Fraction((int)(a.GetRealValue() * b.GetRealValue() - a.GetImaginaryValue() * -b.GetImaginaryValue()), (int)(b.GetRealValue() * b.GetRealValue() - b.GetImaginaryValue() * -b.GetImaginaryValue()));
+            Fraction ImagPart = new Fraction((int)(a.GetRealValue() * -b.GetImaginaryValue() + a.GetImaginaryValue() * b.GetRealValue()), (int)(b.GetRealValue() * b.GetRealValue() - b.GetImaginaryValue() * -b.GetImaginaryValue()));
+            return new Complex(RealPart, ImagPart);
+        }
+
+        public static string CreateArgLine(Complex a, Fraction b)
+        {
+            string loci;
+            if (a.GetComplex()[0] == '-')
+            {
+                if (b.GetTop() != 1)
+                {
+                    loci = $"arg(z{a.GetComplex()})={b.GetTop()}π/{b.GetBottom()}";
+                }
+                else
+                {
+                    loci = $"arg(z{a.GetComplex()})=π/{b.GetBottom()}";
+                }
+            }
+            else
+            {
+                if (b.GetTop() != 1)
+                {
+                    loci = $"arg(z+{a.GetComplex()})={b.GetTop()}π/{b.GetBottom()}";
+                }
+                else
+                {
+                    loci = $"arg(z+{a.GetComplex()})=π/{b.GetBottom()}";
+                }
+            }
+            return loci;
+        }
+
+        public static string CreateModCircle(Complex a, int modulus)
+        {
+            string loci;
+            if (a.GetComplex()[0] == '-')
+            {
+                loci = $"|z{a.GetComplex()}|={modulus}";
+            }
+            else
+            {
+                loci = $"|z+{a.GetComplex()}|={modulus}";
+            }
+            return loci;
+        }
+
+        public static string CreateCartesianCircle(Complex a, int radius)
+        {
+            string xpart, ypart;
+            if (a.GetRealValue() < 0)
+            {
+                xpart = $"(x{a.GetReal()})^2";
+            }
+            else if (a.GetRealValue() == 0)
+            {
+                xpart = "x^2";
+            }
+            else
+            {
+                xpart = $"(x+{a.GetReal()})^2";
+            }
+            if (a.GetImaginaryValue() < 0)
+            {
+                ypart = $"(y{a.GetImaginaryValue()})^2";
+            }
+            else if (a.GetImaginaryValue() == 0)
+            {
+                ypart = "y^2";
+            }
+            else
+            {
+                ypart = $"(y+{a.GetImaginaryValue()})^2";
+            }
+            return $"{xpart}+{ypart}={radius}";
+        }
+
+        public static string CreateCartesianLine(Complex a, double grad)
+        {
+            string answer = "";
+            double yint = grad * -a.GetRealValue() + a.GetImaginaryValue();
+            double xint = yint / grad;
+            if (grad == 0.5 || grad == -0.5)
+            {
+                answer += "y=x/2";
+            }
+            else if (grad == 1) answer += "y=x";
+            else if (grad == -1) answer += "y=-x";
+            else answer += "y=" + grad + "x";
+            if (yint != 0)
+            {
+                string yint2;
+                if (yint.ToString().Contains('.'))
+                {
+                    yint2 = (yint * 2) + "/2";
+                }
+                else yint2 = yint.ToString();
+                if (yint < 0) answer += yint2;
+                else answer += "+" + yint2;
+                if (grad == 5) answer = $"y={yint}";
+            }
+            if (grad == 0)
+            {
+                string xint2;
+                if(xint.ToString().Contains('.'))
+                {
+                    xint2 = (xint * 2) + "/2";
+                }
+                else xint2 = xint.ToString();
+                answer = $"x={xint2}";
+            }
+            return answer;
         }
 
         static void Menu()

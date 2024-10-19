@@ -36,7 +36,6 @@ namespace NEA.Questions.MultiDivide
 
         public void Calculate()
         {
-            int realpart = (int)(operand.GetRealValue() * Zconjagute.GetRealValue() - operand.GetImaginaryValue() * Zconjagute.GetImaginaryValue());
             int imagpart = (int)(operand.GetRealValue() * Zconjagute.GetImaginaryValue() + operand.GetImaginaryValue() * Zconjagute.GetRealValue());
             constant = (int)(imagpart - Z.GetImaginaryValue());
         }

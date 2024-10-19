@@ -28,28 +28,7 @@ namespace NEA.Questions.Loci
                 int rand = rnd.Next(fractions.Length); ;
                 argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
                 step = steps[rand];
-                if (inanswer.GetComplex()[0] == '-')
-                {
-                    if (argument.GetTop() != 1)
-                    {
-                        answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                    else
-                    {
-                        answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                }
-                else
-                {
-                    if (argument.GetTop() != 1)
-                    {
-                        answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                    else
-                    {
-                        answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                }
+                answer = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2) isleft = true;
                 else isleft = false;
             }
@@ -58,28 +37,7 @@ namespace NEA.Questions.Loci
                 int rand = rnd.Next(fractions.Length);
                 argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
                 step = -steps[rand];
-                if (inanswer.GetComplex()[0] == '-')
-                {
-                    if (argument.GetTop() != 1)
-                    {
-                        answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                    else
-                    {
-                        answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                }
-                else
-                {
-                    if (argument.GetTop() != 1)
-                    {
-                        answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                    else
-                    {
-                        answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                }
+                answer = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2) isleft = true;
                 else isleft = false;
             }
@@ -99,28 +57,7 @@ namespace NEA.Questions.Loci
                     int rand = rnd.Next(fractions.Length); ;
                     argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
                     step = steps[rand];
-                    if (inanswer.GetComplex()[0] == '-')
-                    {
-                        if (argument.GetTop() != 1)
-                        {
-                            answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                        else
-                        {
-                            answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                    }
-                    else
-                    {
-                        if (argument.GetTop() != 1)
-                        {
-                            answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                        else
-                        {
-                            answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                    }
+                    answer = Program.CreateArgLine(inanswer, argument);
                     if (rand > 2) isleft = true;
                     else isleft = false;
                 }
@@ -129,28 +66,7 @@ namespace NEA.Questions.Loci
                     int rand = rnd.Next(fractions.Length);
                     argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
                     step = -steps[rand];
-                    if (inanswer.GetComplex()[0] == '-')
-                    {
-                        if (argument.GetTop() != 1)
-                        {
-                            answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                        else
-                        {
-                            answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                    }
-                    else
-                    {
-                        if (argument.GetTop() != 1)
-                        {
-                            answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                        else
-                        {
-                            answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                    }
+                    answer = Program.CreateArgLine(inanswer, argument);
                     if (rand > 2) isleft = true;
                     else isleft = false;
                 }
@@ -172,28 +88,7 @@ namespace NEA.Questions.Loci
                 placeholder = Array.IndexOf(fractions, (argument.GetTop(), argument.GetBottom()));
                 step = steps[placeholder];
             }
-            if (inanswer.GetComplex()[0] == '-')
-            {
-                if (argument.GetTop() != 1)
-                {
-                    answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                }
-                else
-                {
-                    answer = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                }
-            }
-            else
-            {
-                if (argument.GetTop() != 1)
-                {
-                    answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                }
-                else
-                {
-                    answer = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                }
-            }
+            answer = Program.CreateArgLine(inanswer, argument);
             if (placeholder > 2) isleft = true;
             else isleft = false;
         }

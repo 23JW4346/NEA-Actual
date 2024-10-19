@@ -21,14 +21,7 @@ namespace NEA.Questions.Loci
             while (operand.GetComplex() == "") operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
             Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
             modulus = rnd.Next(1, 6);
-            if (temp.GetComplex()[0] == '-')
-            {
-                loci = $"|z{temp.GetComplex()}|={modulus}";
-            }
-            else
-            {
-                loci = $"|z+{temp.GetComplex()}|={modulus}";
-            }
+            loci = Program.CreateModCircle(temp, modulus);
         }
 
         public ModGraph(Random rnd, string filename)
@@ -36,14 +29,7 @@ namespace NEA.Questions.Loci
             if (GetQuestion(filename))
             {
                 Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
-                if (temp.GetComplex()[0] == '-')
-                {
-                    loci = $"|z{temp.GetComplex()}|={modulus}";
-                }
-                else
-                {
-                    loci = $"|z+{temp.GetComplex()}|={modulus}";
-                }
+                loci = Program.CreateModCircle(temp, modulus);
             }
             else
             {
@@ -51,14 +37,7 @@ namespace NEA.Questions.Loci
                 while (operand.GetComplex() == "") operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
                 Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
                 modulus = rnd.Next(1, 6);
-                if (temp.GetComplex()[0] == '-')
-                {
-                    loci = $"|z{temp.GetComplex()}|={modulus}";
-                }
-                else
-                {
-                    loci = $"|z+{temp.GetComplex()}|={modulus}";
-                }
+                loci = Program.CreateModCircle(temp, modulus);
             }
         }
         public void Calculate()

@@ -34,28 +34,7 @@ namespace NEA.Questions.Loci
                 step = steps[rand];
                 if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0 ) grad = step;
                 else grad = -step;
-                if (inanswer.GetComplex()[0] == '-')
-                {
-                    if (argument.GetTop() != 1)
-                    {
-                        loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                    else
-                    {
-                        loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                }
-                else
-                {
-                    if (argument.GetTop() != 1)
-                    {
-                        loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                    else
-                    {
-                        loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                }
+                loci = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2)  isleft = true;
                 else isleft = false;
             }
@@ -66,28 +45,7 @@ namespace NEA.Questions.Loci
                 step = -steps[rand];
                 if (argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
                 else grad = -step;
-                if (inanswer.GetComplex()[0] == '-')
-                {
-                    if (argument.GetTop() != 1)
-                    {
-                        loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                    else
-                    {
-                        loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                }
-                else
-                {
-                    if (argument.GetTop() != 1)
-                    {
-                        loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                    else
-                    {
-                        loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                }
+                loci = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2) isleft = true;
                 else isleft = false;
             }
@@ -114,28 +72,7 @@ namespace NEA.Questions.Loci
                    argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
                     else grad = -step;
                 }
-                if (inanswer.GetComplex()[0] == '-')
-                {
-                    if (argument.GetTop() != 1)
-                    {
-                        loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                    else
-                    {
-                        loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                }
-                else
-                {
-                    if (argument.GetTop() != 1)
-                    {
-                        loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                    else
-                    {
-                        loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                    }
-                }
+                loci = Program.CreateArgLine(inanswer, argument);
                 if (Math.Abs(argument.GetValue()) >= 0.5) isleft = true;
                 else isleft = false;
             }
@@ -151,28 +88,7 @@ namespace NEA.Questions.Loci
                     step = steps[rand];
                     if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0) grad = step;
                     else grad = -step;
-                    if (inanswer.GetComplex()[0] == '-')
-                    {
-                        if (argument.GetTop() != 1)
-                        {
-                            loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                        else
-                        {
-                            loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                    }
-                    else
-                    {
-                        if (argument.GetTop() != 1)
-                        {
-                            loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                        else
-                        {
-                            loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                    }
+                    loci = Program.CreateArgLine(inanswer, argument);
                     if (rand > 2) isleft = true;
                     else isleft = false;
                 }
@@ -183,28 +99,7 @@ namespace NEA.Questions.Loci
                     step = -steps[rand];
                     if (argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
                     else grad = -step;
-                    if (inanswer.GetComplex()[0] == '-')
-                    {
-                        if (argument.GetTop() != 1)
-                        {
-                            loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                        else
-                        {
-                            loci = $"arg(z{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                    }
-                    else
-                    {
-                        if (argument.GetTop() != 1)
-                        {
-                            loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                        else
-                        {
-                            loci = $"arg(z+{inanswer.GetComplex()})={argument.GetTop()}π/{argument.GetBottom()}";
-                        }
-                    }
+                    loci = Program.CreateArgLine(inanswer, argument);
                     if (rand > 2) isleft = true;
                     else isleft = false;
                 }
@@ -214,26 +109,7 @@ namespace NEA.Questions.Loci
 
         public void Calculate()
         {
-            double yint = grad*-operand.GetRealValue() + operand.GetImaginaryValue();
-            if (grad == 0.5 || grad == -0.5)
-            {
-                answer += "y=x/2";
-            }
-            else if (grad == 1) answer += "y=x";
-            else if (grad == -1) answer += "y=-x";
-            else answer += "y=" + grad + "x";
-            if (yint != 0)
-            {
-                string yint2;
-                if (yint.ToString().Contains('.'))
-                {
-                    yint2 = (yint * 2) + "/2";
-                }
-                else yint2 = yint.ToString();
-                if (yint < 0) answer += yint2;
-                else answer += "+" + yint2;
-            }
-            Console.WriteLine(answer);
+            answer = Program.CreateCartesianLine(operand, grad);
         }
 
         public bool CheckAnswer(string answer)

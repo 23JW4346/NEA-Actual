@@ -32,31 +32,7 @@ namespace NEA.Questions.MultiDivide
 
         public void Calculate()
         {
-            Fraction real = new Fraction();
-            Fraction imaginary = new Fraction();
-            Complex conjugate = new Complex(operand2.GetRealValue(), -operand2.GetImaginaryValue());
-            double realtop = operand1.GetRealValue() * conjugate.GetRealValue() - operand1.GetImaginaryValue() * conjugate.GetImaginaryValue();
-            double imagtop = operand1.GetImaginaryValue() * conjugate.GetRealValue() + operand1.GetRealValue() * conjugate.GetImaginaryValue();
-            double bottom = operand2.GetRealValue() * conjugate.GetRealValue() - operand2.GetImaginaryValue() * conjugate.GetImaginaryValue();
-            if (!realtop.ToString().Contains('.') && !imagtop.ToString().Contains('.') && !bottom.ToString().Contains('.'))
-            {
-                real = new Fraction((int)realtop, (int)bottom);
-                imaginary = new Fraction((int)imagtop, (int)bottom);
-            }
-            else
-            {
-                bool loop = true;
-                do
-                {
-                    realtop *= bottom;
-                    imagtop *= bottom;
-                    bottom *= bottom;
-                    if (!realtop.ToString().Contains('.') && !imagtop.ToString().Contains('.') && !bottom.ToString().Contains('.')) loop = false;
-                } while (loop);  
-
-               
-            }
-            answer = new Complex(real, imaginary);
+            answer = Program.DivideComplex(operand1, operand2);
         }
 
         public bool CheckAnswer(string answer)

@@ -34,9 +34,7 @@ namespace NEA.Questions.MultiDivide
 
         public void Calculate()
         {
-            double realvalue = operand1.GetRealValue() * operand2.GetRealValue() - operand1.GetImaginaryValue() * operand2.GetImaginaryValue();
-            double imagvalue = operand1.GetRealValue() * operand2.GetImaginaryValue() + operand1.GetImaginaryValue() * operand2.GetRealValue();
-            answer = new Complex(realvalue, imagvalue);
+            answer = Program.TimesComplex(operand1, operand2);
         }
 
         public bool CheckAnswer(string answer)

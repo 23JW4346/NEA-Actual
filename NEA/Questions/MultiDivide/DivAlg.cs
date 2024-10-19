@@ -35,20 +35,19 @@ namespace NEA.Questions.MultiDivide
 
         public void Calculate()
         {
-            double realvalue = operand1.GetRealValue() * answer.GetRealValue() - operand1.GetImaginaryValue() * answer.GetImaginaryValue();
-            double imagvalue = operand1.GetRealValue() * answer.GetImaginaryValue() + operand1.GetImaginaryValue() * answer.GetRealValue();
+            Complex temp = Program.TimesComplex(operand1, operand2);
             a = 1;
-            int loop = (int)realvalue;
-            if (imagvalue < realvalue) loop = (int)imagvalue;
+            int loop = (int)temp.GetRealValue();
+            if (temp.GetImaginaryValue() < temp.GetRealValue()) loop = (int)temp.GetImaginaryValue();
             for (int i = 1; i <= loop; i++)
             {
-                if ((int)realvalue % i == 0 && (int)imagvalue % i == 0)
+                if ((int)temp.GetRealValue() % i == 0 && (int)temp.GetImaginaryValue() % i == 0)
                 {
                     a = i;
                 }
             }
-            Fraction real = new Fraction((int)realvalue, a);
-            Fraction imag = new Fraction((int)imagvalue, a);
+            Fraction real = new Fraction((int)temp.GetRealValue(), a);
+            Fraction imag = new Fraction((int)temp.GetImaginaryValue(), a);
             operand2 = new Complex(real, imag);
         }
 

@@ -26,14 +26,7 @@ namespace NEA.Questions.Loci
                 int rand = rnd.Next(fractions.Length); ;
                 argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
                 step = steps[rand];
-                if (inanswer.GetComplex()[0] == '-')
-                {
-                    argLoci = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
-                }
-                else
-                {
-                    argLoci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
-                }
+                argLoci = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2) isleft = true;
                 else isleft = false;
             }
@@ -42,14 +35,7 @@ namespace NEA.Questions.Loci
                 int rand = rnd.Next(fractions.Length);
                 argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
                 step = -steps[rand];
-                if (inanswer.GetComplex()[0] == '-')
-                {
-                    argLoci = $"arg(z{inanswer.GetComplex()})={argument.GetString()}π";
-                }
-                else
-                {
-                    argLoci = $"arg(z+{inanswer.GetComplex()})={argument.GetString()}π";
-                }
+                argLoci = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2) isleft = true;
                 else isleft = false;
             }

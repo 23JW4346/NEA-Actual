@@ -24,14 +24,7 @@ namespace NEA.Questions.Loci
             while(operand.GetComplex() == "") operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
             Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
             modulus = rnd.Next(1, 6);
-            if (temp.GetComplex()[0] == '-')
-            {
-                loci = $"|z{temp.GetComplex()}|={modulus}";
-            }
-            else
-            {
-                loci = $"|z+{temp.GetComplex()}|={modulus}";
-            }
+            loci = Program.CreateModCircle(temp, modulus);
             Calculate();
         }
 
@@ -40,14 +33,7 @@ namespace NEA.Questions.Loci
             if (GetQuestion(filename))
             {
                 Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
-                if (temp.GetComplex()[0] == '-')
-                {
-                    loci = $"|z{temp.GetComplex()}|={modulus}";
-                }
-                else
-                {
-                    loci = $"|z+{temp.GetComplex()}|={modulus}";
-                }
+                loci = Program.CreateModCircle(temp, modulus);
             }
             else
             {
@@ -55,14 +41,7 @@ namespace NEA.Questions.Loci
                 while (operand.GetComplex() == "") operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
                 Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
                 modulus = rnd.Next(1, 6);
-                if (temp.GetComplex()[0] == '-')
-                {
-                    loci = $"|z{temp.GetComplex()}|={modulus}";
-                }
-                else
-                {
-                    loci = $"|z+{temp.GetComplex()}|={modulus}";
-                }
+                loci = Program.CreateModCircle(temp, modulus);
             }
             Calculate();
         }
@@ -70,33 +49,7 @@ namespace NEA.Questions.Loci
         public void Calculate()
         {
             Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
-            string xpart, ypart;
-            int radius = modulus * modulus;
-            if (temp.GetRealValue() < 0)
-            {
-                xpart = $"(x{temp.GetReal()})^2";
-            }
-            else if (temp.GetRealValue() == 0)
-            {
-                xpart = "x^2";
-            }
-            else
-            {
-                xpart =  $"(x+{temp.GetReal()})^2";
-            }
-            if (temp.GetImaginaryValue() < 0)
-            {
-                ypart = $"(y{temp.GetImaginaryValue()})^2";
-            }
-            else if (temp.GetImaginaryValue() == 0)
-            {
-                ypart = "y^2";
-            }
-            else
-            {
-                ypart = $"(y+{temp.GetImaginaryValue()})^2";
-            }
-            answer = $"{xpart}+{ypart}={radius}";
+            answer = Program.CreateCartesianCircle(temp, modulus * modulus);
         }
 
         public bool CheckAnswer(string answer)
