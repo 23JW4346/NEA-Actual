@@ -86,7 +86,7 @@ namespace NEA.Questions.Loci
                     int rand = rnd.Next(fractions.Length); ;
                     argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
                     step = steps[rand];
-                    if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0) grad = step;
+                    if (argument.GetValue() <= 1 / 2 && argument.GetValue() >= 0) grad = step;
                     else grad = -step;
                     loci = Program.CreateArgLine(inanswer, argument);
                     if (rand > 2) isleft = true;
@@ -97,7 +97,7 @@ namespace NEA.Questions.Loci
                     int rand = rnd.Next(fractions.Length);
                     argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
                     step = -steps[rand];
-                    if (argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
+                    if (argument.GetValue() >= -1 && argument.GetValue() <= -1 / 2) grad = step;
                     else grad = -step;
                     loci = Program.CreateArgLine(inanswer, argument);
                     if (rand > 2) isleft = true;

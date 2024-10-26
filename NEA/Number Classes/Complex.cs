@@ -113,8 +113,6 @@ namespace NEA.Number_Classes
             else if (outputimag[0] == '-') return outputreal + outputimag;
             else if (outputreal.Length == 0) return outputimag;
             return outputreal + "+" + outputimag;
-
-
         }
 
         public Number GetModulus()
@@ -153,6 +151,8 @@ namespace NEA.Number_Classes
             }
             return Math.Round(arg, 3);
         }
+
+
     }
 }
 

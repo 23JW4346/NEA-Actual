@@ -24,7 +24,7 @@ namespace NEA.Questions.Loci
             }
             else if (rand == 2)
             {
-                gradient = new Fraction(rnd.Next(-3), rnd.Next(4));
+                gradient = new Fraction(rnd.Next(-3, 1), rnd.Next(4));
             }
             else
             {
@@ -67,7 +67,7 @@ namespace NEA.Questions.Loci
         private void GetPoints(int space)
         {
             Complex temp = midpoint;
-            double negRec = Math.Pow(gradient.GetValue(), -1);
+            double negRec = -Math.Pow(gradient.GetValue(), -1);
             bool isleft = false;
             if (negRec < 0) isleft = true;
             for (int i = 0; i < space; i++)
@@ -88,49 +88,9 @@ namespace NEA.Questions.Loci
 
         public void Calculate()
         {
-            Complex temp = new Complex(-operand1.GetRealValue(), -operand1.GetImaginaryValue());
-            equation += "|z";
-            if (temp.GetComplex()[0] == '-')
-            {
-                equation += temp.GetComplex();
-            }
-            else equation += "+" + temp.GetComplex();
-            equation += "|=|z";
-            temp = new Complex(-operand2.GetRealValue(), -operand2.GetImaginaryValue());
-            if (temp.GetComplex()[0] == '-')
-            {
-                equation += temp.GetComplex();
-            }
-            else equation += "+" + temp.GetComplex();
-            equation += "|";
-            if (gradient.GetValue() == 0)
-            {
-                answer = "x=" + midpoint.GetReal();
-            }
-            else if (gradient.GetValue() == 5)
-            {
-                answer = "y=" + midpoint.GetImaginary();
-            }
-            else if (operand1.GetImaginaryValue() - operand2.GetImaginaryValue() == 0 && operand1.GetRealValue() - operand2.GetRealValue() == 0)
-            {
-                answer = "y=x";
-            }
-            else
-            {
-                answer += "y=";
-                if (gradient.GetString()[0] == '-')
-                {
-                    answer += gradient.GetString() + "x";
-                }
-                else if (gradient.GetString() == "1") answer += "x";
-                else if (gradient.GetString() == "-1") answer += "-x";
-                else answer += gradient.GetString() + "x";
-                if (midpoint.GetImaginaryValue() < 0)
-                {
-                    answer += midpoint.GetImaginary();
-                }
-                else answer += "+" + midpoint.GetImaginary();
-            }
+            equation = Program.CreateModLine(new Complex(-operand1.GetRealValue(), -operand1.GetImaginaryValue()), 
+                                             new Complex(-operand2.GetRealValue(), -operand2.GetImaginaryValue()));
+            answer = Program.CreateCartesianLine(midpoint, gradient.GetValue());
         }
 
         public bool CheckAnswer(string answer)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,7 +31,7 @@ namespace NEA.Number_Classes
                 if (numerator < 0) numerator = -numerator;
                 if (denominator < 0) denominator = -denominator;
             }
-            simplify();
+            Simplify();
 
         }
         public Fraction()
@@ -50,7 +51,7 @@ namespace NEA.Number_Classes
                 if (numerator < 0) numerator = -numerator;
                 if (denominator < 0) denominator = -denominator;
             }
-            simplify();
+            Simplify();
         }
 
         public override string GetString()
@@ -65,16 +66,16 @@ namespace NEA.Number_Classes
             return $"{numerator}/{denominator}";
         }
 
-        public double GetTop() => numerator;
+        public virtual double GetTop() => numerator;
 
-        public double GetBottom() => denominator;
+        public virtual double GetBottom() => denominator;
 
         public override double GetValue()
         {
             if (isnegative) return (double)-(numerator / denominator);
             return (double)(numerator / denominator);
         }
-        public void simplify()
+        public virtual void Simplify()
         {
             bool x = true;
             if (numerator == denominator)

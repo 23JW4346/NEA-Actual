@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using NEA.Number_Classes;
 using NEA.Questions;
 using NEA.Questions.Loci;
 using NEA.Questions.ModArg;
 using NEA.Questions.MultiDivide;
 using NEA.Questions.Polynomial_Roots;
-using System.Windows.Forms;
-using NEA.Number_Classes;
-using System.Windows.Forms.DataVisualization.Charting;
-using System.Drawing.Imaging;
 
 namespace NEA
 {
@@ -20,17 +19,21 @@ namespace NEA
     {
         static Random rnd = new Random();
         static List<List<string>> savequests = new List<List<string>>();
+        const string posintReg = "[1-9][0-9]*|0";
+        const string intReg = "-?" + posintReg;
+        const string fracReg = posintReg + "/" + posintReg + "|-?" + posintReg + "/" + posintReg +"|0";
+        const string complexReg = "(("+ intReg + ")|(" + fracReg + "))[+-](("+ intReg +")|(" + fracReg + "))i|(("+ intReg + ")|(" + fracReg + "))i";
+
+
 
         static void Main(string[] args)
         {
-            Console.WindowHeight = 63;
-            Console.WindowWidth = 240;
-            IQuestion temp = new MultiAlg();
-            QuestionForm form = new QuestionForm(temp);
-            Task.Run(() => Application.Run(form));
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
+            IQuestion temp = new ArgModIntersect(rnd);
+            Console.WriteLine(temp.PrintQuestion());
+            temp.LoadDiagram();
+            Console.WriteLine(temp.PrintAnswer(false));
             Console.ReadKey();
-
-            Console.OutputEncoding = System.Text.Encoding.Unicode; 
             Menu();
             using (StreamWriter sw = new StreamWriter("Questions.txt", true))
             {
@@ -140,6 +143,16 @@ namespace NEA
             }
             else if (grad == 1) answer += "y=x";
             else if (grad == -1) answer += "y=-x";
+            else if (grad == 0)
+            {
+                    string xint2;
+                if (xint.ToString().Contains('.'))
+                {
+                    xint2 = (xint * 2) + "/2";
+                }
+                else xint2 = xint.ToString();
+                answer = $"x={xint2}";
+            }
             else answer += "y=" + grad + "x";
             if (yint != 0)
             {
@@ -153,17 +166,24 @@ namespace NEA
                 else answer += "+" + yint2;
                 if (grad == 5) answer = $"y={yint}";
             }
-            if (grad == 0)
-            {
-                string xint2;
-                if(xint.ToString().Contains('.'))
-                {
-                    xint2 = (xint * 2) + "/2";
-                }
-                else xint2 = xint.ToString();
-                answer = $"x={xint2}";
-            }
             return answer;
+        }
+
+        public static string CreateModLine(Complex a, Complex b)
+        {
+            string loci = "|z";
+            if (a.GetComplex()[0] == '-')
+            {
+                loci += a.GetComplex();
+            }
+            else loci += "+" + a.GetComplex();
+            loci += "|=|z";
+            if (b.GetComplex()[0] == '-')
+            {
+                loci += b.GetComplex();
+            }
+            else loci += "+" + b.GetComplex();
+            return loci + "|";
         }
 
         static void Menu()
@@ -264,7 +284,7 @@ namespace NEA
                                 AskQuestion(GenQ(4), ref loop, ref placeholder);
                                 break;
                             case 6:
-                                AskQuestion(GenQ(rnd.Next( 6)), ref loop, ref placeholder);
+                                AskQuestion(GenQ(rnd.Next(6)), ref loop, ref placeholder);
                                 break;
                             case 7:
                                 return;
@@ -352,7 +372,7 @@ namespace NEA
                                 return new DivAlg();
                             }
                         case 2:
-                            if(rnd.Next(1,16) == 1)
+                            if (rnd.Next(1, 16) == 1)
                             {
                                 return new DivAlg2("Questions.txt");
                             }
@@ -425,7 +445,7 @@ namespace NEA
                     switch (rnd.Next(3))
                     {
                         case 0:
-                            if(rnd.Next(1,16) == 1)
+                            if (rnd.Next(1, 16) == 1)
                             {
                                 return new Quadratic(rnd.Next(1, 4), "Questions.txt");
                             }
@@ -434,7 +454,7 @@ namespace NEA
                                 return new Quadratic(rnd.Next(1, 4));
                             }
                         case 1:
-                            if(rnd.Next(1, 16) == 1)
+                            if (rnd.Next(1, 16) == 1)
                             {
                                 return new Cubic1rootgiven(rnd, "Questions.txt");
                             }
@@ -476,7 +496,7 @@ namespace NEA
                                 return new ModToCartesian(rnd);
                             }
                         case 3:
-                            if(rnd.Next(1, 16) == 1)
+                            if (rnd.Next(1, 16) == 1)
                             {
                                 return new ModGraph(rnd, "Questions.txt");
                             }
@@ -485,7 +505,7 @@ namespace NEA
                                 return new ModGraph(rnd);
                             }
                         case 4:
-                            if(rnd.Next(1,16) == 1)
+                            if (rnd.Next(1, 16) == 1)
                             {
                                 return new ModLine("Questions.txt");
                             }
@@ -494,7 +514,7 @@ namespace NEA
                                 return new ModLine(rnd);
                             }
                         case 5:
-                            if(rnd.Next(1,16) == 1)
+                            if (rnd.Next(1, 16) == 1)
                             {
                                 return new ArgIntersect(rnd, "Questions.txt");
                             }
@@ -573,7 +593,7 @@ namespace NEA
                         Console.CursorLeft--;
                         Console.Write(" ");
                         Console.CursorLeft--;
-                        ans.Remove(ans.Length - 1); 
+                        ans.Remove(ans.Length - 1);
                     }
                     else
                     {
@@ -664,10 +684,10 @@ namespace NEA
                 questionWrong[i] = true;
             }
             Shuffle(quizQuestions);
-            foreach(IQuestion question in quizQuestions)
+            foreach (IQuestion question in quizQuestions)
             {
                 bool repeat = false;
-                AskQuestion(question,ref repeat, ref scoreForQuestion);
+                AskQuestion(question, ref repeat, ref scoreForQuestion);
                 if (scoreForQuestion > 0)
                 {
                     quizScore += scoreForQuestion;
@@ -678,9 +698,9 @@ namespace NEA
             Console.WriteLine();
             Console.WriteLine("You have reached the end of the quiz");
             Console.WriteLine($"Your final score was {quizScore}");
-            if(questionWrong.Contains(false))
+            if (questionWrong.Contains(false))
             {
-                for(int i = 0; i < questionWrong.Length; i++)
+                for (int i = 0; i < questionWrong.Length; i++)
                 {
                     if (!questionWrong[i])
                     {
@@ -705,7 +725,7 @@ namespace NEA
                     }
                 }
                 Console.Write("due to your results, We suggest Revising: ");
-                switch(Array.IndexOf(numberwrong, numberwrong.Max()))
+                switch (Array.IndexOf(numberwrong, numberwrong.Max()))
                 {
                     case 0:
                         Console.WriteLine("Complex number multiplication");
@@ -733,7 +753,7 @@ namespace NEA
 
         static void Shuffle(IQuestion[] questions)
         {
-            for(int i = 0; i < 100; i++)
+            for (int i = 0; i < 100; i++)
             {
                 int index = rnd.Next(questions.Length);
                 IQuestion temp = questions[index];

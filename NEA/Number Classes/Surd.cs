@@ -8,7 +8,7 @@ namespace NEA.Number_Classes
 {
     public class Surd : Number
     {
-        private int coefficent, root;
+        public int coefficent, root;
 
         public Surd(int incoef, int inroot)
         {
@@ -33,5 +33,9 @@ namespace NEA.Number_Classes
         {
             return coefficent * Math.Sqrt(root);
         }
+
+        public int GetCoef() => coefficent;
+
+        public int GetRoot() => root;
     }
 }

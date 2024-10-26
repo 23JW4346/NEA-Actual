@@ -1,15 +1,19 @@
 ﻿using NEA.Number_Classes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace NEA.Questions.Loci
 {
     public class ArgModIntersect : IQuestion
     {
         private string argLoci, modLoci;
-        private Complex operand1, operand2;
+        private Complex midpoint, answer;
         private Fraction argument;
-        private double step;
+        private double step, grad;
         private int modulus;
         private bool isleft;
         private ArgandDiagram diagram;
@@ -18,14 +22,16 @@ namespace NEA.Questions.Loci
 
         public ArgModIntersect(Random rnd)
         {
-            operand1 = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-            while (operand1.GetComplex() == null) operand1 = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-            Complex inanswer = new Complex(-operand1.GetRealValue(), -operand1.GetImaginaryValue());
+            midpoint = new Complex(rnd.Next(-4, 5), rnd.Next(-4, 5));
+            Complex inanswer = new Complex(-midpoint.GetRealValue(), -midpoint.GetImaginaryValue());
+            modulus = rnd.Next(1, 6);
             if (rnd.Next(2) == 1)
             {
                 int rand = rnd.Next(fractions.Length); ;
                 argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
                 step = steps[rand];
+                if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0) grad = step;
+                else grad = -step;
                 argLoci = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2) isleft = true;
                 else isleft = false;
@@ -35,27 +41,73 @@ namespace NEA.Questions.Loci
                 int rand = rnd.Next(fractions.Length);
                 argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
                 step = -steps[rand];
+                if (argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
+                else grad = -step;
                 argLoci = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2) isleft = true;
                 else isleft = false;
             }
-
-            operand2 = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-            while (operand2.GetComplex() == "") operand2 = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-            Complex temp = new Complex(-operand2.GetRealValue(), -operand2.GetImaginaryValue());
-            modulus = rnd.Next(1, 6);
-            if (temp.GetComplex()[0] == '-')
-            {
-                modLoci = $"|z{temp.GetComplex()}|={modulus}";
-            }
-            else
-            {
-                modLoci = $"|z+{temp.GetComplex()}|={modulus}";
-            }
+            modLoci = Program.CreateModCircle(inanswer, modulus);
+            Calculate();
         }
         public void Calculate()
         {
-            throw new NotImplementedException();
+            Number realpart = null, imagpart = null;
+            double real = Math.Sin(argument.GetValue() * Math.PI);
+            if(Math.Abs(real / Math.Sqrt(2)) == 1 / 2)
+            {
+                if(real > 0)
+                {
+                    realpart = new SurdFraction(new Surd(modulus, 2), -2);
+
+                }
+                else realpart = new SurdFraction(new Surd(modulus, 2), 2);
+            }
+            else if (real / Math.Sqrt(3) == 1 / 2)
+            {
+                if (real > 0)
+                {
+                    realpart = new SurdFraction(new Surd(modulus, 3), -2);
+
+                }
+                else realpart = new SurdFraction(new Surd(modulus, 3), 2);
+            }
+            else
+            {
+                if (real > 0)
+                {
+                    realpart = new Fraction(modulus, 2);
+                }
+                else realpart = new Fraction(modulus, -2);
+            }
+            double imag = Math.Cos(argument.GetValue() * Math.PI);
+            if (Math.Abs(imag / Math.Sqrt(2)) == 1 / 2)
+            {
+                if (imag > 0)
+                {
+                    imagpart = new SurdFraction(new Surd(modulus, 2), -2);
+
+                }
+                else imagpart = new SurdFraction(new Surd(modulus, 2), 2);
+            }
+            else if (imag / Math.Sqrt(3) == 1 / 2)
+            {
+                if (imag > 0)
+                {
+                    imagpart = new SurdFraction(new Surd(modulus, 3), -2);
+
+                }
+                else imagpart = new SurdFraction(new Surd(modulus, 3), 2);
+            }
+            else
+            {
+                if (imag > 0)
+                {
+                    imagpart = new Fraction(modulus, 2);
+                }
+                else imagpart = new Fraction(modulus, -2);
+            }
+            answer = new Complex(realpart, imagpart);
         }
 
         public bool CheckAnswer(string answer)
@@ -75,18 +127,24 @@ namespace NEA.Questions.Loci
 
         public void LoadDiagram()
         {
-            throw new NotImplementedException();
+            diagram = new ArgandDiagram();
+            diagram.CreateCircle(midpoint, modulus);
+            diagram.CreateLine(step, midpoint, isleft);
+            Task.Run(() => diagram);
         }
 
         public string PrintAnswer(bool correct)
         {
-            throw new NotImplementedException();
+            if (correct)
+            {
+                return $"Correct!\nThe Answer is {answer.GetComplex()}";
+            }
+            return $"Incorrect!\nThe Answer was {answer.GetComplex()}";
         }
 
         public string PrintQuestion()
         {
-            return $"Find if there are any intersections between {argLoci} and {modLoci}, and the points of intersections in the form a+bi.\n" +
-                $"(if there are none, type 'no')";
+            return $"{argLoci} and {modLoci} Intersect at the point P. Find P in the form a+bi.";
         }
 
         public List<string> SaveQuestion()
