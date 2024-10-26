@@ -53,24 +53,27 @@ namespace NEA.Questions.Loci
         public void Calculate()
         {
             Number realpart = null, imagpart = null;
+            Surd temp;
             double real = Math.Sin(argument.GetValue() * Math.PI);
             if(Math.Abs(real / Math.Sqrt(2)) == 1 / 2)
             {
+                temp  = new Surd(modulus, 2);
                 if(real > 0)
                 {
-                    realpart = new SurdFraction(new Surd(modulus, 2), -2);
+                    realpart = new SurdFraction(temp, -2);
 
                 }
-                else realpart = new SurdFraction(new Surd(modulus, 2), 2);
+                else realpart = new SurdFraction(temp, 2);
             }
-            else if (real / Math.Sqrt(3) == 1 / 2)
+            else if (Math.Abs(real / Math.Sqrt(3)) == 1 / 2)
             {
+                temp = new Surd(modulus, 3);
                 if (real > 0)
                 {
-                    realpart = new SurdFraction(new Surd(modulus, 3), -2);
+                    realpart = new SurdFraction(temp, -2);
 
                 }
-                else realpart = new SurdFraction(new Surd(modulus, 3), 2);
+                else realpart = new SurdFraction(temp, 2);
             }
             else
             {
@@ -83,21 +86,23 @@ namespace NEA.Questions.Loci
             double imag = Math.Cos(argument.GetValue() * Math.PI);
             if (Math.Abs(imag / Math.Sqrt(2)) == 1 / 2)
             {
+                temp = new Surd(modulus, 2);
                 if (imag > 0)
                 {
-                    imagpart = new SurdFraction(new Surd(modulus, 2), -2);
+                    imagpart = new SurdFraction(temp, -2);
 
                 }
-                else imagpart = new SurdFraction(new Surd(modulus, 2), 2);
+                else imagpart = new SurdFraction(temp, 2);
             }
-            else if (imag / Math.Sqrt(3) == 1 / 2)
+            else if (Math.Abs(imag / Math.Sqrt(3)) == 1 / 2)
             {
+                temp = new Surd(modulus, 3);
                 if (imag > 0)
                 {
-                    imagpart = new SurdFraction(new Surd(modulus, 3), -2);
+                    imagpart = new SurdFraction(temp, -2);
 
                 }
-                else imagpart = new SurdFraction(new Surd(modulus, 3), 2);
+                else imagpart = new SurdFraction(temp, 2);
             }
             else
             {

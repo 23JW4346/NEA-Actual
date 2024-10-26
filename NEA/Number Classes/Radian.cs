@@ -8,7 +8,7 @@ namespace NEA.Number_Classes
 {
     public class SurdFraction : Fraction
     {
-        private Surd numerator;
+        private Surd numerator = new Surd();
         private int denominator;
 
         public SurdFraction(Surd top, int bottom)
