@@ -10,7 +10,7 @@ namespace NEA.Number_Classes
     public class Fraction : Number
     {
         private int numerator = default;
-        private int denominator = default;
+        private int denominator = 1;
 
 
         public Fraction(int innum, int inden)
@@ -53,6 +53,7 @@ namespace NEA.Number_Classes
             }
             Simplify();
         }
+
 
         public override string GetString()
         {

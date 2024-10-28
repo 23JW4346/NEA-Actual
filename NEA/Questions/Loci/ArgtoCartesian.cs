@@ -16,7 +16,7 @@ namespace NEA.Questions.Loci
         private Complex operand;
         private Fraction argument;
         private string loci, answer;
-        private double step, grad;
+        private double step;
         private bool isleft;
         private ArgandDiagram diagram;
         private (int, int)[] fractions = { (1, 6), (1, 4), (1, 3), (2, 3), (3, 4), (5, 6) };
@@ -32,8 +32,6 @@ namespace NEA.Questions.Loci
                 int rand = rnd.Next(fractions.Length); ;
                 argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
                 step = steps[rand];
-                if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0 ) grad = step;
-                else grad = -step;
                 loci = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2)  isleft = true;
                 else isleft = false;
@@ -43,8 +41,6 @@ namespace NEA.Questions.Loci
                 int rand = rnd.Next(fractions.Length);
                 argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
                 step = -steps[rand];
-                if (argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
-                else grad = -step;
                 loci = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2) isleft = true;
                 else isleft = false;
@@ -61,16 +57,10 @@ namespace NEA.Questions.Loci
                 {
                     Fraction temp = new Fraction((int)-argument.GetTop(), (int)argument.GetBottom());
                     step = -steps[Array.IndexOf(fractions, (temp.GetTop(), temp.GetBottom()))];
-                    if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0 ||
-                   argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
-                    else grad = -step;
                 }
                 else
                 {
                     step = steps[Array.IndexOf(fractions, (argument.GetTop(), argument.GetBottom()))];
-                    if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0 ||
-                   argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
-                    else grad = -step;
                 }
                 loci = Program.CreateArgLine(inanswer, argument);
                 if (Math.Abs(argument.GetValue()) >= 0.5) isleft = true;
@@ -86,8 +76,6 @@ namespace NEA.Questions.Loci
                     int rand = rnd.Next(fractions.Length); ;
                     argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
                     step = steps[rand];
-                    if (argument.GetValue() <= 1 / 2 && argument.GetValue() >= 0) grad = step;
-                    else grad = -step;
                     loci = Program.CreateArgLine(inanswer, argument);
                     if (rand > 2) isleft = true;
                     else isleft = false;
@@ -97,8 +85,6 @@ namespace NEA.Questions.Loci
                     int rand = rnd.Next(fractions.Length);
                     argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
                     step = -steps[rand];
-                    if (argument.GetValue() >= -1 && argument.GetValue() <= -1 / 2) grad = step;
-                    else grad = -step;
                     loci = Program.CreateArgLine(inanswer, argument);
                     if (rand > 2) isleft = true;
                     else isleft = false;
@@ -109,7 +95,7 @@ namespace NEA.Questions.Loci
 
         public void Calculate()
         {
-            answer = Program.CreateCartesianLine(operand, grad);
+            answer = Program.CreateCartesianLine(operand, step);
         }
 
         public bool CheckAnswer(string answer)
@@ -169,7 +155,7 @@ namespace NEA.Questions.Loci
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();
-            diagram.CreateLine(step, operand, isleft);
+            diagram.CreateLine(-step, operand, isleft);
             Task.Run(() => Application.Run(diagram));
         }
 

@@ -29,11 +29,6 @@ namespace NEA
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
-            IQuestion temp = new ArgModIntersect(rnd);
-            Console.WriteLine(temp.PrintQuestion());
-            temp.LoadDiagram();
-            Console.WriteLine(temp.PrintAnswer(false));
-            Console.ReadKey();
             Menu();
             using (StreamWriter sw = new StreamWriter("Questions.txt", true))
             {
@@ -107,27 +102,27 @@ namespace NEA
             string xpart, ypart;
             if (a.GetRealValue() < 0)
             {
-                xpart = $"(x{a.GetReal()})^2";
+                xpart = $"(x{a.GetReal()})²";
             }
             else if (a.GetRealValue() == 0)
             {
-                xpart = "x^2";
+                xpart = "x²";
             }
             else
             {
-                xpart = $"(x+{a.GetReal()})^2";
+                xpart = $"(x+{a.GetReal()})²";
             }
             if (a.GetImaginaryValue() < 0)
             {
-                ypart = $"(y{a.GetImaginaryValue()})^2";
+                ypart = $"(y{a.GetImaginaryValue()})²";
             }
             else if (a.GetImaginaryValue() == 0)
             {
-                ypart = "y^2";
+                ypart = "y²";
             }
             else
             {
-                ypart = $"(y+{a.GetImaginaryValue()})^2";
+                ypart = $"(y+{a.GetImaginaryValue()})²";
             }
             return $"{xpart}+{ypart}={radius}";
         }
@@ -136,20 +131,22 @@ namespace NEA
         {
             string answer = "";
             double yint = grad * -a.GetRealValue() + a.GetImaginaryValue();
-            double xint = yint / grad;
-            if (grad == 0.5 || grad == -0.5)
+            double xint = -yint / grad;
+            if (grad == 0.5)
             {
                 answer += "y=x/2";
             }
+            else if (grad == -0.5) answer += "y=-x/2";
             else if (grad == 1) answer += "y=x";
             else if (grad == -1) answer += "y=-x";
             else if (grad == 0)
             {
-                    string xint2;
+                string xint2;
                 if (xint.ToString().Contains('.'))
                 {
                     xint2 = (xint * 2) + "/2";
                 }
+                else if (xint == double.NaN) xint2 = "0";
                 else xint2 = xint.ToString();
                 answer = $"x={xint2}";
             }
@@ -164,7 +161,7 @@ namespace NEA
                 else yint2 = yint.ToString();
                 if (yint < 0) answer += yint2;
                 else answer += "+" + yint2;
-                if (grad == 5) answer = $"y={yint}";
+                if (grad == int.MaxValue) answer = $"y={yint}";
             }
             return answer;
         }
@@ -507,7 +504,7 @@ namespace NEA
                         case 4:
                             if (rnd.Next(1, 16) == 1)
                             {
-                                return new ModLine("Questions.txt");
+                                return new ModLine("Questions.txt", rnd);
                             }
                             else
                             {
@@ -593,13 +590,41 @@ namespace NEA
                         Console.CursorLeft--;
                         Console.Write(" ");
                         Console.CursorLeft--;
-                        ans.Remove(ans.Length - 1);
+                        ans = ans.Substring(0, ans.Length - 1);
                     }
                     else
                     {
                         Console.CursorLeft++;
                         Console.CursorLeft--;
                     }
+                }
+                else if (cantypeans && choice.KeyChar == '^')
+                {
+                    do
+                    {
+                        choice = Console.ReadKey(true);
+                        switch (choice.KeyChar)
+                        {
+                            case '2':
+                                ans += "²";
+                                Console.Write("²");
+                                break;
+                            case '3':
+                                ans += "³";
+                                Console.Write("³");
+                                break;
+                            case '4':
+                                ans += "⁴";
+                                Console.Write("⁴");
+                                break;
+
+                        }
+                    } while (!Char.IsDigit(choice.KeyChar));
+                }
+                else if (cantypeans && choice.Key == ConsoleKey.P)
+                {
+                    Console.Write("π");
+                    ans += "π";
                 }
                 else if (cantypeans && choice.Key != ConsoleKey.Backspace)
                 {

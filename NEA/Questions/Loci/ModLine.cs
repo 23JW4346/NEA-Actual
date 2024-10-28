@@ -13,6 +13,7 @@ namespace NEA.Questions.Loci
         private ArgandDiagram diagram;
         private Complex midpoint, operand1, operand2;
         private Number gradient;
+        private double grad;
         private string answer, equation;
 
         public ModLine(Random rnd)
@@ -33,33 +34,60 @@ namespace NEA.Questions.Loci
             midpoint = new Complex(rnd.Next(6), rnd.Next(6));
             if (gradient.GetValue() == 0)
             {
+                grad = 0;
                 rand = rnd.Next(5);
                 operand1 = new Complex(midpoint.GetRealValue(), midpoint.GetImaginaryValue() + rand);
                 operand2 = new Complex(midpoint.GetRealValue(), midpoint.GetImaginaryValue() - rand);
             }
             else if (gradient.GetValue() == 5)
             {
+                grad = int.MaxValue;
                 rand = rnd.Next(5);
                 operand1 = new Complex(midpoint.GetRealValue() + rand, midpoint.GetImaginaryValue());
                 operand2 = new Complex(midpoint.GetRealValue() - rand, midpoint.GetImaginaryValue());
             }
             else
             {
+                grad = gradient.GetValue();
                 GetPoints(rnd.Next(5));
             }
             Calculate();
         }
 
-        public ModLine(string filename)
+        public ModLine(string filename, Random rnd)
         {
             if (!GetQuestion(filename))
             {
-                operand1 = new Complex(false);
-                do
+                int rand = rnd.Next(3);
+                if (rand == 1)
                 {
-                    operand2 = new Complex(false);
+                    gradient = new Fraction(rnd.Next(3), rnd.Next(4));
                 }
-                while (operand1.GetComplex() == operand2.GetComplex());
+                else if (rand == 2)
+                {
+                    gradient = new Fraction(rnd.Next(-3, 1), rnd.Next(4));
+                }
+                else
+                {
+                    gradient = new Number(rnd.Next(-4, 6));
+                }
+                midpoint = new Complex(rnd.Next(6), rnd.Next(6));
+                if (gradient.GetValue() == 0)
+                {
+                    rand = rnd.Next(5);
+                    operand1 = new Complex(midpoint.GetRealValue(), midpoint.GetImaginaryValue() + rand);
+                    operand2 = new Complex(midpoint.GetRealValue(), midpoint.GetImaginaryValue() - rand);
+                }
+                else if (gradient.GetValue() == 5)
+                {
+                    rand = rnd.Next(5);
+                    operand1 = new Complex(midpoint.GetRealValue() + rand, midpoint.GetImaginaryValue());
+                    operand2 = new Complex(midpoint.GetRealValue() - rand, midpoint.GetImaginaryValue());
+                }
+                else
+                {
+                    GetPoints(rnd.Next(5));
+                }
             }
             Calculate();
         }
@@ -67,7 +95,7 @@ namespace NEA.Questions.Loci
         private void GetPoints(int space)
         {
             Complex temp = midpoint;
-            double negRec = -Math.Pow(gradient.GetValue(), -1);
+            double negRec = -Math.Pow(grad, -1);
             bool isleft = false;
             if (negRec < 0) isleft = true;
             for (int i = 0; i < space; i++)
@@ -90,7 +118,7 @@ namespace NEA.Questions.Loci
         {
             equation = Program.CreateModLine(new Complex(-operand1.GetRealValue(), -operand1.GetImaginaryValue()), 
                                              new Complex(-operand2.GetRealValue(), -operand2.GetImaginaryValue()));
-            answer = Program.CreateCartesianLine(midpoint, gradient.GetValue());
+            answer = Program.CreateCartesianLine(midpoint, grad);
         }
 
         public bool CheckAnswer(string answer)
@@ -145,7 +173,7 @@ namespace NEA.Questions.Loci
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();
-            diagram.CreateModLine(midpoint, gradient.GetValue());
+            diagram.CreateModLine(midpoint, -gradient.GetValue());
             Task.Run(() => Application.Run(diagram));
         }
 

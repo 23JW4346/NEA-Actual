@@ -102,8 +102,8 @@ namespace NEA.Number_Classes
             if (imaginary.GetString() != "0")
             {
                 outputimag += "";
-                if (imaginary.GetString() == "1") outputimag += "i";
-                else if (imaginary.GetString() == "-1") outputimag += "-i";
+                if (imaginary.GetValue() == 1) outputimag += "i";
+                else if (imaginary.GetValue() == -1) outputimag += "-i";
                 else
                 {
                     outputimag += imaginary.GetString() + "i";

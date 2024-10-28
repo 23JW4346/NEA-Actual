@@ -9,7 +9,7 @@ namespace NEA.Number_Classes
     public class SurdFraction : Fraction
     {
         private Surd numerator = new Surd();
-        private int denominator;
+        private int denominator = 1;
 
         public SurdFraction(Surd top, int bottom)
         {
@@ -22,7 +22,7 @@ namespace NEA.Number_Classes
         {
             if (denominator != 1)
             {
-                return $"{numerator.GetString()}/{denominator};";
+                return $"{numerator.GetString()}/{denominator}";
             }
             return $"{numerator.GetString()}";
         }

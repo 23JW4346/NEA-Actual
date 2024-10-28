@@ -81,7 +81,7 @@ namespace NEA.Questions.Loci
             {
                 Fraction temp = new Fraction((int)-argument.GetTop(), (int)argument.GetBottom());
                 placeholder = Array.IndexOf(fractions, (temp.GetTop(), temp.GetBottom()));
-                step = steps[placeholder];
+                step = -steps[placeholder];
             }
             else
             {

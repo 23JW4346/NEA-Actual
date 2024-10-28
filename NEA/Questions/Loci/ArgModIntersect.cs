@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using System.Windows.Forms.DataVisualization.Charting;
+using System.Windows.Forms;
 
 namespace NEA.Questions.Loci
 {
@@ -13,7 +13,7 @@ namespace NEA.Questions.Loci
         private string argLoci, modLoci;
         private Complex midpoint, answer;
         private Fraction argument;
-        private double step, grad;
+        private double step;
         private int modulus;
         private bool isleft;
         private ArgandDiagram diagram;
@@ -30,8 +30,6 @@ namespace NEA.Questions.Loci
                 int rand = rnd.Next(fractions.Length); ;
                 argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
                 step = steps[rand];
-                if (argument.GetValue() < 1 / 2 && argument.GetValue() > 0) grad = step;
-                else grad = -step;
                 argLoci = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2) isleft = true;
                 else isleft = false;
@@ -41,8 +39,6 @@ namespace NEA.Questions.Loci
                 int rand = rnd.Next(fractions.Length);
                 argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
                 step = -steps[rand];
-                if (argument.GetValue() > -1 && argument.GetValue() < -1 / 2) grad = step;
-                else grad = -step;
                 argLoci = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2) isleft = true;
                 else isleft = false;
@@ -134,8 +130,8 @@ namespace NEA.Questions.Loci
         {
             diagram = new ArgandDiagram();
             diagram.CreateCircle(midpoint, modulus);
-            diagram.CreateLine(step, midpoint, isleft);
-            Task.Run(() => diagram);
+            diagram.CreateLine(-step, midpoint, isleft);
+            Task.Run(() => Application.Run(diagram));
         }
 
         public string PrintAnswer(bool correct)

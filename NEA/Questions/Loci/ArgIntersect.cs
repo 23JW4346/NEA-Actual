@@ -59,7 +59,7 @@ namespace NEA.Questions.Loci
             {
                 if (isleft1) point.Item1++;
                 else point.Item1--;
-                point.Item2 -= step1;
+                point.Item2 += step1;
             } while (rnd.Next(4) != 0 && point.Item1 >= -10 && point.Item1 <= 10 && point.Item2 <= 10 && point.Item2 >= -10);
             Number real, imag;
             if (point.Item1.ToString().Contains('.')) real = new Fraction((int)(point.Item1 * 2), 2);
@@ -67,28 +67,7 @@ namespace NEA.Questions.Loci
             if (point.Item1.ToString().Contains('.')) imag = new Fraction((int)(point.Item2 * 2), 2);
             else imag = new Number(point.Item2);
             point1 = new Complex(-real.GetValue(), -imag.GetValue());
-            if (point1.GetComplex()[0] == '-')
-            {
-                if (angle1.GetTop() != 1)
-                {
-                    loci1 = $"arg(z{point1.GetComplex()})={angle1.GetTop()}π/{angle1.GetBottom()}";
-                }
-                else
-                {
-                    loci1 = $"arg(z{point1.GetComplex()})=π/{angle1.GetBottom()}";
-                }
-            }
-            else
-            {
-                if (angle1.GetTop() != 1)
-                {
-                    loci1 = $"arg(z+{point1.GetComplex()})={angle1.GetTop()}π/{angle1.GetBottom()}";
-                }
-                else
-                {
-                    loci1 = $"arg(z+{point1.GetComplex()})=π/{angle1.GetBottom()}";
-                }
-            }
+            loci1 = Program.CreateArgLine(point1, angle1);
             point1 = new Complex(real.GetValue(), imag.GetValue());
             int rand2 = rnd.Next(fractions.Length);
             while (rand2 == rand) rand2 = rnd.Next(fractions.Length);
@@ -112,35 +91,14 @@ namespace NEA.Questions.Loci
             {
                 if (isleft2) point.Item1++;
                 else point.Item1--;
-                point.Item2 -= step2;
+                point.Item2 += step2;
             } while (rnd.Next(3) != 0 && point.Item1 >= -10 && point.Item1 <= 10 && point.Item2 <= 10 && point.Item2 >= -10);
             if (point.Item1.ToString().Contains('.')) real = new Fraction((int)(point.Item1 * 2), 2);
             else real = new Number(point.Item1);
             if (point.Item1.ToString().Contains('.')) imag = new Fraction((int)(point.Item2 * 2), 2);
             else imag = new Number(point.Item2);
             point2 = new Complex(-real.GetValue(), -imag.GetValue());
-            if (point2.GetComplex()[0] == '-')
-            {
-                if (angle2.GetTop() != 1)
-                {
-                    loci2 = $"arg(z{point2.GetComplex()})={angle2.GetTop()}π/{angle2.GetBottom()}";
-                }
-                else
-                {
-                    loci2 = $"arg(z{point2.GetComplex()})=π/{angle2.GetBottom()}";
-                }
-            }
-            else
-            {
-                if (angle2.GetTop() != 1)
-                {
-                    loci2 = $"arg(z+{point2.GetComplex()})={angle2.GetTop()}π/{angle2.GetBottom()}";
-                }
-                else
-                {
-                    loci2 = $"arg(z+{point2.GetComplex()})=π/{angle2.GetBottom()}";
-                }
-            }
+            loci2 = Program.CreateArgLine(point2, angle2);
             point2 = new Complex(real.GetValue(), imag.GetValue());
         }
 
@@ -206,8 +164,8 @@ namespace NEA.Questions.Loci
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();
-            diagram.CreateLine(step1, point1, isleft1);
-            diagram.CreateLine(step2, point2, isleft2);
+            diagram.CreateLine(-step1, point1, isleft1);
+            diagram.CreateLine(-step2, point2, isleft2);
             Task.Run(() => Application.Run(diagram));
         }
 

@@ -53,9 +53,9 @@ namespace NEA.Questions.Polynomial_Roots
             else c = "a";
             d = (-coef * (int)((root.GetRealValue() * conjugate.GetRealValue() - root.GetImaginaryValue() * conjugate.GetImaginaryValue()) * root2)).ToString();
             if (coef != 1) cubic += coef;
-            cubic += "z^3";
+            cubic += "z³";
             if (!b.Contains('-')) cubic += "+";
-            cubic += b + "z^2";
+            cubic += b + "z²";
             if (!c.Contains('-')) cubic += "+";
             cubic += c + "z";
             if(!d.Contains('-')) cubic += "+";

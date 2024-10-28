@@ -40,8 +40,8 @@ namespace NEA.Questions.Polynomial_Roots
         {
             int b = -coef * (int)(root.GetRealValue() + conjugate.GetRealValue());
             int c = coef * (int)(root.GetRealValue() *  conjugate.GetRealValue() - root.GetImaginaryValue() * conjugate.GetImaginaryValue());
-            if (coef != 1) quadratic += $"{coef}z^2";
-            else quadratic += "z^2";
+            if (coef != 1) quadratic += $"{coef}z²";
+            else quadratic += "z²";
             if (b < 0) quadratic += $"{b}z";
             else quadratic += $"+{b}z";
             if (c < 0) quadratic += c;
