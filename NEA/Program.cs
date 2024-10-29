@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,12 +20,6 @@ namespace NEA
     {
         static Random rnd = new Random();
         static List<List<string>> savequests = new List<List<string>>();
-        const string posintReg = "[1-9][0-9]*|0";
-        const string intReg = "-?" + posintReg;
-        const string fracReg = posintReg + "/" + posintReg + "|-?" + posintReg + "/" + posintReg +"|0";
-        const string complexReg = "(("+ intReg + ")|(" + fracReg + "))[+-](("+ intReg +")|(" + fracReg + "))i|(("+ intReg + ")|(" + fracReg + "))i";
-
-
 
         static void Main(string[] args)
         {
@@ -60,23 +55,25 @@ namespace NEA
             string loci;
             if (a.GetComplex()[0] == '-')
             {
-                if (b.GetTop() != 1)
+                if (Math.Abs(b.GetTop()) != 1)
                 {
                     loci = $"arg(z{a.GetComplex()})={b.GetTop()}π/{b.GetBottom()}";
                 }
                 else
                 {
-                    loci = $"arg(z{a.GetComplex()})=π/{b.GetBottom()}";
+                    if(b.GetNegative()) loci = $"arg(z{a.GetComplex()})=-π/{b.GetBottom()}";
+                    else loci = $"arg(z{a.GetComplex()})=π/{b.GetBottom()}";
                 }
             }
             else
             {
-                if (b.GetTop() != 1)
+                if (Math.Abs(b.GetTop()) != 1)
                 {
                     loci = $"arg(z+{a.GetComplex()})={b.GetTop()}π/{b.GetBottom()}";
                 }
                 else
                 {
+                    if(b.GetNegative()) loci = $"arg(z+{a.GetComplex()})=-π/{b.GetBottom()}";
                     loci = $"arg(z+{a.GetComplex()})=π/{b.GetBottom()}";
                 }
             }
@@ -130,7 +127,9 @@ namespace NEA
         public static string CreateCartesianLine(Complex a, double grad)
         {
             string answer = "";
-            double yint = grad * -a.GetRealValue() + a.GetImaginaryValue();
+            double yint;
+            if (grad != int.MaxValue) yint = grad * -a.GetRealValue() + a.GetImaginaryValue();
+            else yint = a.GetImaginaryValue();
             double xint = -yint / grad;
             if (grad == 0.5)
             {
@@ -148,7 +147,7 @@ namespace NEA
                 }
                 else if (xint == double.NaN) xint2 = "0";
                 else xint2 = xint.ToString();
-                answer = $"x={xint2}";
+                answer = $"y={xint2}";
             }
             else answer += "y=" + grad + "x";
             if (yint != 0)
@@ -161,7 +160,7 @@ namespace NEA
                 else yint2 = yint.ToString();
                 if (yint < 0) answer += yint2;
                 else answer += "+" + yint2;
-                if (grad == int.MaxValue) answer = $"y={yint}";
+                if (grad == int.MaxValue) answer = $"x={yint}";
             }
             return answer;
         }
@@ -348,7 +347,7 @@ namespace NEA
                     }
                     break;
                 case 1:
-                    switch (rnd.Next(3))
+                    switch (rnd.Next(2))
                     {
                         case 0:
                             if (rnd.Next(1, 16) == 1)
@@ -367,15 +366,6 @@ namespace NEA
                             else
                             {
                                 return new DivAlg();
-                            }
-                        case 2:
-                            if (rnd.Next(1, 16) == 1)
-                            {
-                                return new DivAlg2("Questions.txt");
-                            }
-                            else
-                            {
-                                return new DivAlg2();
                             }
                     }
                     break;
@@ -421,20 +411,20 @@ namespace NEA
                         case 4:
                             if (rnd.Next(1, 16) == 1)
                             {
-                                return new ModulusPowers(rnd.Next(0, 4), "Questions.txt");
+                                return new ModulusPowers(rnd.Next(2, 5), "Questions.txt");
                             }
                             else
                             {
-                                return new ModulusPowers(rnd.Next(0, 4));
+                                return new ModulusPowers(rnd.Next(2, 5));
                             }
                         case 5:
                             if (rnd.Next(1, 16) == 1)
                             {
-                                return new ArgumentPowers(rnd.Next(0, 4), "Questions.txt");
+                                return new ArgumentPowers(rnd.Next(2, 5), "Questions.txt");
                             }
                             else
                             {
-                                return new ArgumentPowers(rnd.Next(0, 4));
+                                return new ArgumentPowers(rnd.Next(2, 5));
                             }
                     }
                     break;
@@ -463,7 +453,7 @@ namespace NEA
                     break;
                 case 4:
 
-                    switch (rnd.Next(6))
+                    switch (rnd.Next(7))
                     {
                         case 0:
                             if (rnd.Next(1, 16) == 1)
@@ -519,6 +509,15 @@ namespace NEA
                             {
                                 return new ArgIntersect(rnd);
                             }
+                        case 6:
+                            if(rnd.Next(1, 16) == 1)
+                            {
+                                return new ArgModIntersect(rnd);
+                            }
+                            else
+                            {
+                                return new ArgModIntersect(rnd);
+                            }
                         default:
                             break;
                     }
@@ -530,20 +529,55 @@ namespace NEA
             return new Quadratic(rnd.Next(1, 4));
         }
 
+        const string fracPat = "-?[1-9][0-9]*(/[1-9][0-9]*)?|0";
+        const string fracompPat = "("+fracPat+"(\\+|-)"+fracPat+"i)|"+fracPat+"i?";
+        const string realPat = "-?[1-9][0-9]*(\\.[0-9]*[1-9])?|-?0\\.[0-9]*[1-9]|0";
+        const string complexPat = "(-?[1-9][0-9]*(\\.[0-9]*[1-9])?(\\+|-)[1-9][0-9]*(\\.[0-9]*[1-9])?i)|(-?[1-9][0-9]*(\\.[0-9]*[1-9])?i?)|-?i|0";
+        const string modArgPat = "[1-9][0-9]\\(cos\\("+realPat+"\\)\\+isin\\("+realPat+"\\)\\)";
+        const string quadraticPat = "z²(\\+|-)[1-9][0-9]*z(\\+|-)[1-9][0-9]*";
+        
+        //Checks the user input with Regexpatterns defined above to see if its a answer that is allowed.
+        static bool ValidateInput(string answer, IQuestion question)
+        {
+            if (question.GetType() == typeof(Multiply2Complex)
+                || question.GetType() == typeof(MultiAlg)
+                || question.GetType() == typeof(ArgIntersect)
+                || question.GetType() == typeof(ModArgToNormal)
+                || question.GetType() == typeof(ArgModIntersect))
+            {
+                if (Regex.IsMatch(answer, complexPat)) return true;
+            }
+            else if (question.GetType() == typeof(ModulusQuestion)
+                || question.GetType() == typeof(ModulusPowers)
+                || question.GetType() == typeof(ArgumentQuestion)
+                || question.GetType() == typeof(ArgumentPowers))
+            {
+                if (Regex.IsMatch(answer, realPat)) return true;
+            }
+            else if (question.GetType() == typeof(Divide2Complex)
+                || question.GetType() == typeof(DivAlg))
+            {
+                if (Regex.IsMatch(answer, fracompPat)) return true;
+            }
+            else if (question.GetType() == typeof(ModulusArgumentForm))
+            {
+                if (Regex.IsMatch(answer, modArgPat)) return true;
+            }
+            else if (question.GetType() == typeof(GivenRootFindQuadratic))
+            {
+                if(Regex.IsMatch(answer, quadraticPat)) return true;
+            }
+            return false;
+        }
+
         static void AskQuestion(IQuestion question, ref bool loop, ref int score)
         {
             Console.Clear();
             string ans = "";
-            bool cantypeans = true;
-            char lastTyped = ' ';
             Console.WriteLine(question.PrintQuestion());
             Console.WriteLine();
             Console.Write("Answer: ");
             ConsoleKeyInfo choice;
-            int CursorforAns = Console.CursorLeft;
-            Console.Write("\n  Click for hint");
-            Console.CursorTop--;
-            Console.CursorLeft = CursorforAns;
             int currentposition = Console.CursorTop, newposition = 0;
             try
             {
@@ -553,40 +587,21 @@ namespace NEA
             do
             {
                 choice = Console.ReadKey(true);
-                if (choice.Key == ConsoleKey.Enter && cantypeans)
+                if (choice.Key == ConsoleKey.Enter)
                 {
                     Console.CursorTop += 2;
                     Console.CursorLeft = 0;
+
                     if (!question.CheckAnswer(ans))
                     {
                         savequests.Add(question.SaveQuestion());
                     }
                     Console.WriteLine(question.PrintAnswer(question.CheckAnswer(ans)));
                 }
-                else if (choice.Key == ConsoleKey.DownArrow && newposition != 1)
-                {
-                    Console.CursorLeft = 0;
-                    Console.Write("A");
-                    newposition++;
-                    Console.CursorTop = currentposition + newposition;
-                    Console.CursorLeft = 0;
-                    Console.Write(">");
-                    cantypeans = false;
-                }
-                else if (choice.Key == ConsoleKey.UpArrow && newposition != 0)
-                {
-                    Console.CursorLeft = 0;
-                    Console.Write(" ");
-                    newposition--;
-                    Console.CursorTop = currentposition + newposition;
-                    Console.CursorLeft = CursorforAns;
-                    cantypeans = true;
-                }
-                else if (choice.Key == ConsoleKey.Backspace && cantypeans && Console.CursorLeft > 8)
+                else if (choice.Key == ConsoleKey.Backspace && Console.CursorLeft > 8)
                 {
                     if (ans.Length > 0)
                     {
-                        CursorforAns--;
                         Console.CursorLeft--;
                         Console.Write(" ");
                         Console.CursorLeft--;
@@ -598,7 +613,23 @@ namespace NEA
                         Console.CursorLeft--;
                     }
                 }
-                else if (cantypeans && choice.KeyChar == '^')
+                else if (choice.Key == ConsoleKey.LeftArrow && Console.CursorLeft > 8)
+                {
+                    if (ans.Length > 0)
+                    {
+                        Console.CursorLeft--;
+                    }
+                    else
+                    {
+                        Console.CursorLeft++;
+                        Console.CursorLeft--;
+                    }
+                }
+                else if (choice.Key == ConsoleKey.RightArrow && Console.CursorLeft < 8 + ans.Length)
+                {
+                    Console.CursorLeft++;
+                }
+                else if (choice.KeyChar == '^')
                 {
                     do
                     {
@@ -621,17 +652,30 @@ namespace NEA
                         }
                     } while (!Char.IsDigit(choice.KeyChar));
                 }
-                else if (cantypeans && choice.Key == ConsoleKey.P)
+                else if (choice.Key == ConsoleKey.P)
                 {
                     Console.Write("π");
                     ans += "π";
                 }
-                else if (cantypeans && choice.Key != ConsoleKey.Backspace)
+                else if (choice.Key != ConsoleKey.Backspace)
                 {
-                    Console.Write(choice.KeyChar);
-                    lastTyped = choice.KeyChar;
-                    ans += choice.KeyChar;
-                    CursorforAns++;
+                    if (Console.CursorLeft == 8 + ans.Length)
+                    {
+                        Console.Write(choice.KeyChar);
+                        ans += choice.KeyChar;
+                    }
+                    else
+                    {
+                        ans.Trim(' ');
+                        int index = Console.CursorLeft - 8;
+                        string firstpart = ans.Substring(0, index);
+                        string secondpart = ans.Substring(index);
+                        Console.Write(new string(' ', Math.Abs(ans.Length - index)));
+                        Console.CursorLeft = 8 + index;
+                        Console.Write($"{choice.KeyChar}{secondpart}");
+                        ans = firstpart + choice.KeyChar + secondpart;
+                        Console.CursorLeft = 9 + index;
+                    }
                 }
             } while (choice.Key != ConsoleKey.Enter);
             if (loop)
@@ -698,17 +742,36 @@ namespace NEA
         {
             Console.Clear();
             int quizScore = 0, scoreForQuestion = 0;
-            IQuestion[] quizQuestions = new IQuestion[10];
-            int[] questionSets = new int[10];
-            bool[] questionWrong = new bool[10];
+            bool loop = false;
+            IQuestion[] quizQuestions = new IQuestion[1];
+            int[] questionSets = new int[1];
+            bool[] questionWrong = new bool[1];
             int[] numberwrong = new int[5];
+            do
+            {
+                loop = false;
+                Console.WriteLine("How many Questions would you like in your quiz?");
+                string choice = Console.ReadLine();
+                Console.Clear();
+                if (Regex.IsMatch(choice.Trim(), "[0-9]"))
+                {
+                    int length = int.Parse(choice);
+                    quizQuestions = new IQuestion[length];
+                    questionSets = new int[length];
+                    questionWrong = new bool[length];
+                }
+                else
+                {
+                    Console.WriteLine("Please enter a valid number");
+                    loop = true;
+                }
+            } while (loop);
             for (int i = 0; i < quizQuestions.Length; i++)
             {
                 questionSets[i] = rnd.Next(6);
                 quizQuestions[i] = GenQ(questionSets[i]);
                 questionWrong[i] = true;
             }
-            Shuffle(quizQuestions);
             foreach (IQuestion question in quizQuestions)
             {
                 bool repeat = false;
@@ -774,19 +837,6 @@ namespace NEA
             Console.Write("> Main Menu");
             Console.CursorLeft = 1;
             Console.ReadKey();
-        }
-
-        static void Shuffle(IQuestion[] questions)
-        {
-            for (int i = 0; i < 100; i++)
-            {
-                int index = rnd.Next(questions.Length);
-                IQuestion temp = questions[index];
-                int index2 = index;
-                while (index == index2) index2 = rnd.Next(questions.Length);
-                questions[index] = questions[index2];
-                questions[index2] = temp;
-            }
         }
     }
 }

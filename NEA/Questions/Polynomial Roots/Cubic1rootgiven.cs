@@ -16,14 +16,7 @@ namespace NEA.Questions.Polynomial_Roots
         private bool hide1, hide2;
         public Cubic1rootgiven(Random rnd)
         {
-            root = new Complex(false);
-            conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
-            root2 = rnd.Next(2,5);
-            coef = rnd.Next(1,4);
-            if(rnd.Next(3) == 0) hide1 = true;
-            else hide1 = false;
-            if(rnd.Next(3) == 0) hide2 = true;
-            else hide2 = false;
+            GenQ(rnd);
             Calculate();
         }
 
@@ -31,16 +24,21 @@ namespace NEA.Questions.Polynomial_Roots
         {
             if (!GetQuestion(filename))
             {
-                root = new Complex(false);
-                conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
-                if (rnd.Next(3) == 0) hide1 = true;
-                else hide1 = false;
-                if (rnd.Next(3) == 0) hide2 = true;
-                else hide2 = false;
-                root2 = rnd.Next(2, 9);
-                coef = rnd.Next(1, 4);
+                GenQ(rnd);
             }
             Calculate();
+        }
+
+        public void GenQ(Random rnd)
+        {
+            root = new Complex(false);
+            conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
+            root2 = rnd.Next(2, 5);
+            coef = rnd.Next(1, 4);
+            if (rnd.Next(3) == 0) hide1 = true;
+            else hide1 = false;
+            if (rnd.Next(3) == 0) hide2 = true;
+            else hide2 = false;
         }
 
         public void Calculate()
@@ -115,10 +113,6 @@ namespace NEA.Questions.Polynomial_Roots
             return found;
         }
 
-        public string Hint()
-        {
-            throw new NotImplementedException();
-        }
 
         public void LoadDiagram()
         {

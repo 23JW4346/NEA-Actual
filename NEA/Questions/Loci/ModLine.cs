@@ -1,6 +1,7 @@
 ﻿using NEA.Number_Classes;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,14 +19,29 @@ namespace NEA.Questions.Loci
 
         public ModLine(Random rnd)
         {
+            GenQ(rnd);
+            Calculate();
+        }
+
+        public ModLine(string filename, Random rnd)
+        {
+            if (!GetQuestion(filename))
+            {
+                GenQ(rnd);
+            }
+            Calculate();
+        }
+
+        public void GenQ(Random rnd)
+        {
             int rand = rnd.Next(3);
             if (rand == 1)
             {
-                gradient = new Fraction(rnd.Next(3), rnd.Next(4));
+                gradient = new Fraction(rnd.Next(1, 3), rnd.Next(1, 4));
             }
             else if (rand == 2)
             {
-                gradient = new Fraction(rnd.Next(-3, 1), rnd.Next(4));
+                gradient = new Fraction(rnd.Next(-3, 0), rnd.Next(1, 4));
             }
             else
             {
@@ -34,85 +50,60 @@ namespace NEA.Questions.Loci
             midpoint = new Complex(rnd.Next(6), rnd.Next(6));
             if (gradient.GetValue() == 0)
             {
-                grad = 0;
                 rand = rnd.Next(5);
                 operand1 = new Complex(midpoint.GetRealValue(), midpoint.GetImaginaryValue() + rand);
                 operand2 = new Complex(midpoint.GetRealValue(), midpoint.GetImaginaryValue() - rand);
             }
             else if (gradient.GetValue() == 5)
             {
-                grad = int.MaxValue;
                 rand = rnd.Next(5);
                 operand1 = new Complex(midpoint.GetRealValue() + rand, midpoint.GetImaginaryValue());
                 operand2 = new Complex(midpoint.GetRealValue() - rand, midpoint.GetImaginaryValue());
-            }
+            } 
             else
             {
-                grad = gradient.GetValue();
                 GetPoints(rnd.Next(5));
             }
-            Calculate();
-        }
-
-        public ModLine(string filename, Random rnd)
-        {
-            if (!GetQuestion(filename))
-            {
-                int rand = rnd.Next(3);
-                if (rand == 1)
-                {
-                    gradient = new Fraction(rnd.Next(3), rnd.Next(4));
-                }
-                else if (rand == 2)
-                {
-                    gradient = new Fraction(rnd.Next(-3, 1), rnd.Next(4));
-                }
-                else
-                {
-                    gradient = new Number(rnd.Next(-4, 6));
-                }
-                midpoint = new Complex(rnd.Next(6), rnd.Next(6));
-                if (gradient.GetValue() == 0)
-                {
-                    rand = rnd.Next(5);
-                    operand1 = new Complex(midpoint.GetRealValue(), midpoint.GetImaginaryValue() + rand);
-                    operand2 = new Complex(midpoint.GetRealValue(), midpoint.GetImaginaryValue() - rand);
-                }
-                else if (gradient.GetValue() == 5)
-                {
-                    rand = rnd.Next(5);
-                    operand1 = new Complex(midpoint.GetRealValue() + rand, midpoint.GetImaginaryValue());
-                    operand2 = new Complex(midpoint.GetRealValue() - rand, midpoint.GetImaginaryValue());
-                }
-                else
-                {
-                    GetPoints(rnd.Next(5));
-                }
-            }
-            Calculate();
         }
 
         private void GetPoints(int space)
         {
-            Complex temp = midpoint;
-            double negRec = -Math.Pow(grad, -1);
+            double xint = midpoint.GetRealValue();
+            double yint = midpoint.GetImaginaryValue();
+            double negRec = -1 / grad;
             bool isleft = false;
             if (negRec < 0) isleft = true;
             for (int i = 0; i < space; i++)
             {
-                if (isleft) temp = new Complex(temp.GetRealValue() - 1, temp.GetImaginaryValue() + negRec);
-                else temp = new Complex(temp.GetRealValue() + 1, temp.GetImaginaryValue() + negRec);
+                if (isleft)
+                {
+                    xint--;
+                    yint -= grad;
+                }
+                else
+                {
+                    xint++;
+                    yint+=grad;
+                }
             }
-            operand1 = temp;
-            temp = midpoint;
+            operand1 = new Complex(xint, yint);
+            xint = midpoint.GetRealValue();
+            yint = midpoint.GetImaginaryValue();
             for (int i = 0; i < space; i++)
             {
-                if (isleft) temp = new Complex(temp.GetRealValue() + 1, temp.GetImaginaryValue() - negRec);
-                else temp = new Complex(temp.GetRealValue() - 1, temp.GetImaginaryValue() - negRec);
+                if (isleft)
+                {
+                    xint++;
+                    yint += grad;
+                }
+                else
+                {
+                    xint--;
+                    yint -= grad;
+                }
             }
-            operand2 = temp;
+            operand2 = new Complex(xint, yint);
         }
-
 
         public void Calculate()
         {
@@ -173,7 +164,7 @@ namespace NEA.Questions.Loci
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();
-            diagram.CreateModLine(midpoint, -gradient.GetValue());
+            diagram.CreateModLine(midpoint, grad);
             Task.Run(() => Application.Run(diagram));
         }
 
@@ -202,10 +193,6 @@ namespace NEA.Questions.Loci
                 equation,
                 answer
             };
-        }
-        public string Hint()
-        {
-            throw new NotImplementedException();
         }
     }
 }

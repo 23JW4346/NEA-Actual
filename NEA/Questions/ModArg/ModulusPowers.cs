@@ -18,8 +18,7 @@ namespace NEA.Questions.ModArg
 
         public ModulusPowers(int inexp)
         {
-            operand = new Complex(true);
-            exponent = inexp;
+            GenQ(inexp);
             Calculate();
         }
 
@@ -27,10 +26,15 @@ namespace NEA.Questions.ModArg
         {
             if (!GetQuestion(filename))
             {
-                operand = new Complex(true);
-                exponent = inexp;
+                GenQ(inexp);
+                Calculate();
             }
-            Calculate();
+        }
+
+        public void GenQ(int inexp)
+        {
+            operand = new Complex(true);
+            exponent = inexp;
         }
 
         public void Calculate()
@@ -62,6 +66,7 @@ namespace NEA.Questions.ModArg
                     {
                         operand = new Complex(sr.ReadLine());
                         exponent = int.Parse(sr.ReadLine());
+                        answer = int.Parse(sr.ReadLine());
                         found = true;
                     }
                     else
@@ -75,11 +80,6 @@ namespace NEA.Questions.ModArg
             File.Delete(filename);
             File.Move(tempfile, filename);
             return found;
-        }
-
-        public string Hint()
-        {
-            throw new NotImplementedException();
         }
 
         public void LoadDiagram()
@@ -98,7 +98,20 @@ namespace NEA.Questions.ModArg
 
         public string PrintQuestion()
         {
-            return $"The complex number Z is denoted as {operand.GetComplex()}.\nWithout calculating Z^5, Find|Z^5|";
+            string z = "z";
+            switch (exponent)
+            {
+                case '2':
+                    z += "²";
+                    break;
+                case '3':
+                    z += "³";
+                    break;
+                case '4':
+                    z += "⁴";
+                    break;
+            }
+            return $"The complex number z is denoted as {operand.GetComplex()}.\nWithout calculating {z}, Find|{z}|";
         }
 
         public List<string> SaveQuestion()
@@ -107,7 +120,8 @@ namespace NEA.Questions.ModArg
             {
                 "ModPow",
                 operand.GetComplex(),
-                exponent.ToString()
+                exponent.ToString(),
+                answer.ToString()
             };
         }
     }

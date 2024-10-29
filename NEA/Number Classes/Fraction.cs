@@ -67,7 +67,11 @@ namespace NEA.Number_Classes
             return $"{numerator}/{denominator}";
         }
 
-        public virtual double GetTop() => numerator;
+        public virtual double GetTop()
+        {
+            if (isnegative) return -numerator;
+            return numerator;
+        }
 
         public virtual double GetBottom() => denominator;
 

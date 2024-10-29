@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,19 +16,22 @@ namespace NEA.Questions.MultiDivide
 
         public Divide2Complex()
         {
-            operand1 = new Complex(false);
-            operand2 = new Complex(false);
+            GenQ();
             Calculate();
         }
         public Divide2Complex(string filename)
         {
-            if (GetQuestion(filename)) Calculate();
-            else
+            if (!GetQuestion(filename))
             {
-                operand1 = new Complex(false);
-                operand2 = new Complex(false);
-                Calculate();
+                GenQ();
             }
+            Calculate();
+        }
+
+        public void GenQ()
+        {
+            operand1 = new Complex(false);
+            operand2 = new Complex(false);
         }
 
         public void Calculate()
@@ -75,11 +79,6 @@ namespace NEA.Questions.MultiDivide
             return found;
         }
 
-        public string Hint()
-        {
-            throw new NotImplementedException();
-        }
-
         public void LoadDiagram()
         {
             throw new NotImplementedException();
@@ -96,7 +95,7 @@ namespace NEA.Questions.MultiDivide
             output += $"\nModel answer\n" +
                       $"To divide 2 complex numbers, you have to rationalise the denominator, as it is a surd (i = root of -1)\n" +
                       $"So you must multiply both numerator and denominator by the conjugate of the denominator.\n" +
-                      $"Numerator: ({operand1.GetComplex()})*({new Complex(operand2.GetRealValue(), -operand2.GetRealValue()).GetComplex()}) = {new Complex(operand1.GetRealValue() * operand2.GetRealValue() - operand1.GetImaginaryValue() * (-operand2.GetImaginaryValue()), operand1.GetRealValue() * (-operand2.GetImaginaryValue()) + operand1.GetImaginaryValue() * operand2.GetRealValue()).GetComplex()}\n" +
+                      $"Numerator: ({operand1.GetComplex()})*({new Complex(operand2.GetRealValue(), -operand2.GetRealValue()).GetComplex()}) = {Program.TimesComplex(operand1, operand2).GetComplex()}\n" +
                       $"Denominator: ({operand1.GetComplex()})*({new Complex(operand2.GetRealValue(), -operand2.GetRealValue()).GetComplex()}) = {new Number(operand2.GetRealValue() * operand2.GetRealValue() - operand2.GetImaginaryValue() * (-operand2.GetImaginaryValue())).GetString()}\n" +
                       $"The you divide both the real and the imaginary parts of the numerator by the denominator, which gives you the answer of {answer.GetComplex()}\n";
             return output;

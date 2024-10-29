@@ -20,6 +20,21 @@ namespace NEA.Questions.Loci
 
         public ArgGraph(Random rnd)
         {
+            GenQ(rnd);
+        }
+
+
+        public ArgGraph(string filename, Random rnd)
+        {
+            if (GetQuestion(filename)) Calculate();
+            else
+            {
+                GenQ(rnd);
+            }
+        }
+
+        public void GenQ(Random rnd)
+        {
             operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
             while (operand.GetComplex() == null) operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
             Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
@@ -40,36 +55,6 @@ namespace NEA.Questions.Loci
                 answer = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2) isleft = true;
                 else isleft = false;
-            }
-
-        }
-
-        public ArgGraph(string filename, Random rnd)
-        {
-            if (GetQuestion(filename)) Calculate();
-            else
-            {
-                operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-                while (operand.GetComplex() == null) operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-                Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
-                if (rnd.Next(2) == 1)
-                {
-                    int rand = rnd.Next(fractions.Length); ;
-                    argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
-                    step = steps[rand];
-                    answer = Program.CreateArgLine(inanswer, argument);
-                    if (rand > 2) isleft = true;
-                    else isleft = false;
-                }
-                else
-                {
-                    int rand = rnd.Next(fractions.Length);
-                    argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
-                    step = -steps[rand];
-                    answer = Program.CreateArgLine(inanswer, argument);
-                    if (rand > 2) isleft = true;
-                    else isleft = false;
-                }
             }
         }
 
@@ -132,11 +117,6 @@ namespace NEA.Questions.Loci
             File.Delete(filename);
             File.Move(tempfile, filename);
             return found;
-        }
-
-        public string Hint()
-        {
-            throw new NotImplementedException();
         }
 
         public void LoadDiagram()

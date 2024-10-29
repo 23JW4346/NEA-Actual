@@ -121,10 +121,6 @@ namespace NEA.Questions.Loci
             throw new NotImplementedException();
         }
 
-        public string Hint()
-        {
-            throw new NotImplementedException();
-        }
 
         public void LoadDiagram()
         {

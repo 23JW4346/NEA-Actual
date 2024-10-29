@@ -69,7 +69,6 @@
     <Compile Include="Questions\ModArg\ModulusQuestion.cs" />
     <Compile Include="Questions\MultiDivide\DivAlg.cs" />
     <Compile Include="Questions\MultiDivide\MultiAlg.cs" />
-    <Compile Include="Questions\MultiDivide\DivAlg2.cs" />
     <Compile Include="Questions\MultiDivide\Multiply2Complex.cs" />
     <Compile Include="Questions\MultiDivide\Divide2Complex.cs" />
     <Compile Include="Number Classes\Complex.cs" />
@@ -79,6 +78,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Questions\Polynomial Roots\Cubic1rootgiven.cs" />
+    <Compile Include="Questions\Polynomial Roots\GivenRootFindQuadratic.cs" />
     <Compile Include="Questions\Polynomial Roots\Quadratic.cs" />
     <Compile Include="Questions\QuestionForm.cs">
       <SubType>Form</SubType>

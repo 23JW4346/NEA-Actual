@@ -18,9 +18,7 @@ namespace NEA.Questions.Polynomial_Roots
         
         public Quadratic(int incoef)
         {
-            root = new Complex(false);
-            conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
-            coef = incoef;
+            GenQ(incoef);
             Calculate();
         }
 
@@ -28,13 +26,17 @@ namespace NEA.Questions.Polynomial_Roots
         {
             if (!GetQuestion(filename))
             {
-                root = new Complex(false);
-                conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
-                coef = incoef;
+                GenQ(incoef);
             }
             Calculate();
         }
 
+        public void GenQ(int incoef)
+        {
+            root = new Complex(false);
+            conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
+            coef = incoef;
+        }
 
         public void Calculate()
         {
@@ -96,12 +98,6 @@ namespace NEA.Questions.Polynomial_Roots
             File.Move(tempfile, filename);
             return found;
         }
-
-        public string Hint()
-        {
-            throw new NotImplementedException();
-        }
-
         public void LoadDiagram()
         {
             throw new NotImplementedException();

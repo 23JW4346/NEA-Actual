@@ -20,39 +20,40 @@ namespace NEA.Questions.MultiDivide
 
         public MultiAlg()
         {
-            known = new int[4];
-            known[0] = (int)new Number().GetValue();
-            known[1] = (int)new Number().GetValue();
-            known[2] = (int)new Number().GetValue();
-            algA = (int)new Number().GetValue();
+            GenQ();
             Calculate();
         }
 
         public MultiAlg(string filename)
         {
-            if (GetQuestion(filename)) Calculate();
-            else
+            if (!GetQuestion(filename))
             {
-                known = new int[4];
-                known[0] = (int)new Number().GetValue();
-                known[1] = (int)new Number().GetValue();
-                known[2] = (int)new Number().GetValue();
-                algA = (int)new Number().GetValue();
+                GenQ();
                 Calculate();
             }
+        }
+
+        public void GenQ()
+        {
+            known = new int[4];
+            known[0] = (int)new Number().GetValue();
+            known[1] = (int)new Number().GetValue();
+            known[2] = (int)new Number().GetValue();
+            algA = (int)new Number().GetValue();
         }
 
         public void Calculate()
         {
             Complex operand1 = new Complex(algA, known[0]);
             Complex operand2 = new Complex(known[1], known[2]);
-            algB = (int)(operand1.GetRealValue() * operand2.GetRealValue() - operand1.GetImaginaryValue() * operand2.GetImaginaryValue());
-            known[3] = (int)(operand1.GetRealValue() * operand2.GetImaginaryValue() + operand1.GetImaginaryValue() * operand2.GetRealValue());
+            Complex rightSide = Program.TimesComplex(operand1, operand2);
+            algB = (int)rightSide.GetRealValue();
+            known[3] = (int)rightSide.GetImaginaryValue();
+            answer = algA + "," + algB;
         }
 
         public bool CheckAnswer(string answer)
         {
-            this.answer = algA + "," + algB;
             if (answer == this.answer)
             {
                 return true;
@@ -93,11 +94,6 @@ namespace NEA.Questions.MultiDivide
             File.Delete(filename);
             File.Move(tempfile, filename);
             return found;
-        }
-
-        public string Hint()
-        {
-            throw new NotImplementedException();
         }
 
         public void LoadDiagram()

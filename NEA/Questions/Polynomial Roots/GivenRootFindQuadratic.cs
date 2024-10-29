@@ -6,43 +6,46 @@ using System.Text;
 using System.Threading.Tasks;
 using NEA.Number_Classes;
 
-namespace NEA.Questions.ModArg
+namespace NEA.Questions.Polynomial_Roots
 {
-    public class ModulusArgumentForm : IQuestion
+    public class GivenRootFindQuadratic : IQuestion
     {
-        private Complex operand;
-
+        private Complex root;
         private string answer;
 
-        public ModulusArgumentForm()
+        public GivenRootFindQuadratic()
         {
-            operand = new Complex(true);
+            root = new Complex(false);
             Calculate();
         }
 
-        public ModulusArgumentForm(string filename)
+        public GivenRootFindQuadratic(string filename)
         {
             if (!GetQuestion(filename))
             {
-                operand = new Complex(true);
+                root = new Complex(false);
                 Calculate();
             }
         }
 
         public void Calculate()
         {
-            string Modulus = operand.GetModulus().GetString();
-            string arg = operand.GetArgument().ToString();
-            answer = $"{Modulus}(cos({arg})+isin({arg}))";
+            Complex conj = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
+            int coef1 , coef2 ;
+            coef1 = -(int)(root.GetRealValue() + conj.GetRealValue());
+            coef2 = (int)Program.TimesComplex(root, conj).GetRealValue();
+            answer = $"z²";
+            if (coef1 > 0) answer += "+";
+            answer += $"{coef1}z";
+            if(coef2  >  0) answer += "+";
+            answer += coef2;
         }
 
         public bool CheckAnswer(string answer)
         {
-            if (answer == this.answer)
-            {
-                return true;
-            }
+            if(answer == this.answer) return true;
             return false;
+
         }
 
         public bool GetQuestion(string filename)
@@ -56,9 +59,9 @@ namespace NEA.Questions.ModArg
                 {
                     string line;
                     line = sr.ReadLine();
-                    if (line == "ModArg" && !found)
+                    if (line == "GetQuad" && !found)
                     {
-                        operand = new Complex(sr.ReadLine());
+                        root = new Complex(sr.ReadLine());
                         answer = sr.ReadLine();
                         found = true;
                     }
@@ -84,23 +87,25 @@ namespace NEA.Questions.ModArg
         {
             if (correct)
             {
-                return $"Correct!\nThe Answer is {answer}";
+                return $"Correct, the answer is {answer}";
             }
-            return $"Incorrect!\nThe Answer was {answer}";
+            else
+            {
+                return $"Incorrect, the answer was {answer}";
+            }
         }
 
         public string PrintQuestion()
         {
-            return $"The complex number z is denoted as {operand.GetComplex()}. Write z in modulus-argument form (arguments in 3.d.p)";
+            return $"A quadratic equation has a root {root.GetComplex()}.\nFind the quadratic equation in the form az²+bz+c=0, where a, b and c are integers.";
         }
-
 
         public List<string> SaveQuestion()
         {
             return new List<string>
             {
-                "ModArg",
-                operand.GetComplex(),
+                "GetQuad",
+                root.GetComplex(),
                 answer
             };
         }

@@ -10,7 +10,6 @@ namespace NEA.Questions.Loci
 {
     public class ArgIntersect : IQuestion
     {
-        private Random rnd;
         private Complex point1, point2, answerpoint;
         private Fraction angle1, angle2;
         private double step1, step2;
@@ -20,23 +19,22 @@ namespace NEA.Questions.Loci
         private (int, int)[] fractions = { (1, 6), (1, 4), (1, 3), (2, 3), (3, 4), (5, 6) };
         private double[] steps = { 0.5, 1, 2, 2, 1, 0.5 };
 
-        public ArgIntersect(Random randy)
+        public ArgIntersect(Random rnd)
         {
-            rnd = randy;
+            GenQ(rnd);
             Calculate();
         }
 
-        public ArgIntersect(Random randy, string filename)
+        public ArgIntersect(Random rnd, string filename)
         {
-            rnd = randy;
-            if (GetQuestion(filename))
+            if (!GetQuestion(filename))
             {
-
+                GenQ(rnd);
             }
-            else Calculate();
+            Calculate();
         }
 
-        public void Calculate()
+        public void GenQ(Random rnd)
         {
             answerpoint = new Complex(rnd.Next(-5, 6), rnd.Next(-5, 6));
             int rand = rnd.Next(fractions.Length);
@@ -54,24 +52,15 @@ namespace NEA.Questions.Loci
                 if (rand > 2) isleft1 = true;
                 else isleft1 = false;
             }
-            (double, double) point = (answerpoint.GetRealValue(), answerpoint.GetImaginaryValue());
-            do
+            double xint = answerpoint.GetRealValue(), yint = answerpoint.GetImaginaryValue();
+            while(rnd.Next(5) != 0 && Math.Abs(xint) <= 10 && Math.Abs(yint) <= 10)
             {
-                if (isleft1) point.Item1++;
-                else point.Item1--;
-                point.Item2 += step1;
-            } while (rnd.Next(4) != 0 && point.Item1 >= -10 && point.Item1 <= 10 && point.Item2 <= 10 && point.Item2 >= -10);
-            Number real, imag;
-            if (point.Item1.ToString().Contains('.')) real = new Fraction((int)(point.Item1 * 2), 2);
-            else real = new Number(point.Item1);
-            if (point.Item1.ToString().Contains('.')) imag = new Fraction((int)(point.Item2 * 2), 2);
-            else imag = new Number(point.Item2);
-            point1 = new Complex(-real.GetValue(), -imag.GetValue());
-            loci1 = Program.CreateArgLine(point1, angle1);
-            point1 = new Complex(real.GetValue(), imag.GetValue());
-            int rand2 = rnd.Next(fractions.Length);
-            while (rand2 == rand) rand2 = rnd.Next(fractions.Length);
-            rand = rand2;
+                if (isleft1) xint++;
+                else xint--;
+                yint -= step1;
+            }
+            point1 = new Complex(xint, yint);
+            rand = rnd.Next(fractions.Length);
             if (rnd.Next(2) == 0)
             {
                 angle2 = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
@@ -86,20 +75,23 @@ namespace NEA.Questions.Loci
                 if (rand > 2) isleft2 = true;
                 else isleft2 = false;
             }
-            point = (answerpoint.GetRealValue(), answerpoint.GetImaginaryValue());
-            do
+            xint = answerpoint.GetRealValue();
+            yint = answerpoint.GetImaginaryValue();
+            while (rnd.Next(5) != 0 && Math.Abs(xint) <= 10 && Math.Abs(yint) <= 10)
             {
-                if (isleft2) point.Item1++;
-                else point.Item1--;
-                point.Item2 += step2;
-            } while (rnd.Next(3) != 0 && point.Item1 >= -10 && point.Item1 <= 10 && point.Item2 <= 10 && point.Item2 >= -10);
-            if (point.Item1.ToString().Contains('.')) real = new Fraction((int)(point.Item1 * 2), 2);
-            else real = new Number(point.Item1);
-            if (point.Item1.ToString().Contains('.')) imag = new Fraction((int)(point.Item2 * 2), 2);
-            else imag = new Number(point.Item2);
-            point2 = new Complex(-real.GetValue(), -imag.GetValue());
-            loci2 = Program.CreateArgLine(point2, angle2);
-            point2 = new Complex(real.GetValue(), imag.GetValue());
+                if (isleft2) xint++;
+                else xint--;
+                yint -= step1;
+            }
+            point2 = new Complex(xint, yint);
+        }
+
+        public void Calculate()
+        {
+            Complex temp = new Complex(-point1.GetRealValue(), -point2.GetRealValue());
+            loci1 = Program.CreateArgLine(temp, angle1);
+            temp = new Complex(-point2.GetRealValue(), -point2.GetRealValue());
+            loci2 = Program.CreateArgLine(temp, angle2);
         }
 
         public bool CheckAnswer(string answer)
@@ -154,11 +146,6 @@ namespace NEA.Questions.Loci
             File.Delete(filename);
             File.Move(tempfile, filename);
             return found;
-        }
-
-        public string Hint()
-        {
-            throw new NotImplementedException();
         }
 
         public void LoadDiagram()

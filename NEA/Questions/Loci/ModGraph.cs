@@ -17,32 +17,29 @@ namespace NEA.Questions.Loci
 
         public ModGraph(Random rnd)
         {
-            operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-            while (operand.GetComplex() == "") operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-            Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
-            modulus = rnd.Next(1, 6);
-            loci = Program.CreateModCircle(temp, modulus);
+            GenQ(rnd);
+            Calculate();
         }
 
         public ModGraph(Random rnd, string filename)
         {
-            if (GetQuestion(filename))
+            if (!GetQuestion(filename))
             {
-                Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
-                loci = Program.CreateModCircle(temp, modulus);
+                GenQ(rnd);
             }
-            else
-            {
-                operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-                while (operand.GetComplex() == "") operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-                Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
-                modulus = rnd.Next(1, 6);
-                loci = Program.CreateModCircle(temp, modulus);
-            }
+            Calculate();
+        }
+
+        public void GenQ(Random rnd)
+        {
+            operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+            while (operand.GetComplex() == "") operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+            modulus = rnd.Next(1, 6);
         }
         public void Calculate()
         {
-            throw new NotImplementedException();
+            Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
+            loci = Program.CreateModCircle(temp, modulus);
         }
 
         public bool CheckAnswer(string answer)
@@ -82,11 +79,6 @@ namespace NEA.Questions.Loci
             File.Delete(filename);
             File.Move(tempfile, filename);
             return found;
-        }
-
-        public string Hint()
-        {
-            throw new NotImplementedException();
         }
 
         public void LoadDiagram()

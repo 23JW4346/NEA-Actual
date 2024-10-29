@@ -24,27 +24,7 @@ namespace NEA.Questions.Loci
 
         public ArgtoCartesian(Random rnd)
         {
-            operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-            Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
-            while (operand.GetComplex() == null) operand = new Complex(rnd.Next(-3,4), rnd.Next(-3 ,4));
-            if (rnd.Next(2) == 1)
-            {
-                int rand = rnd.Next(fractions.Length); ;
-                argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
-                step = steps[rand];
-                loci = Program.CreateArgLine(inanswer, argument);
-                if (rand > 2)  isleft = true;
-                else isleft = false;
-            }
-            else
-            {
-                int rand = rnd.Next(fractions.Length);
-                argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
-                step = -steps[rand];
-                loci = Program.CreateArgLine(inanswer, argument);
-                if (rand > 2) isleft = true;
-                else isleft = false;
-            }
+            GenQ(rnd);
             Calculate();
         }
 
@@ -68,29 +48,34 @@ namespace NEA.Questions.Loci
             }
             else
             {
-                operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-                Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
-                while (operand.GetComplex() == null) operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-                if (rnd.Next(2) == 1)
-                {
-                    int rand = rnd.Next(fractions.Length); ;
-                    argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
-                    step = steps[rand];
-                    loci = Program.CreateArgLine(inanswer, argument);
-                    if (rand > 2) isleft = true;
-                    else isleft = false;
-                }
-                else
-                {
-                    int rand = rnd.Next(fractions.Length);
-                    argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
-                    step = -steps[rand];
-                    loci = Program.CreateArgLine(inanswer, argument);
-                    if (rand > 2) isleft = true;
-                    else isleft = false;
-                }
+                GenQ(rnd);
             }
             Calculate();
+        }
+
+        public void GenQ(Random rnd)
+        {
+            operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+            Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
+            while (operand.GetComplex() == null) operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+            if (rnd.Next(2) == 1)
+            {
+                int rand = rnd.Next(fractions.Length); ;
+                argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
+                step = steps[rand];
+                loci = Program.CreateArgLine(inanswer, argument);
+                if (rand > 2) isleft = true;
+                else isleft = false;
+            }
+            else
+            {
+                int rand = rnd.Next(fractions.Length);
+                argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
+                step = -steps[rand];
+                loci = Program.CreateArgLine(inanswer, argument);
+                if (rand > 2) isleft = true;
+                else isleft = false;
+            }
         }
 
         public void Calculate()
@@ -155,7 +140,7 @@ namespace NEA.Questions.Loci
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();
-            diagram.CreateLine(-step, operand, isleft);
+            diagram.CreateLine(step, operand, isleft);
             Task.Run(() => Application.Run(diagram));
         }
 
@@ -167,11 +152,6 @@ namespace NEA.Questions.Loci
                 operand.GetComplex(),
                 argument.GetString()
             };
-        }
-
-        public string Hint()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -19,12 +19,11 @@ namespace NEA.Questions.ModArg
 
         public ModulusQuestion(string filename)
         {
-            if (GetQuestion(filename)) Calculate();
-            else
-            {
+            if (!GetQuestion(filename)) 
+            { 
                 operand = new Complex(true);
-                Calculate();
             }
+            Calculate();
         }
 
         public void Calculate()
@@ -68,11 +67,6 @@ namespace NEA.Questions.ModArg
             File.Delete(filename);
             File.Move(tempfile, filename);
             return found;
-        }
-
-        public string Hint()
-        {
-            throw new NotImplementedException();
         }
 
         public void LoadDiagram()

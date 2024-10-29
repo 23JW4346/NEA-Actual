@@ -15,21 +15,24 @@ namespace NEA.Questions.MultiDivide
 
         public Multiply2Complex()
         {
-            operand1 = new Complex(false);
-            operand2 = new Complex(false);
+            GenQ();
             Calculate();
 
         }
 
         public Multiply2Complex(string filename)
         {
-            if (GetQuestion(filename)) Calculate();
-            else
+            if (!GetQuestion(filename))
             {
-                operand1 = new Complex(false);
-                operand2 = new Complex(false);
-                Calculate();
+                GenQ();
             }
+            Calculate();
+        }
+
+        public void GenQ()
+        {
+            operand1 = new Complex(false);
+            operand2 = new Complex(false);
         }
 
         public void Calculate()
@@ -75,11 +78,6 @@ namespace NEA.Questions.MultiDivide
             File.Delete(filename);
             File.Move(tempfile, filename);
             return found;
-        }
-
-        public string Hint()
-        {
-            throw new NotImplementedException();
         }
 
         public void LoadDiagram()

@@ -15,21 +15,24 @@ namespace NEA.Questions.MultiDivide
 
         public DivAlg()
         {
-            operand1 = new Complex(false);
-            answer = new Complex(false);
+            GenQ();
             Calculate();
         }
 
         public DivAlg(string filename)
         {
-            if(GetQuestion(filename)) Calculate();
-            else
+            if(!GetQuestion(filename))
             {
-                operand1 = new Complex(false);
-                answer = new Complex(false);
+                GenQ();
                 Calculate();
             }
 
+        }
+
+        public void GenQ()
+        {
+            operand1 = new Complex(false);
+            answer = new Complex(false);
         }
 
 
@@ -75,7 +78,9 @@ namespace NEA.Questions.MultiDivide
                     if (line == "DivAlg" && !found)
                     {
                         operand1 = new Complex(sr.ReadLine());
+                        operand2 = new Complex(sr.ReadLine());
                         answer = new Complex(sr.ReadLine());
+                        a = int.Parse(sr.ReadLine());
                         found = true;
                     }
                     else
@@ -89,11 +94,6 @@ namespace NEA.Questions.MultiDivide
             File.Delete(filename);
             File.Move(tempfile, filename);
             return found;
-        }
-
-        public string Hint()
-        {
-            throw new NotImplementedException();
         }
 
         public void LoadDiagram()
@@ -130,7 +130,9 @@ namespace NEA.Questions.MultiDivide
             {
                 "DivAlg",
                 operand1.GetComplex(),
-                answer.GetComplex()
+                operand2.GetComplex(),
+                answer.GetComplex(),
+                a.ToString()
             };
         }
     }

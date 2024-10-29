@@ -16,17 +16,21 @@ namespace NEA.Questions.ModArg
 
         public ArgumentQuestion()
         {
-            operand = new Complex(false);
+            GenQ();
             Calculate();
         }
         public ArgumentQuestion(string filename)
         {
-            if (GetQuestion(filename)) Calculate();
-            else
+            if (!GetQuestion(filename))
             {
-                operand = new Complex(false);
-                Calculate();
+                GenQ();
             }
+            Calculate();
+        }
+
+        public void GenQ()
+        {
+            operand = new Complex(false);
         }
 
         public void Calculate()
@@ -70,11 +74,6 @@ namespace NEA.Questions.ModArg
             File.Delete(filename);
             File.Move(tempfile, filename);
             return found;
-        }
-
-        public string Hint()
-        {
-            throw new NotImplementedException();
         }
 
         public void LoadDiagram()
