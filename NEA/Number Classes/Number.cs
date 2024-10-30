@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace NEA.Number_Classes
 {
+    //Made the number class so i could use it as a parent class for other types of Numbers (Fraction, Surd, etc)
     public class Number
     {
         private double value;

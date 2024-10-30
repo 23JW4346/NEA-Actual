@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace NEA.Number_Classes
 {
+
+    //inherited from number, so i could make fractions out of complex division.a
     public class Fraction : Number
     {
         private int numerator = default;
