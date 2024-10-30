@@ -32,7 +32,7 @@ namespace NEA.Questions.MultiDivide
         public void GenQ(Random rnd)
         {
             answer1 = new Complex(false);
-            answer2 = new Complex(-answer1.GetRealValue(), -answer2.GetRealValue());
+            answer2 = new Complex(-answer1.GetRealValue(), -answer1.GetImaginaryValue());
         }
 
 
