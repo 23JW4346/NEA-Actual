@@ -2,51 +2,59 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.Emit;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using NEA.Number_Classes;
 
-namespace NEA.Questions.ModArg
+namespace NEA.Questions.MultiDivide
 {
-    public class ModulusPowers : IQuestion
+    public class ZSquared : IQuestion
     {
-        private Complex operand;
-        private int exponent;
 
-        private int answer;
+        private Complex operand, answer1 ,answer2;
 
-        public ModulusPowers(int inexp)
+        public ZSquared(Random rnd)
         {
-            GenQ(inexp);
+            GenQ(rnd);
             Calculate();
         }
 
-        public ModulusPowers(int inexp, string filename)
+        public ZSquared(string filename, Random rnd)
         {
             if (!GetQuestion(filename))
             {
-                GenQ(inexp);
+                GenQ(rnd);
                 Calculate();
             }
         }
 
-        public void GenQ(int inexp)
+        public void GenQ(Random rnd)
         {
-            operand = new Complex(true);
-            exponent = inexp;
+            answer1 = new Complex(false);
+            answer2 = new Complex(-answer1.GetRealValue(), -answer2.GetRealValue());
         }
+
 
         public void Calculate()
         {
-            answer = (int)Math.Pow(operand.GetModulus().GetValue(),exponent);
+            operand = answer1;
+            operand = Program.TimesComplex(answer1, operand);
         }
 
         public bool CheckAnswer(string answer)
         {
-            if(answer == this.answer.ToString())
+            if (answer.Contains(','))
             {
-                return true;
+                string[] answers = answer.Split(',');
+
+                if (answers[0] == answer1.GetComplex() || answers[1] == answer1.GetComplex() && answers[1] != answers[0])
+                {
+                    if (answers[0] == answer2.GetComplex() || answers[1] == answer2.GetComplex())
+                    {
+                        return true;
+                    }
+                }
             }
             return false;
         }
@@ -62,11 +70,11 @@ namespace NEA.Questions.ModArg
                 {
                     string line;
                     line = sr.ReadLine();
-                    if (line == "ModPow" && !found)
+                    if (line == "ZSquared" && !found)
                     {
+                        answer1 = new Complex(sr.ReadLine());
+                        answer2 = new Complex(-answer1.GetRealValue(), -answer1.GetImaginaryValue());
                         operand = new Complex(sr.ReadLine());
-                        exponent = int.Parse(sr.ReadLine());
-                        answer = int.Parse(sr.ReadLine());
                         found = true;
                     }
                     else
@@ -89,39 +97,22 @@ namespace NEA.Questions.ModArg
 
         public string PrintAnswer(bool correct)
         {
-            if (correct)
-            {
-                return $"Correct!\nThe Answer is {answer}";
-            }
-            return $"Incorrect!\nThe Answer was {answer}";
+            if (correct) return $"Correct, the answer was {answer1.GetComplex()},{answer2.GetComplex()}";
+            return $"Incorrect, the answer is {answer1.GetComplex()},{answer2.GetComplex()}";
         }
 
         public string PrintQuestion()
         {
-            string z = "z";
-            switch (exponent)
-            {
-                case 2:
-                    z += "²";
-                    break;
-                case 3:
-                    z += "³";
-                    break;
-                default:
-                    z += "⁴";
-                    break;
-            }
-            return $"The complex number z is denoted as {operand.GetComplex()}.\nWithout calculating {z}, Find|{z}|";
+            return $"Given that z²={operand.GetComplex()}, find 2 values for z in the form a+bi (place a comma between both values, with 0 spaces)";
         }
 
         public List<string> SaveQuestion()
         {
             return new List<string>
             {
-                "ModPow",
+                "ZSquared",
+                answer1.GetComplex(),
                 operand.GetComplex(),
-                exponent.ToString(),
-                answer.ToString()
             };
         }
     }

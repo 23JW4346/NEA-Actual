@@ -38,7 +38,7 @@ namespace NEA.Questions.MultiDivide
 
         public void Calculate()
         {
-            Complex temp = Program.TimesComplex(operand1, operand2);
+            Complex temp = Program.TimesComplex(operand1, answer);
             a = 1;
             int loop = (int)temp.GetRealValue();
             if (temp.GetImaginaryValue() < temp.GetRealValue()) loop = (int)temp.GetImaginaryValue();
@@ -103,19 +103,11 @@ namespace NEA.Questions.MultiDivide
 
         public string PrintAnswer(bool correct)
         {
-            string output = "";
             if (correct)
             {
-                output +=  $"Correct!\nThe answer is {answer.GetComplex()}";
+                return $"Correct!\nThe answer is {answer.GetComplex()}";
             }
-            else output += $"Incorrect!\nThe answer was {answer.GetComplex()}";
-            output += $"\n Model answer: \n" +
-                      $"This question requires you to rearange the equation to get z on one side.\n" +
-                      $"This would give you the equation of ";
-            if (a != 1) output += $"z = ({a}({operand2.GetComplex()}))/({operand1.GetComplex()})\n";
-            else output += $"z = ({operand2.GetComplex()})/({operand1.GetComplex()})\n";
-            output += $"With this you can now solve it, giving you an answer of {answer.GetComplex()}";
-            return output;
+            else return $"Incorrect!\nThe answer was {answer.GetComplex()}";
         }
 
         public string PrintQuestion()

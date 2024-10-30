@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using NEA.Number_Classes;
 using NEA.Questions;
 using NEA.Questions.Loci;
@@ -324,7 +325,7 @@ namespace NEA
             switch (questionSet)
             {
                 case 0:
-                    switch (rnd.Next(2))
+                    switch (rnd.Next(3))
                     {
                         case 0:
                             if (rnd.Next(1, 16) == 1)
@@ -343,6 +344,15 @@ namespace NEA
                             else
                             {
                                 return new MultiAlg();
+                            }
+                        case 2:
+                            if(rnd.Next(1, 16) == 1)
+                            {
+                                return new ZSquared(rnd);
+                            }
+                            else
+                            {
+                                return new ZSquared("Questions.txt", rnd);
                             }
                     }
                     break;
@@ -529,12 +539,17 @@ namespace NEA
             return new Quadratic(rnd.Next(1, 4));
         }
 
-        const string fracPat = "-?[1-9][0-9]*(/[1-9][0-9]*)?|0";
-        const string fracompPat = "("+fracPat+"(\\+|-)"+fracPat+"i)|"+fracPat+"i?";
+        const string fracPat = "-?([1-9][0-9]*)(/[1-9][0-9]*)?|0";
+        const string fracompPat = "("+fracPat+ "(\\+|-)([1-9][0-9]*)i(/[1-9][0-9]*)?)|([1-9][0-9]*)i?(/[1-9][0-9]*)?";
         const string realPat = "-?[1-9][0-9]*(\\.[0-9]*[1-9])?|-?0\\.[0-9]*[1-9]|0";
         const string complexPat = "(-?[1-9][0-9]*(\\.[0-9]*[1-9])?(\\+|-)[1-9][0-9]*(\\.[0-9]*[1-9])?i)|(-?[1-9][0-9]*(\\.[0-9]*[1-9])?i?)|-?i|0";
         const string modArgPat = "[1-9][0-9]\\(cos\\("+realPat+"\\)\\+isin\\("+realPat+"\\)\\)";
         const string quadraticPat = "z²(\\+|-)[1-9][0-9]*z(\\+|-)[1-9][0-9]*";
+        const string argPat = "arg\\(z+?"+complexPat+ "\\)=[1-9]?π/[1-9]";
+        const string modPat = "\\|z+?"+complexPat+"|=[1-9]";
+        const string linePat = "(y=[2-9]?x(/[2-9])?((\\+|-)" + fracPat + "))?|(y=" + fracPat + ")|(x="+ fracPat + ")";
+        const string circlePat = "((\\(x(\\+|-)[1-9]\\)²)|(x²))\\+((\\(y(\\+|-)[1-9]\\)²)|(y²))=[1-9][0-9]*";
+
         
         //Checks the user input with Regexpatterns defined above to see if its a answer that is allowed.
         static bool ValidateInput(string answer, IQuestion question)
@@ -565,7 +580,30 @@ namespace NEA
             }
             else if (question.GetType() == typeof(GivenRootFindQuadratic))
             {
-                if(Regex.IsMatch(answer, quadraticPat)) return true;
+                if (Regex.IsMatch(answer, quadraticPat)) return true;
+            }
+            else if (question.GetType() == typeof(ArgGraph))
+            {
+                if (Regex.IsMatch(answer, argPat)) return true;
+            }
+            else if (question.GetType() == typeof(ModGraph))
+            {
+                if (Regex.IsMatch(answer, modPat)) return true;
+            }
+            else if (question.GetType() == typeof(ArgtoCartesian)
+                || question.GetType() == typeof(ModLine))
+            {
+                if(Regex.IsMatch(answer ,linePat)) return true;
+            }
+            else if (question.GetType() == typeof(ModToCartesian))
+            {
+                if (Regex.IsMatch(answer, circlePat)) return true;
+            }
+            else if (question.GetType() == typeof(Quadratic)
+                || question.GetType() == typeof(Cubic1rootgiven)
+                || question.GetType() == typeof(ZSquared))
+            {
+                if (Regex.IsMatch(answer, complexPat + "," + complexPat)) return true;
             }
             return false;
         }
@@ -574,6 +612,7 @@ namespace NEA
         {
             Console.Clear();
             string ans = "";
+            bool thisloop = true;
             Console.WriteLine(question.PrintQuestion());
             Console.WriteLine();
             Console.Write("Answer: ");
@@ -591,12 +630,28 @@ namespace NEA
                 {
                     Console.CursorTop += 2;
                     Console.CursorLeft = 0;
-
-                    if (!question.CheckAnswer(ans))
+                    bool isValid = ValidateInput(ans, question);
+                    if (!isValid)
                     {
-                        savequests.Add(question.SaveQuestion());
+                        Console.WriteLine("Invalid input, please enter a correct input");
+                        Console.CursorTop = currentposition;
+                        Console.CursorLeft = 8;
+                        Console.CursorTop = currentposition;
+                        Console.CursorLeft = 8;
+                        ans = "";
+
                     }
-                    Console.WriteLine(question.PrintAnswer(question.CheckAnswer(ans)));
+                    else
+                    {
+                        bool iscorrect = question.CheckAnswer(ans);
+                        if (!iscorrect)
+                        {
+                            savequests.Add(question.SaveQuestion());
+                        }
+                        Console.WriteLine(new string(' ', ans.Length));
+                        Console.WriteLine(question.PrintAnswer(question.CheckAnswer(ans)));
+                        thisloop = false;
+                    }
                 }
                 else if (choice.Key == ConsoleKey.Backspace && Console.CursorLeft > 8)
                 {
@@ -631,6 +686,7 @@ namespace NEA
                 }
                 else if (choice.KeyChar == '^')
                 {
+                    bool doloop = true;
                     do
                     {
                         choice = Console.ReadKey(true);
@@ -648,9 +704,12 @@ namespace NEA
                                 ans += "⁴";
                                 Console.Write("⁴");
                                 break;
+                            default:
+                                doloop = false;
+                                break;
 
                         }
-                    } while (!Char.IsDigit(choice.KeyChar));
+                    } while (!Char.IsDigit(choice.KeyChar) && doloop);
                 }
                 else if (choice.Key == ConsoleKey.P)
                 {
@@ -677,7 +736,7 @@ namespace NEA
                         Console.CursorLeft = 9 + index;
                     }
                 }
-            } while (choice.Key != ConsoleKey.Enter);
+            } while (thisloop);
             if (loop)
             {
                 Console.WriteLine();
@@ -747,13 +806,14 @@ namespace NEA
             int[] questionSets = new int[1];
             bool[] questionWrong = new bool[1];
             int[] numberwrong = new int[5];
+            List<int> setsInUse = new List<int>();
             do
             {
                 loop = false;
                 Console.WriteLine("How many Questions would you like in your quiz?");
                 string choice = Console.ReadLine();
                 Console.Clear();
-                if (Regex.IsMatch(choice.Trim(), "[0-9]"))
+                if (Regex.IsMatch(choice.Trim(), "[1-9][0-9]*"))
                 {
                     int length = int.Parse(choice);
                     quizQuestions = new IQuestion[length];
@@ -766,9 +826,88 @@ namespace NEA
                     loop = true;
                 }
             } while (loop);
+            Console.Clear();
+            Console.WriteLine("Which Topics would you like?");
+            Console.WriteLine("  Complex Number Multiplication");
+            Console.WriteLine("  Complex Number Division");
+            Console.WriteLine("  Modulus Argument Form");
+            Console.WriteLine("  Finding Roots of a polynomial");
+            Console.WriteLine("  Complex Loci");
+            Console.WriteLine("  Continue");
+            Console.CursorLeft = 1;
+            Console.CursorTop = 1;
+            bool exit = true;
+            while (exit)
+            {
+                ConsoleKeyInfo choice = Console.ReadKey(true);
+                int cursorpos = Console.CursorTop;
+                if (choice.Key == ConsoleKey.Enter)
+                {
+                    switch (Console.CursorTop)
+                    {
+                        case 1:
+                            if (!setsInUse.Contains(1)) setsInUse.Add(1);
+                            else setsInUse.Remove(1);
+                            cursorpos = 1;
+                            break;
+                        case 2:
+                            if (!setsInUse.Contains(2)) setsInUse.Add(2);
+                            else setsInUse.Remove(2);
+                            cursorpos = 2;
+                            break;
+                        case 3:
+                            if (!setsInUse.Contains(3)) setsInUse.Add(3);
+                            else setsInUse.Remove(3);
+                            cursorpos = 3;
+                            break;
+                        case 4:
+                            if (!setsInUse.Contains(4)) setsInUse.Add(4);
+                            else setsInUse.Remove(4);
+                            cursorpos = 4;
+                            break;
+                        case 5:
+                            if (!setsInUse.Contains(5)) setsInUse.Add(5);
+                            else setsInUse.Remove(5);
+                            cursorpos = 5;
+                            break;
+                        default:
+                            exit = false;
+                            break;
+                    }
+                    Console.Clear();
+                    Console.WriteLine("Which Topics would you like?");
+                    if(setsInUse.Contains(1)) Console.WriteLine("> Complex Number Multiplication");
+                    else Console.WriteLine("  Complex Number Multiplication");
+                    if (setsInUse.Contains(2)) Console.WriteLine("> Complex Number Division");
+                    else Console.WriteLine("  Complex Number Division");
+                    if (setsInUse.Contains(3)) Console.WriteLine("> Modulus Argument Form");
+                    else Console.WriteLine("  Modulus Argument Form");
+                    if (setsInUse.Contains(4)) Console.WriteLine("> Finding Roots of a polynomial");
+                    else Console.WriteLine("  Finding Roots of a polynomial");
+                    if (setsInUse.Contains(5)) Console.WriteLine("> Complex Loci");
+                    else Console.WriteLine("  Complex Loci");
+                    Console.WriteLine("  Continue");
+                    Console.CursorLeft = 1;
+                    Console.CursorTop = cursorpos;
+                }
+                else if (choice.Key == ConsoleKey.DownArrow && Console.CursorTop != 6)
+                {
+                    Console.CursorLeft = 0;
+                    Console.CursorTop++;
+                    Console.CursorLeft = 1;
+                    
+                }
+                else if (choice.Key == ConsoleKey.UpArrow && Console.CursorTop != 1)
+                {
+                    Console.CursorLeft = 0;
+                    Console.CursorTop--;
+                    Console.CursorLeft = 1;
+                }
+            }
+
             for (int i = 0; i < quizQuestions.Length; i++)
             {
-                questionSets[i] = rnd.Next(6);
+                questionSets[i] = setsInUse[rnd.Next(setsInUse.Count)]-1;
                 quizQuestions[i] = GenQ(questionSets[i]);
                 questionWrong[i] = true;
             }

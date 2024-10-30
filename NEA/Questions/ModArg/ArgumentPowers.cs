@@ -100,13 +100,13 @@ namespace NEA.Questions.ModArg
             string z = "z";
             switch (exponent)
             {
-                case '2':
+                case 2:
                     z += "²";
                     break;
-                case '3':
+                case 3:
                     z += "³";
                     break;
-                case '4':
+                default:
                     z += "⁴";
                     break;
             }
