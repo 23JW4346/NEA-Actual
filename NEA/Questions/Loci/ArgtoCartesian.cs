@@ -16,7 +16,7 @@ namespace NEA.Questions.Loci
         private Complex operand;
         private Fraction argument;
         private string loci, answer;
-        private double step;
+        private double step, m;
         private bool isleft;
         private ArgandDiagram diagram;
         private (int, int)[] fractions = { (1, 6), (1, 4), (1, 3), (2, 3), (3, 4), (5, 6) };
@@ -56,17 +56,24 @@ namespace NEA.Questions.Loci
         public void GenQ(Random rnd)
         {
             operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-            while(operand.GetComplex() != "") operand = new Complex(rnd.Next(-3,4), rnd.Next(-3,4));
+            while(operand.GetComplex() == "") operand = new Complex(rnd.Next(-3,4), rnd.Next(-3,4));
             Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
-            while (operand.GetComplex() == null) operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
             if (rnd.Next(2) == 1)
             {
                 int rand = rnd.Next(fractions.Length); ;
                 argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
                 step = steps[rand];
                 loci = Program.CreateArgLine(inanswer, argument);
-                if (rand > 2) isleft = true;
-                else isleft = false;
+                if (rand > 2)
+                {
+                    isleft = true;
+                    m = -step;
+                }
+                else
+                {
+                    isleft = false;
+                    m = step;
+                }
             }
             else
             {
@@ -74,14 +81,22 @@ namespace NEA.Questions.Loci
                 argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
                 step = -steps[rand];
                 loci = Program.CreateArgLine(inanswer, argument);
-                if (rand > 2) isleft = true;
-                else isleft = false;
+                if (rand > 2)
+                {
+                    isleft = true;
+                    m = step;
+                }
+                else
+                {
+                    isleft = false;
+                    m = -step;
+                }
             }
         }
 
         public void Calculate()
         {
-            answer = Program.CreateCartesianLine(operand, step);
+            answer = Program.CreateCartesianLine(operand, m);
         }
 
         public bool CheckAnswer(string answer)
@@ -151,7 +166,7 @@ namespace NEA.Questions.Loci
             {
                 "ArgToCart",
                 operand.GetComplex(),
-                argument.GetString()
+                argument.GetString(false)
             };
         }
     }

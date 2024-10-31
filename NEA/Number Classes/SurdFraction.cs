@@ -18,13 +18,21 @@ namespace NEA.Number_Classes
             Simplify();
         }
 
-        public override string GetString()
+        public override string GetString(bool isimag)
         {
+            if (isimag)
+            {
+                if (denominator != 1)
+                {
+                    return $"{numerator.GetString(true)}/{denominator}";
+                }
+                return $"{numerator.GetString(true)}";
+            }
             if (denominator != 1)
             {
-                return $"{numerator.GetString()}/{denominator}";
+                return $"{numerator.GetString(false)}/{denominator}";
             }
-            return $"{numerator.GetString()}";
+            return $"{numerator.GetString(false)}";
         }
 
         public override double GetValue()

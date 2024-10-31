@@ -23,8 +23,13 @@ namespace NEA.Number_Classes
             root = roots[rnd.Next(roots.Length)];
         }
 
-        public override string GetString()
+        public override string GetString(bool isimag)
         {
+            if (isimag)
+            {
+                if (coefficent == 1) return $"√{root}i";
+                else return $"{coefficent}√{root}i";
+            }
             if (coefficent == 1) return $"√{root}";
             else return $"{coefficent}√{root}";
         }

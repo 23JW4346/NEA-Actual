@@ -113,7 +113,8 @@ namespace NEA.Questions.Loci
 
         public bool CheckAnswer(string answer)
         {
-            throw new NotImplementedException();
+            if (answer == this.answer.GetComplex()) return true;
+            return false;
         }
 
         public bool GetQuestion(string filename)
@@ -146,7 +147,17 @@ namespace NEA.Questions.Loci
 
         public List<string> SaveQuestion()
         {
-            throw new NotImplementedException();
+            return new List<string>()
+            {
+                "ArgModInt",
+                argLoci,
+                modLoci,
+                midpoint.GetComplex(),
+                modulus.ToString(),
+                step.ToString(),
+                isleft? "1": "0"
+            };
+
         }
     }
 }

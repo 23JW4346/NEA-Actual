@@ -31,8 +31,8 @@ namespace NEA.Questions.ModArg
 
         public void Calculate()
         {
-            string Modulus = operand.GetModulus().GetString();
-            string arg = operand.GetArgument().ToString();
+            string Modulus = operand.GetModulus().GetString(false);
+            string arg = Math.Round(operand.GetArgument(), 3).ToString();
             answer = $"{Modulus}(cos({arg})+isin({arg}))";
         }
 

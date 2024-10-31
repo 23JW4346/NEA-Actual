@@ -35,12 +35,12 @@ namespace NEA.Questions.ModArg
 
         public void Calculate()
         {
-            answer = new Number(operand.GetArgument());
+            answer = new Number(Math.Round(operand.GetArgument(), 3));
         }
 
         public bool CheckAnswer(string answer)
         {
-            if (answer == this.answer.GetString())
+            if (answer == this.answer.GetString(false))
             {
                 return true;
             }
@@ -85,9 +85,9 @@ namespace NEA.Questions.ModArg
         {
             if (correct)
             {
-                return $"Correct!\nThe Answer is {answer.GetString()}";
+                return $"Correct!\nThe Answer is {answer.GetString(false)}";
             }
-            return $"Incorrect!\nThe Answer was {answer.GetString()}";
+            return $"Incorrect!\nThe Answer was {answer.GetString(false)}";
         }
 
         public string PrintQuestion()

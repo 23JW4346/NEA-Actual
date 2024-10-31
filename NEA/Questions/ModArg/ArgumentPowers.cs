@@ -38,7 +38,7 @@ namespace NEA.Questions.ModArg
         public void Calculate()
         {
             double arg = operand.GetArgument();
-            answer =  Math.Round(arg * exponent,2);
+            answer =  exponent * Math.Round(arg,3);
         }
 
         public bool CheckAnswer(string answer)

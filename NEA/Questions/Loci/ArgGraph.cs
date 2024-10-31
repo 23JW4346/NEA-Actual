@@ -147,7 +147,7 @@ namespace NEA.Questions.Loci
             {
                 "ArgGraph",
                 operand.GetComplex(),
-                argument.GetString()
+                argument.GetString(false)
             };
         }
     }

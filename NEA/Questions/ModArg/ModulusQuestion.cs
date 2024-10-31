@@ -33,7 +33,7 @@ namespace NEA.Questions.ModArg
 
         public bool CheckAnswer(string answer)
         {
-            if (answer == this.answer.GetString())
+            if (answer == this.answer.GetString(false))
             {
                 return true;
             }
@@ -78,9 +78,9 @@ namespace NEA.Questions.ModArg
         {
             if (correct)
             {
-                return $"Correct!\nThe Answer is {answer.GetString()}";
+                return $"Correct!\nThe Answer is {answer.GetString(false)}";
             }
-            return $"Incorrect!\nThe Answer was {answer.GetString()}";
+            return $"Incorrect!\nThe Answer was {answer.GetString(false)}";
         }
 
         public string PrintQuestion()

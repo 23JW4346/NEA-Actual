@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -50,19 +51,20 @@ namespace NEA.Questions.Loci
             midpoint = new Complex(rnd.Next(6), rnd.Next(6));
             if (gradient.GetValue() == 0)
             {
-                rand = rnd.Next(5);
+                rand = rnd.Next(1, 5);
                 operand1 = new Complex(midpoint.GetRealValue(), midpoint.GetImaginaryValue() + rand);
                 operand2 = new Complex(midpoint.GetRealValue(), midpoint.GetImaginaryValue() - rand);
             }
             else if (gradient.GetValue() == 5)
             {
-                rand = rnd.Next(5);
+                rand = rnd.Next(1, 5);
                 operand1 = new Complex(midpoint.GetRealValue() + rand, midpoint.GetImaginaryValue());
                 operand2 = new Complex(midpoint.GetRealValue() - rand, midpoint.GetImaginaryValue());
             } 
             else
             {
-                GetPoints(rnd.Next(5));
+                grad = gradient.GetValue();
+                GetPoints(rnd.Next(1, 5));
             }
         }
 
@@ -70,37 +72,19 @@ namespace NEA.Questions.Loci
         {
             double xint = midpoint.GetRealValue();
             double yint = midpoint.GetImaginaryValue();
-            double negRec = -1 / grad;
-            bool isleft = false;
-            if (negRec < 0) isleft = true;
+            double negRec = -Math.Pow(grad, -1);
             for (int i = 0; i < space; i++)
             {
-                if (isleft)
-                {
                     xint--;
-                    yint -= grad;
-                }
-                else
-                {
-                    xint++;
-                    yint+=grad;
-                }
+                    yint -= negRec;
             }
             operand1 = new Complex(xint, yint);
             xint = midpoint.GetRealValue();
             yint = midpoint.GetImaginaryValue();
             for (int i = 0; i < space; i++)
             {
-                if (isleft)
-                {
                     xint++;
-                    yint += grad;
-                }
-                else
-                {
-                    xint--;
-                    yint -= grad;
-                }
+                    yint += negRec;
             }
             operand2 = new Complex(xint, yint);
         }
@@ -143,7 +127,7 @@ namespace NEA.Questions.Loci
                             string[] fract = line.Split('/');
                             gradient = new Fraction(int.Parse(fract[0]), int.Parse(fract[1]));
                         }
-                        else gradient = new Number(int.Parse(line2));
+                        else gradient = new Number(double.Parse(line2));
                         equation = sr.ReadLine();
                         answer = sr.ReadLine();
                         found = true;
@@ -189,7 +173,7 @@ namespace NEA.Questions.Loci
                 "ModLine",
                 operand1.GetComplex(),
                 operand2.GetComplex(),
-                gradient.GetString(),
+                gradient.GetString(false),
                 equation,
                 answer
             };

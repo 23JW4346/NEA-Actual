@@ -57,8 +57,18 @@ namespace NEA.Number_Classes
         }
 
 
-        public override string GetString()
+        public override string GetString(bool isimag)
         {
+            if (isimag)
+            {
+                if (isnegative)
+                {
+                    if (denominator == 1) return $"-{numerator}i";
+                    return $"-{numerator}i/{denominator}";
+                }
+                else if (denominator == 1) return $"{numerator}i"; 
+                return $"{numerator}i/{denominator}";
+            }
             if (isnegative)
             {
                 if (denominator == 1) return $"-{numerator}";

@@ -41,6 +41,8 @@ namespace NEA
             }
         }
 
+
+
         //returns a*b
         public static Complex TimesComplex(Complex a, Complex b)
         {
@@ -136,7 +138,7 @@ namespace NEA
         {
             string answer = "";
             double yint;
-            if (grad != int.MaxValue) yint = grad * -a.GetRealValue() + a.GetImaginaryValue();
+            if (grad != int.MaxValue || grad != 0) yint = grad * -a.GetRealValue() + a.GetImaginaryValue();
             else yint = a.GetImaginaryValue();
             double xint = -yint / grad;
             if (grad == 0.5)
@@ -148,14 +150,7 @@ namespace NEA
             else if (grad == -1) answer += "y=-x";
             else if (grad == 0)
             {
-                string xint2;
-                if (xint.ToString().Contains('.'))
-                {
-                    xint2 = (xint * 2) + "/2";
-                }
-                else if (xint == double.NaN) xint2 = "0";
-                else xint2 = xint.ToString();
-                answer = $"y={xint2}";
+                answer = $"y={yint}";
             }
             else answer += "y=" + grad + "x";
             if (yint != 0)
@@ -633,11 +628,13 @@ namespace NEA
             Console.Write("Answer: ");
             ConsoleKeyInfo choice;
             int currentposition = Console.CursorTop, newposition = 0;
-            try
+            if(question.GetType() == typeof(ArgGraph) || question.GetType() == typeof(ArgIntersect) ||
+               question.GetType() == typeof(ArgModIntersect) || question.GetType() == typeof(ArgtoCartesian) ||
+               question.GetType() == typeof(ModGraph) ||  question.GetType() == typeof(ModLine) ||
+               question.GetType() == typeof(ModToCartesian))
             {
                 question.LoadDiagram();
             }
-            catch { }
             do
             {
                 choice = Console.ReadKey(true);
@@ -663,7 +660,7 @@ namespace NEA
                         {
                             savequests.Add(question.SaveQuestion());
                         }
-                        Console.WriteLine(new string(' ', ans.Length));
+                        Console.WriteLine(new string(' ', "Invalid input, please enter a correct input".Length));
                         Console.WriteLine(question.PrintAnswer(question.CheckAnswer(ans)));
                         thisloop = false;
                     }
@@ -731,7 +728,7 @@ namespace NEA
                     Console.Write("π");
                     ans += "π";
                 }
-                else if (Char.IsLetterOrDigit(choice.KeyChar))
+                else if (Regex.IsMatch(choice.KeyChar.ToString(), "[0-9]|[-\\.,\\+=\\|\\(\\)/ ]|[A-Za-z]"))
                 {
                     if (Console.CursorLeft == 8 + ans.Length)
                     {

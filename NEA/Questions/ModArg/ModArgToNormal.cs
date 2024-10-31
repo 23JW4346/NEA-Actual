@@ -84,8 +84,8 @@ namespace NEA.Questions.ModArg
 
         public string PrintQuestion()
         {
-            return $"The complex number z has a modulus of {answer.GetModulus().GetValue()} and an argument of {answer.GetArgument()}\n" +
-                $"calculate z in the form a+bi, where a and b are real";
+            return $"The complex number z has a modulus of {answer.GetModulus().GetValue()} and an argument of {Math.Round(answer.GetArgument(), 3)}\n" +
+                $"calculate z in the form a+bi, where a and b are intergers (no decimal part)";
         }
 
         public List<string> SaveQuestion()

@@ -16,8 +16,9 @@ namespace NEA.Questions.Loci
     public partial class ArgandDiagram : Form
     {
 
-        private static int instance = 1;
+        private int instance = 1;
 
+        //draws the real and imaginary axis on the windows form
         public ArgandDiagram()
         {
             InitializeComponent();
@@ -37,6 +38,7 @@ namespace NEA.Questions.Loci
             }
         }
 
+        //draws a half line on windows forms
         public void CreateLine(double step, Complex operand, bool isleft)
         {
             Diagram.Series.Add("line " + instance);
@@ -56,6 +58,7 @@ namespace NEA.Questions.Loci
             instance++;
         }
 
+        //draws a circles on windows form for an argand diagram
         public void CreateCircle(Complex operand, int modulus)
         {
             Diagram.Series.Add("circle");
@@ -74,6 +77,8 @@ namespace NEA.Questions.Loci
             }
         }
 
+
+        //draws a full line on windows form for an argand diagram
         public void CreateModLine(Complex midpoint, double gradient)
         {
             Diagram.Series.Add("line " + instance);

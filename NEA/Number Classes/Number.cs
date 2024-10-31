@@ -25,7 +25,21 @@ namespace NEA.Number_Classes
             if (value < 0) isnegative = true;
         }
 
-        public virtual string GetString() => value.ToString();
+        public virtual string GetString(bool isimag)
+        {
+            if (isimag)
+            {
+                if (value == 1) return "i";
+                else if (value == -1) return "-i";
+                else if (value != 0) return value.ToString() + "i";
+                
+            }
+            else
+            {
+                if (value != 0) return value.ToString();
+            }
+            return null;
+        }
 
         public virtual double GetValue() => value;
         

@@ -78,7 +78,7 @@ namespace NEA.Number_Classes
             }
         }
 
-        public string GetReal() => real.GetString();
+        public string GetReal() => real.GetString(false);
 
         public double GetRealValue() => real.GetValue();
 
@@ -88,22 +88,22 @@ namespace NEA.Number_Classes
         {
             string outputreal = "";
             string outputimag = "";
-            if (real.GetString() == "0" && imaginary.GetString() == "0")
+            if (real.GetString(false) == "0" && imaginary.GetString(true) == "0")
             {
                 return default;
             }
-            if (real.GetString() != "0")
+            if (real.GetString(false) != "0")
             {
-                outputreal += real.GetString();
+                outputreal += real.GetString(false);
             }
-            if (imaginary.GetString() != "0")
+            if (imaginary.GetString(false) != "0")
             {
                 outputimag += "";
                 if (imaginary.GetValue() == 1) outputimag += "i";
                 else if (imaginary.GetValue() == -1) outputimag += "-i";
                 else
                 {
-                    outputimag += imaginary.GetString() + "i";
+                    outputimag += imaginary.GetString(true);
                 }
             }
             if (outputimag.Length == 0) return outputreal;
@@ -137,26 +137,17 @@ namespace NEA.Number_Classes
         public double GetArgument()
         {
             double tantheta = imaginary.GetValue() / real.GetValue();
-            if (tantheta < 0) tantheta = -tantheta;
-            double arg = Math.Atan(tantheta);
+            double arg = Math.Atan(Math.Abs(tantheta));
             if(imaginary.GetValue() > 0)
             {
                 if(real.GetValue() < 0) arg = Math.PI - arg;
             }
             else if (imaginary.GetValue() < 0)
             {
-                if (real.GetValue() > 0) arg = -arg;
-                else if (real.GetValue() < 0) arg = arg - Math.PI;
+                if (real.GetValue() < 0) arg = -Math.PI + arg;
+                else arg = -arg;
             }
-            if (imaginary.GetValue() > 0 && real.GetValue() < 0)
-            {
-                arg += Math.PI;
-            }
-            else if (imaginary.GetValue() < 0 && real.GetValue() < 0)
-            {
-                arg -= Math.PI;
-            }
-            return Math.Round(arg, 3);
+            return arg;
         }
     }
 }
