@@ -16,7 +16,6 @@ namespace NEA.Number_Classes
                                                                                        };
 
 
-
         public Complex(double inreal, double inimaginary)
         {
             real = new Number(inreal);
@@ -28,7 +27,7 @@ namespace NEA.Number_Classes
             real = inreal;
             imaginary = inimaginary;
         }
-
+        //base consturctor, takes in a bool to either generate it so mod is a whole number or not. 
         public Complex(bool modquestion)
         {
             if (modquestion)
@@ -51,7 +50,7 @@ namespace NEA.Number_Classes
                 imaginary = new Number();
             }
         }
-
+        //Gets the complex from the text file, and converts it to the object
         public Complex(string strcomp)
         {
             string temp = "";
@@ -83,10 +82,8 @@ namespace NEA.Number_Classes
 
         public double GetRealValue() => real.GetValue();
 
-        public string GetImaginary() => imaginary.GetString();
-
         public double GetImaginaryValue() => imaginary.GetValue();
-
+        //returns the Complex number string
         public string GetComplex()
         {
             string outputreal = "";
@@ -114,7 +111,7 @@ namespace NEA.Number_Classes
             else if (outputreal.Length == 0) return outputimag;
             return outputreal + "+" + outputimag;
         }
-
+        //Calculates the Modulus of the Complex number
         public Number GetModulus()
         {
             int pythag = (int)Math.Pow(real.GetValue(), 2) + (int)Math.Pow(imaginary.GetValue(), 2);
@@ -135,12 +132,22 @@ namespace NEA.Number_Classes
             if (pythag == 1) return new Number(coef);
             return new Surd(coef, pythag);
         }
+
+        //calculates the Argument of the complex number
         public double GetArgument()
         {
             double tantheta = imaginary.GetValue() / real.GetValue();
             if (tantheta < 0) tantheta = -tantheta;
-            double arg;
-            arg = Math.Atan(tantheta);
+            double arg = Math.Atan(tantheta);
+            if(imaginary.GetValue() > 0)
+            {
+                if(real.GetValue() < 0) arg = Math.PI - arg;
+            }
+            else if (imaginary.GetValue() < 0)
+            {
+                if (real.GetValue() > 0) arg = -arg;
+                else if (real.GetValue() < 0) arg = arg - Math.PI;
+            }
             if (imaginary.GetValue() > 0 && real.GetValue() < 0)
             {
                 arg += Math.PI;
@@ -151,8 +158,6 @@ namespace NEA.Number_Classes
             }
             return Math.Round(arg, 3);
         }
-
-
     }
 }
 

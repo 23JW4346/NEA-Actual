@@ -26,6 +26,8 @@ namespace NEA
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             Menu();
+
+            //At the end when the user clicks exit, it saves all the questions that the user got wrong into a text file.
             using (StreamWriter sw = new StreamWriter("Questions.txt", true))
             {
                 foreach (List<string> strings in savequests)
@@ -39,11 +41,13 @@ namespace NEA
             }
         }
 
+        //returns a*b
         public static Complex TimesComplex(Complex a, Complex b)
         {
             return new Complex(a.GetRealValue() * b.GetRealValue() - a.GetImaginaryValue() * b.GetImaginaryValue(), a.GetImaginaryValue() * b.GetRealValue() + a.GetRealValue() * b.GetImaginaryValue());
         }
 
+        //returns the calculation a/b
         public static Complex DivideComplex(Complex a, Complex b)
         {
             Fraction RealPart = new Fraction((int)(a.GetRealValue() * b.GetRealValue() - a.GetImaginaryValue() * -b.GetImaginaryValue()), (int)(b.GetRealValue() * b.GetRealValue() - b.GetImaginaryValue() * -b.GetImaginaryValue()));
@@ -51,6 +55,7 @@ namespace NEA
             return new Complex(RealPart, ImagPart);
         }
 
+        //returns the string for an arg line in an argand diagram (arg(z-(z1)=θ)
         public static string CreateArgLine(Complex a, Fraction b)
         {
             string loci;
@@ -80,7 +85,7 @@ namespace NEA
             }
             return loci;
         }
-
+        //returns the Complex Loci string for a circle (|z-z1|=r)
         public static string CreateModCircle(Complex a, int modulus)
         {
             string loci;
@@ -95,6 +100,7 @@ namespace NEA
             return loci;
         }
 
+        //returns a string for a cartesian circle ((x-x1)² + (y-y1)² = r²)
         public static string CreateCartesianCircle(Complex a, int radius)
         {
             string xpart, ypart;
@@ -125,6 +131,7 @@ namespace NEA
             return $"{xpart}+{ypart}={radius}";
         }
 
+        //returns the string for a cartesian line (y=mx+c)
         public static string CreateCartesianLine(Complex a, double grad)
         {
             string answer = "";
@@ -166,6 +173,7 @@ namespace NEA
             return answer;
         }
 
+        //returns the string for a modline loci (|z-z1|=|z-z2|)
         public static string CreateModLine(Complex a, Complex b)
         {
             string loci = "|z";
@@ -183,6 +191,7 @@ namespace NEA
             return loci + "|";
         }
 
+        //Main Menu, can use arrow kets (up and down) to navigate
         static void Menu()
         {
             bool loop = true;
@@ -240,6 +249,8 @@ namespace NEA
                 loop = false;
             }
         }
+
+        //Menu for choosing topic (still uses up and down arrow keys)
         static void ChooseTopic()
         {
             Console.Clear();
@@ -320,6 +331,7 @@ namespace NEA
             }
         }
 
+        //Returns a question type due to which question set its in and a randomly generated question in that set.
         static IQuestion GenQ(int questionSet)
         {
             switch (questionSet)
@@ -539,6 +551,7 @@ namespace NEA
             return new Quadratic(rnd.Next(1, 4));
         }
 
+        //Regex Patterns
         const string fracPat = "-?([1-9][0-9]*)(/[1-9][0-9]*)?|0";
         const string fracompPat = "("+fracPat+ "(\\+|-)([1-9][0-9]*)i(/[1-9][0-9]*)?)|([1-9][0-9]*)i?(/[1-9][0-9]*)?";
         const string realPat = "-?[1-9][0-9]*(\\.[0-9]*[1-9])?|-?0\\.[0-9]*[1-9]|0";
@@ -551,7 +564,8 @@ namespace NEA
         const string circlePat = "((\\(x(\\+|-)[1-9]\\)²)|(x²))\\+((\\(y(\\+|-)[1-9]\\)²)|(y²))=[1-9][0-9]*";
 
         
-        //Checks the user input with Regexpatterns defined above to see if its a answer that is allowed.
+        //Checks the user input with RegEx patterns defined above to see if its a answer that is allowed.
+        //Checks what question type it is, then with the corresponding RegEx Pattern
         static bool ValidateInput(string answer, IQuestion question)
         {
             if (question.GetType() == typeof(Multiply2Complex)
@@ -608,6 +622,7 @@ namespace NEA
             return false;
         }
 
+        //prints the question to the user, and takes the answer, checks the answer + validates it.
         static void AskQuestion(IQuestion question, ref bool loop, ref int score)
         {
             Console.Clear();
@@ -716,7 +731,7 @@ namespace NEA
                     Console.Write("π");
                     ans += "π";
                 }
-                else if (choice.Key != ConsoleKey.Backspace)
+                else if (Char.IsLetterOrDigit(choice.KeyChar))
                 {
                     if (Console.CursorLeft == 8 + ans.Length)
                     {
@@ -796,6 +811,8 @@ namespace NEA
             }
             Console.Clear();
         }
+
+        //generates the quiz, by asking the user for amount of questions, and differnt types of questions
 
         static void CreateQuiz()
         {
