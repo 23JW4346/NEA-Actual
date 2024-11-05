@@ -37,6 +37,8 @@ namespace NEA.Questions.Loci
         public void GenQ(Random rnd)
         {
             answerpoint = new Complex(rnd.Next(-5, 6), rnd.Next(-5, 6));
+            int xmax = 10 - (int)answerpoint.GetRealValue(), xmin = -10 - (int)answerpoint.GetRealValue();
+            int ymax = 10 - (int)answerpoint.GetImaginaryValue(), ymin = -10-(int)answerpoint.GetImaginaryValue();
             Number real, imag;
             int rand = rnd.Next(fractions.Length);
             if (rnd.Next(2) == 0)
@@ -55,7 +57,7 @@ namespace NEA.Questions.Loci
             }
             double xint = answerpoint.GetRealValue(), yint = answerpoint.GetImaginaryValue();
             int loop = rnd.Next(2,6);
-            while(loop > 0 && Math.Abs(xint) <= 10 && Math.Abs(yint) <= 10)
+            while(loop > 0 && xmin < xint && xint < xmax && ymin < yint && yint < ymax)
             {
                 if (isleft1) xint++;
                 else xint--;
@@ -79,25 +81,29 @@ namespace NEA.Questions.Loci
                 imag = new Number(yint);
             }
             point1 = new Complex(real, imag);
-            rand = rnd.Next(fractions.Length);
-            if (rnd.Next(2) == 0)
+            angle2 = angle1;
+            int rand2 = rnd.Next(fractions.Length);
+            while (angle1.GetValue()*Math.PI == angle2.GetValue()*Math.PI || angle1.GetValue()*Math.PI-Math.PI == angle2.GetValue()*Math.PI || angle1.GetValue()*Math.PI+Math.PI == angle2.GetValue()*Math.PI)
             {
-                angle2 = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
-                step2 = steps[rand];
-                if (rand > 2) isleft2 = true;
-                else isleft2 = false;
-            }
-            else
-            {
-                angle2 = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
-                step2 = -steps[rand];
-                if (rand > 2) isleft2 = true;
-                else isleft2 = false;
+                if (rnd.Next(2) == 0)
+                {
+                    angle2 = new Fraction(fractions[rand2].Item1, fractions[rand2].Item2);
+                    step2 = steps[rand2];
+                    if (rand2 > 2) isleft2 = true;
+                    else isleft2 = false;
+                }
+                else
+                {
+                    angle2 = new Fraction(-fractions[rand2].Item1, fractions[rand2].Item2);
+                    step2 = -steps[rand2];
+                    if (rand2 > 2) isleft2 = true;
+                    else isleft2 = false;
+                }
             }
             xint = answerpoint.GetRealValue();
             yint = answerpoint.GetImaginaryValue();
             loop = rnd.Next(2, 6);
-            while (loop > 0 && Math.Abs(xint) <= 10 && Math.Abs(yint) <= 10)
+            while (loop > 0 && xmin < xint && xint < xmax && ymin < yint && yint < ymax)
             {
                 if (isleft2) xint++;
                 else xint--;

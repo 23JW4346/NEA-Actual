@@ -41,8 +41,6 @@ namespace NEA
             }
         }
 
-
-
         //returns a*b
         public static Complex TimesComplex(Complex a, Complex b)
         {
@@ -138,9 +136,9 @@ namespace NEA
         {
             string answer = "";
             double yint;
-            if (grad != int.MaxValue || grad != 0) yint = grad * -a.GetRealValue() + a.GetImaginaryValue();
+            if (grad != int.MaxValue) yint = grad * -a.GetRealValue() + a.GetImaginaryValue();
             else yint = a.GetImaginaryValue();
-            double xint = -yint / grad;
+            double xint = a.GetRealValue();
             if (grad == 0.5)
             {
                 answer += "y=x/2";
@@ -150,7 +148,14 @@ namespace NEA
             else if (grad == -1) answer += "y=-x";
             else if (grad == 0)
             {
-                answer = $"y={yint}";
+                string xint2;
+                if (xint.ToString().Contains('.'))
+                {
+                    xint2 = (xint * 2) + "/2";
+                }
+                else if (xint == double.NaN) xint2 = "0";
+                else xint2 = a.GetReal();
+                answer = $"y={xint2}";
             }
             else answer += "y=" + grad + "x";
             if (yint != 0)
@@ -526,17 +531,17 @@ namespace NEA
                             {
                                 return new ArgIntersect(rnd);
                             }
-                        case 6:
-                            if(rnd.Next(1, 16) == 1)
-                            {
-                                return new ArgModIntersect(rnd);
-                            }
-                            else
-                            {
-                                return new ArgModIntersect(rnd);
-                            }
-                        default:
-                            break;
+                        //case 6:
+                        //    if(rnd.Next(1, 16) == 1)
+                        //    {
+                        //        return new ArgModIntersect(rnd);
+                        //    }
+                        //    else
+                        //    {
+                        //        return new ArgModIntersect(rnd);
+                        //    }
+                        //default:
+                        //    break;
                     }
                     break;
                 default:
@@ -546,7 +551,7 @@ namespace NEA
             return new Quadratic(rnd.Next(1, 4));
         }
 
-        //Regex Patterns
+        //RegEx Patterns
         const string fracPat = "-?([1-9][0-9]*)(/[1-9][0-9]*)?|0";
         const string fracompPat = "("+fracPat+ "(\\+|-)([1-9][0-9]*)i(/[1-9][0-9]*)?)|([1-9][0-9]*)i?(/[1-9][0-9]*)?";
         const string realPat = "-?[1-9][0-9]*(\\.[0-9]*[1-9])?|-?0\\.[0-9]*[1-9]|0";
@@ -628,13 +633,11 @@ namespace NEA
             Console.Write("Answer: ");
             ConsoleKeyInfo choice;
             int currentposition = Console.CursorTop, newposition = 0;
-            if(question.GetType() == typeof(ArgGraph) || question.GetType() == typeof(ArgIntersect) ||
-               question.GetType() == typeof(ArgModIntersect) || question.GetType() == typeof(ArgtoCartesian) ||
-               question.GetType() == typeof(ModGraph) ||  question.GetType() == typeof(ModLine) ||
-               question.GetType() == typeof(ModToCartesian))
+            try
             {
                 question.LoadDiagram();
             }
+            catch { }
             do
             {
                 choice = Console.ReadKey(true);
@@ -660,7 +663,7 @@ namespace NEA
                         {
                             savequests.Add(question.SaveQuestion());
                         }
-                        Console.WriteLine(new string(' ', "Invalid input, please enter a correct input".Length));
+                        Console.WriteLine(new string(' ', ans.Length));
                         Console.WriteLine(question.PrintAnswer(question.CheckAnswer(ans)));
                         thisloop = false;
                     }

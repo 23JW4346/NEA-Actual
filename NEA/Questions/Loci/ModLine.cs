@@ -124,7 +124,7 @@ namespace NEA.Questions.Loci
                         string line2 = sr.ReadLine();
                         if (line2.Contains('/'))
                         {
-                            string[] fract = line.Split('/');
+                            string[] fract = line2.Split('/');
                             gradient = new Fraction(int.Parse(fract[0]), int.Parse(fract[1]));
                         }
                         else gradient = new Number(double.Parse(line2));
