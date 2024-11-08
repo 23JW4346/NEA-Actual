@@ -72,7 +72,7 @@ namespace NEA.Questions.Loci
         {
             double xint = midpoint.GetRealValue();
             double yint = midpoint.GetImaginaryValue();
-            double negRec = -Math.Pow(grad, -1);
+            double negRec = -1 / grad;
             for (int i = 0; i < space; i++)
             {
                     xint--;

@@ -80,9 +80,9 @@ namespace NEA.Number_Classes
 
         public string GetReal() => real.GetString(false);
 
-        public double GetRealValue() => real.GetValue();
+        public double GetRealValue() => real != null? real.GetValue() : 0;
 
-        public double GetImaginaryValue() => imaginary.GetValue();
+        public double GetImaginaryValue() => imaginary != null? imaginary.GetValue() : 0;
         //returns the Complex number string
         public string GetComplex()
         {

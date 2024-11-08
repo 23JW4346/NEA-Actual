@@ -84,12 +84,12 @@ namespace NEA.Questions.Loci
                 if (rand > 2)
                 {
                     isleft = true;
-                    m = step;
+                    m = -step;
                 }
                 else
                 {
                     isleft = false;
-                    m = -step;
+                    m = step;
                 }
             }
         }

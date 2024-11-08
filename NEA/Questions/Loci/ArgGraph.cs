@@ -137,7 +137,7 @@ namespace NEA.Questions.Loci
 
         public string PrintQuestion()
         {
-            return $"What is the equation for this Complex loci? (no spaces, use Pi symbol π)";
+            return $"What is the equation for this Complex loci? (no spaces, type p for π)";
         }
 
 

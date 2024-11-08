@@ -81,10 +81,9 @@ namespace NEA.Questions.Loci
                 imag = new Number(yint);
             }
             point1 = new Complex(real, imag);
-            angle2 = angle1;
-            int rand2 = rnd.Next(fractions.Length);
-            while (angle1.GetValue()*Math.PI == angle2.GetValue()*Math.PI || angle1.GetValue()*Math.PI-Math.PI == angle2.GetValue()*Math.PI || angle1.GetValue()*Math.PI+Math.PI == angle2.GetValue()*Math.PI)
+            do// angle1.GetValue()*Math.PI-Math.PI == angle2.GetValue()*Math.PI || angle1.GetValue()*Math.PI+Math.PI == angle2.GetValue()*Math.PI)
             {
+                int rand2 = rnd.Next(fractions.Length);
                 if (rnd.Next(2) == 0)
                 {
                     angle2 = new Fraction(fractions[rand2].Item1, fractions[rand2].Item2);
@@ -99,7 +98,8 @@ namespace NEA.Questions.Loci
                     if (rand2 > 2) isleft2 = true;
                     else isleft2 = false;
                 }
-            }
+
+            } while (step1 == step2);
             xint = answerpoint.GetRealValue();
             yint = answerpoint.GetImaginaryValue();
             loop = rnd.Next(2, 6);
