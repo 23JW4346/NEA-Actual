@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using NEA.Number_Classes;
 using System.Windows.Forms;
 using System.IO;
-using System.CodeDom.Compiler;
 
 namespace NEA.Questions.Loci
 {
@@ -42,7 +39,7 @@ namespace NEA.Questions.Loci
 
         public void Calculate()
         {
-            Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
+            Complex temp = operand.Flip();
             loci = Program.CreateModCircle(temp, modulus);
             answer = Program.CreateCartesianCircle(temp, modulus * modulus);
         }
@@ -92,6 +89,11 @@ namespace NEA.Questions.Loci
             diagram = new ArgandDiagram();
             diagram.CreateCircle(operand, modulus);
             Task.Run(() => Application.Run(diagram));
+        }
+
+        public void CloseDiagram()
+        {
+            diagram.Close();
         }
 
         public string PrintAnswer(bool correct)

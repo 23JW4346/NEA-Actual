@@ -1,14 +1,9 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
 using NEA.Number_Classes;
-using NEA.Questions;
 using NEA.Questions.Loci;
 using NEA.Questions.ModArg;
 using NEA.Questions.MultiDivide;
@@ -25,9 +20,14 @@ namespace NEA
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
-            bool loop = true;
-            int score = 0;
-            AskQuestion(new ArgIntersect(rnd), ref loop, ref score);
+            IQuestion q = new ArgIntersect(rnd);
+            bool lol = true;
+            int score = int.MinValue;
+            AskQuestion(q, ref lol, ref score);
+
+            Console.WriteLine("Maximise screen to continue");
+            while (Console.WindowWidth != Console.LargestWindowWidth && Console.WindowHeight != Console.LargestWindowHeight) { }
+            Console.Clear();
             Menu();
 
             //At the end when the user clicks exit, it saves all the questions that the user got wrong into a text file.
@@ -64,27 +64,11 @@ namespace NEA
             string loci;
             if (a.GetComplex()[0] == '-')
             {
-                if (Math.Abs(b.GetTop()) != 1)
-                {
-                    loci = $"arg(z{a.GetComplex()})={b.GetTop()}π/{b.GetBottom()}";
-                }
-                else
-                {
-                    if(b.GetValue() <0 ) loci = $"arg(z{a.GetComplex()})=-π/{b.GetBottom()}";
-                    else loci = $"arg(z{a.GetComplex()})=π/{b.GetBottom()}";
-                }
+                loci = $"arg(z{a.GetComplex()})={b.GetString(true).Replace('i', 'π')}";
             }
             else
             {
-                if (Math.Abs(b.GetTop()) != 1)
-                {
-                    loci = $"arg(z+{a.GetComplex()})={b.GetTop()}π/{b.GetBottom()}";
-                }
-                else
-                {
-                    if(b.GetValue() < 0) loci = $"arg(z+{a.GetComplex()})=-π/{b.GetBottom()}";
-                    loci = $"arg(z+{a.GetComplex()})=π/{b.GetBottom()}";
-                }
+                    loci = $"arg(z+{a.GetComplex()})={b.GetString(true).Replace('i', 'π')}";
             }
             return loci;
         }
@@ -149,6 +133,7 @@ namespace NEA
             else if (grad == -0.5) answer += "y=-x/2";
             else if (grad == 1) answer += "y=x";
             else if (grad == -1) answer += "y=-x";
+            else if (grad == int.MaxValue) answer = $"x={yint}";
             else if (grad == 0)
             {
                 string xint2;
@@ -171,7 +156,6 @@ namespace NEA
                 else yint2 = yint.ToString();
                 if (yint < 0) answer += yint2;
                 else answer += "+" + yint2;
-                if (grad == int.MaxValue) answer = $"x={yint}";
             }
             return answer;
         }
@@ -655,6 +639,7 @@ namespace NEA
                         Console.WriteLine("Invalid input, please enter a correct input");
                         Console.CursorTop = currentposition;
                         Console.CursorLeft = 8;
+                        Console.Write(new string(' ', ans.Length));
                         Console.CursorTop = currentposition;
                         Console.CursorLeft = 8;
                         ans = "";
@@ -662,12 +647,17 @@ namespace NEA
                     }
                     else
                     {
+                        try
+                        {
+                            question.CloseDiagram();
+                        }
+                        catch { }
                         bool iscorrect = question.CheckAnswer(ans);
                         if (!iscorrect)
                         {
                             savequests.Add(question.SaveQuestion());
                         }
-                        Console.WriteLine(new string(' ', ans.Length));
+                        Console.WriteLine(new string(' ', "Invalid input, please enter a correct input".Length));
                         Console.WriteLine(question.PrintAnswer(question.CheckAnswer(ans)));
                         thisloop = false;
                     }

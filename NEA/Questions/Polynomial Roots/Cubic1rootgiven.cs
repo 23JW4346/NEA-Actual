@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NEA.Number_Classes;
 
 namespace NEA.Questions.Polynomial_Roots
@@ -147,6 +145,11 @@ namespace NEA.Questions.Polynomial_Roots
                 hide1? "1" : "0",
                 hide2? "1" : "0",              
             };
+        }
+
+        public void CloseDiagram()
+        {
+            throw new NotImplementedException();
         }
     }
 }

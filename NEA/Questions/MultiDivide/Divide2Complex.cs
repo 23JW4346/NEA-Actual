@@ -108,5 +108,10 @@ namespace NEA.Questions.MultiDivide
                 operand2.GetComplex()
             };
         }
+
+        public void CloseDiagram()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

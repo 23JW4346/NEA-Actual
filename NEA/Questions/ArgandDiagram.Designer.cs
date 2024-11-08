@@ -49,9 +49,10 @@
             chartArea1.BorderWidth = 0;
             chartArea1.Name = "ChartArea1";
             this.Diagram.ChartAreas.Add(chartArea1);
+            this.Diagram.Dock = System.Windows.Forms.DockStyle.Fill;
             legend1.Name = "Legend1";
             this.Diagram.Legends.Add(legend1);
-            this.Diagram.Location = new System.Drawing.Point(104, -2);
+            this.Diagram.Location = new System.Drawing.Point(0, 0);
             this.Diagram.Name = "Diagram";
             series1.BorderWidth = 2;
             series1.ChartArea = "ChartArea1";
@@ -77,7 +78,7 @@
             this.Diagram.Series.Add(series1);
             this.Diagram.Series.Add(series2);
             this.Diagram.Series.Add(series3);
-            this.Diagram.Size = new System.Drawing.Size(588, 454);
+            this.Diagram.Size = new System.Drawing.Size(800, 633);
             this.Diagram.TabIndex = 0;
             this.Diagram.Text = "chart";
             this.Diagram.TextAntiAliasingQuality = System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.SystemDefault;
@@ -86,8 +87,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 633);
             this.Controls.Add(this.Diagram);
+            this.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.Name = "ArgandDiagram";
             this.Text = "Graph";
             ((System.ComponentModel.ISupportInitialize)(this.Diagram)).EndInit();

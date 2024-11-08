@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NEA.Number_Classes;
 
 namespace NEA.Questions.MultiDivide
@@ -126,6 +123,11 @@ namespace NEA.Questions.MultiDivide
                 answer.GetComplex(),
                 a.ToString()
             };
+        }
+
+        public void CloseDiagram()
+        {
+            throw new NotImplementedException();
         }
     }
 }

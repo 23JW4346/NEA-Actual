@@ -1,8 +1,6 @@
 ﻿using NEA.Number_Classes;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -23,7 +21,7 @@ namespace NEA.Questions.Loci
         public ArgModIntersect(Random rnd)
         {
             midpoint = new Complex(rnd.Next(-4, 5), rnd.Next(-4, 5));
-            Complex inanswer = new Complex(-midpoint.GetRealValue(), -midpoint.GetImaginaryValue());
+            Complex inanswer = midpoint.Flip();
             modulus = rnd.Next(1, 6);
             if (rnd.Next(2) == 1)
             {
@@ -115,6 +113,11 @@ namespace NEA.Questions.Loci
         {
             if (answer == this.answer.GetComplex()) return true;
             return false;
+        }
+
+        public void CloseDiagram()
+        {
+            diagram.Close();
         }
 
         public bool GetQuestion(string filename)

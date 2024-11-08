@@ -53,8 +53,8 @@ namespace NEA.Questions.Loci
                 imag += step;
                 if (isleft) real--;
                 else real++;
-                Diagram.Series["line " + instance].Points.AddXY(real, imag);
             }
+            Diagram.Series["line " + instance].Points.AddXY(real, imag);
             instance++;
         }
 

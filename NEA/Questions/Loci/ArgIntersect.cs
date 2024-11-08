@@ -34,12 +34,43 @@ namespace NEA.Questions.Loci
             Calculate();
         }
 
+        public Complex GetPoint(Random rnd, double s, bool isleft)
+        {
+            Complex ret;
+            double xint = answerpoint.GetRealValue(), yint = answerpoint.GetImaginaryValue();
+            int loop = rnd.Next(3, 6);
+            Number real, imag;
+            while (loop > 0 && -9 < xint && xint < 9 && -9 < yint && yint < 9)
+            {
+                if (isleft) xint++;
+                else xint--;
+                yint -= s;
+                loop--;
+            }
+            if (xint.ToString().Contains('.'))
+            {
+                real = new Fraction((int)(xint*2), 2);
+            }
+            else
+            {
+                real = new Number(xint);
+            }
+            if (yint.ToString().Contains("."))
+            {
+                imag = new Fraction((int)(yint*2), 2);
+            }
+            else
+            {
+                imag = new Number(yint);
+            }
+            ret = new Complex(real, imag);
+            if (ret.GetComplex() == answerpoint.GetComplex()) ret = GetPoint(rnd, s, isleft);
+            return ret;
+        }
+
         public void GenQ(Random rnd)
         {
             answerpoint = new Complex(rnd.Next(-5, 6), rnd.Next(-5, 6));
-            int xmax = 10 - (int)answerpoint.GetRealValue(), xmin = -10 - (int)answerpoint.GetRealValue();
-            int ymax = 10 - (int)answerpoint.GetImaginaryValue(), ymin = -10-(int)answerpoint.GetImaginaryValue();
-            Number real, imag;
             int rand = rnd.Next(fractions.Length);
             if (rnd.Next(2) == 0)
             {
@@ -57,31 +88,8 @@ namespace NEA.Questions.Loci
             }
             double xint = answerpoint.GetRealValue(), yint = answerpoint.GetImaginaryValue();
             int loop = rnd.Next(2,6);
-            while(loop > 0 && xmin < xint && xint < xmax && ymin < yint && yint < ymax)
-            {
-                if (isleft1) xint++;
-                else xint--;
-                yint -= step1;
-                loop--;
-            }
-            if (xint.ToString().Contains('.'))
-            {
-                real = new Fraction((int)xint*2, 2);
-            }
-            else
-            {
-                real = new Number(xint);
-            }
-            if (yint.ToString().Contains("."))
-            {
-                imag = new Fraction((int)yint * 2, 2);
-            }
-            else
-            {
-                imag = new Number(yint);
-            }
-            point1 = new Complex(real, imag);
-            do// angle1.GetValue()*Math.PI-Math.PI == angle2.GetValue()*Math.PI || angle1.GetValue()*Math.PI+Math.PI == angle2.GetValue()*Math.PI)
+            point1 = GetPoint(rnd, step1, isleft1);
+            do
             {
                 int rand2 = rnd.Next(fractions.Length);
                 if (rnd.Next(2) == 0)
@@ -99,41 +107,15 @@ namespace NEA.Questions.Loci
                     else isleft2 = false;
                 }
 
-            } while (step1 == step2);
-            xint = answerpoint.GetRealValue();
-            yint = answerpoint.GetImaginaryValue();
-            loop = rnd.Next(2, 6);
-            while (loop > 0 && xmin < xint && xint < xmax && ymin < yint && yint < ymax)
-            {
-                if (isleft2) xint++;
-                else xint--;
-                yint -= step2;
-                loop--;
-            }
-            if (xint.ToString().Contains('.'))
-            {
-                real = new Fraction((int)xint * 2, 2);
-            }
-            else
-            {
-                real = new Number(xint);
-            }
-            if (yint.ToString().Contains("."))
-            {
-                imag = new Fraction((int)yint * 2, 2);
-            }
-            else
-            {
-                imag = new Number(yint);
-            }
-            point2 = new Complex(real, imag);
+            } while (step1 == step2 || (step1 == -step2 && isleft1 != isleft2));
+            point2 = GetPoint(rnd, step2, isleft2);
         }
 
         public void Calculate()
         {
-            Complex temp = new Complex(-point1.GetRealValue(), -point1.GetImaginaryValue());
+            Complex temp = point1.Flip();
             loci1 = Program.CreateArgLine(temp, angle1);
-            temp = new Complex(-point2.GetRealValue(), -point2.GetImaginaryValue());
+            temp = point2.Flip();
             loci2 = Program.CreateArgLine(temp, angle2);
         }
 
@@ -197,6 +179,11 @@ namespace NEA.Questions.Loci
             diagram.CreateLine(step1, point1, isleft1);
             diagram.CreateLine(step2, point2, isleft2);
             Task.Run(() => Application.Run(diagram));
+        }
+
+        public void CloseDiagram()
+        {
+            diagram.Close();
         }
 
         public string PrintAnswer(bool correct)

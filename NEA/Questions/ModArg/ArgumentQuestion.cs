@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NEA.Number_Classes;
 
 namespace NEA.Questions.ModArg
@@ -102,6 +99,11 @@ namespace NEA.Questions.ModArg
                 "Argument",
                 operand.GetComplex(),
             };
+        }
+
+        public void CloseDiagram()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,10 +1,6 @@
-﻿  using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.IO;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NEA.Number_Classes;
@@ -32,7 +28,7 @@ namespace NEA.Questions.Loci
         {
             if (GetQuestion(filename))
             {
-                Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
+                Complex inanswer = operand.Flip();
                 if (argument.GetNegative())
                 {
                     Fraction temp = new Fraction((int)-argument.GetTop(), (int)argument.GetBottom());
@@ -57,7 +53,7 @@ namespace NEA.Questions.Loci
         {
             operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
             while(operand.GetComplex() == "") operand = new Complex(rnd.Next(-3,4), rnd.Next(-3,4));
-            Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
+            Complex inanswer = operand.Flip();
             if (rnd.Next(2) == 1)
             {
                 int rand = rnd.Next(fractions.Length); ;
@@ -158,6 +154,11 @@ namespace NEA.Questions.Loci
             diagram = new ArgandDiagram();
             diagram.CreateLine(step, operand, isleft);
             Task.Run(() => Application.Run(diagram));
+        }
+
+        public void CloseDiagram()
+        {
+            diagram.Close();
         }
 
         public List<string> SaveQuestion()

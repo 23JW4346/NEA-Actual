@@ -15,7 +15,7 @@ namespace NEA.Number_Classes
         private int denominator = 1;
 
 
-        public Fraction(int innum, int inden)
+        public Fraction(int innum, int inden) : base(((double)innum/(double)inden))
         {
             numerator = innum;
             denominator = inden;
@@ -64,9 +64,11 @@ namespace NEA.Number_Classes
                 if (isnegative)
                 {
                     if (denominator == 1) return $"-{numerator}i";
+                    else if (numerator == 1) return $"-i/{denominator}";
                     return $"-{numerator}i/{denominator}";
                 }
-                else if (denominator == 1) return $"{numerator}i"; 
+                else if (denominator == 1) return $"{numerator}i";
+                else if (numerator == 1) return $"i/{denominator}";
                 return $"{numerator}i/{denominator}";
             }
             if (isnegative)
@@ -79,19 +81,14 @@ namespace NEA.Number_Classes
             return $"{numerator}/{denominator}";
         }
 
-        public virtual double GetTop()
+        public override double GetTop()
         {
             if (isnegative) return -numerator;
             return numerator;
         }
 
-        public virtual double GetBottom() => denominator;
+        public override double GetBottom() => denominator;
 
-        public override double GetValue()
-        {
-            if (isnegative) return (double)-(numerator / denominator);
-            return (double)(numerator / denominator);
-        }
         public virtual void Simplify()
         {
             bool x = true;

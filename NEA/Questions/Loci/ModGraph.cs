@@ -38,7 +38,7 @@ namespace NEA.Questions.Loci
         }
         public void Calculate()
         {
-            Complex temp = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
+            Complex temp = operand.Flip();
             loci = Program.CreateModCircle(temp, modulus);
         }
 
@@ -86,6 +86,11 @@ namespace NEA.Questions.Loci
             diagram = new ArgandDiagram();
             diagram.CreateCircle(operand, modulus);
             Task.Run(() => Application.Run(diagram));
+        }
+
+        public void CloseDiagram()
+        {
+            diagram.Close();
         }
 
         public string PrintAnswer(bool correct)

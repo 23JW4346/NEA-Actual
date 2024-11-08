@@ -25,6 +25,11 @@ namespace NEA.Number_Classes
             if (value < 0) isnegative = true;
         }
 
+        public virtual double GetTop() => throw new NotImplementedException();
+
+        public virtual double GetBottom() => throw new NotImplementedException();
+
+
         public virtual string GetString(bool isimag)
         {
             if (isimag)

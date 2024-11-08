@@ -5,7 +5,7 @@ namespace NEA.Number_Classes
 {
     public class Complex
     {
-        private Number real;
+        public Number real;
         private Number imaginary;
 
         private static Random rnd = new Random();
@@ -76,6 +76,24 @@ namespace NEA.Number_Classes
                     imaginary = new Number(double.Parse(temp));
                 }
             }
+        }
+
+        public Complex Flip()
+        {
+            Number outreal, outimag;
+            if (real.GetType() == typeof(Fraction))
+            {
+                real = (Fraction)real;
+                outreal = new Fraction((int)(-real.GetTop()), (int)real.GetBottom());
+            }
+            else outreal = new Number(-real.GetValue());
+            if (imaginary.GetType() == typeof(Fraction))
+            {
+                imaginary = (Fraction)imaginary;
+                outimag = new Fraction((int)(-imaginary.GetTop()), (int)imaginary.GetBottom());
+            }
+            else outimag = new Number(-imaginary.GetValue());
+            return new Complex(outreal, outimag);
         }
 
         public string GetReal() => real.GetString(false);

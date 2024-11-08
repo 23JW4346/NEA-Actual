@@ -37,7 +37,7 @@ namespace NEA.Questions.Loci
         {
             operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
             while (operand.GetComplex() == null) operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-            Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
+            Complex inanswer = operand.Flip();
             if (rnd.Next(2) == 1)
             {
                 int rand = rnd.Next(fractions.Length); ;
@@ -60,7 +60,7 @@ namespace NEA.Questions.Loci
 
         public void Calculate()
         {
-            Complex inanswer = new Complex(-operand.GetRealValue(), -operand.GetImaginaryValue());
+            Complex inanswer = operand.Flip();
             int placeholder = 0;
             if (argument.GetNegative())
             {
@@ -124,6 +124,11 @@ namespace NEA.Questions.Loci
             diagram = new ArgandDiagram();
             diagram.CreateLine(step, operand, isleft);
             Task.Run(() => Application.Run(diagram));
+        }
+
+        public void CloseDiagram()
+        {
+            diagram.Close();
         }
 
         public string PrintAnswer(bool correct)

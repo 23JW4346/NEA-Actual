@@ -1,8 +1,6 @@
 ﻿using NEA.Number_Classes;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -91,8 +89,7 @@ namespace NEA.Questions.Loci
 
         public void Calculate()
         {
-            equation = Program.CreateModLine(new Complex(-operand1.GetRealValue(), -operand1.GetImaginaryValue()), 
-                                             new Complex(-operand2.GetRealValue(), -operand2.GetImaginaryValue()));
+            equation = Program.CreateModLine(operand1.Flip(), operand2.Flip());
             answer = Program.CreateCartesianLine(midpoint, grad);
         }
 
@@ -150,6 +147,11 @@ namespace NEA.Questions.Loci
             diagram = new ArgandDiagram();
             diagram.CreateModLine(midpoint, grad);
             Task.Run(() => Application.Run(diagram));
+        }
+
+        public void CloseDiagram()
+        {
+            diagram.Close();
         }
 
         public string PrintAnswer(bool correct)

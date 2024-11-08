@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using NEA.Number_Classes;
 
 namespace NEA.Questions.MultiDivide
@@ -32,7 +29,7 @@ namespace NEA.Questions.MultiDivide
         public void GenQ(Random rnd)
         {
             answer1 = new Complex(false);
-            answer2 = new Complex(-answer1.GetRealValue(), -answer1.GetImaginaryValue());
+            answer2 = answer1.Flip();
         }
 
 
@@ -114,6 +111,11 @@ namespace NEA.Questions.MultiDivide
                 answer1.GetComplex(),
                 operand.GetComplex(),
             };
+        }
+
+        public void CloseDiagram()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NEA.Number_Classes;
 using System.IO;
-using System.Reflection;
-using System.Data.SqlTypes;
 
 namespace NEA.Questions.Polynomial_Roots
 {
-    public class Quadratic : IQuestion 
+    public class Quadratic : IQuestion
     {
         private Complex root, conjugate;
         private int coef;
@@ -126,6 +122,11 @@ namespace NEA.Questions.Polynomial_Roots
                 root.GetComplex(),
                 coef.ToString()
             };
+        }
+
+        public void CloseDiagram()
+        {
+            throw new NotImplementedException();
         }
     }
 }
