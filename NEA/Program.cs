@@ -23,7 +23,7 @@ namespace NEA
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             Console.WriteLine("Maximise screen to continue");
-            while (Console.WindowWidth != Console.LargestWindowWidth && Console.WindowHeight != Console.LargestWindowHeight) { }
+            //while (Console.WindowWidth < 100 && Console.WindowHeight < 100) { }
             Console.Clear();
             Menu();
 
