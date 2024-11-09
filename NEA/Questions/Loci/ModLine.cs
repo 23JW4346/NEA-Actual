@@ -66,25 +66,70 @@ namespace NEA.Questions.Loci
             }
         }
 
+        private Complex GetComp(double xint, double yint)
+        {
+            Number real = new Number(); 
+            Number imag = new Number();
+            Complex ret;
+            if (xint.ToString().Contains('.'))
+            {
+                switch (xint.ToString()[2])
+                {
+                    case '5':
+                        real = new Fraction((int)(xint * 2), 2);
+                        break;
+                    case '3':
+                    case '6':
+                        real = new Fraction((int)(xint * 3), 3);
+                        break;
+                    case '2':
+                        if (xint.ToString().Length == 3) real = new Fraction((int)(xint * 5), 5);
+                        else real = new Fraction((int)(xint * 4), 4);
+                        break;
+                }
+            }
+            else real = new Number(xint);
+            if (yint.ToString().Contains('.'))
+            {
+                switch (yint.ToString()[2])
+                {
+                    case '5':
+                        imag = new Fraction((int)(yint * 2), 2);
+                        break;
+                    case '3':
+                    case '6':
+                        imag = new Fraction((int)(yint * 3), 3);
+                        break;
+                    case '2':
+                        if (yint.ToString().Length == 3) imag = new Fraction((int)(yint * 5), 5);
+                        else imag = new Fraction((int)(yint * 4), 4);
+                        break;
+                }
+            }
+            else imag = new Number(yint);
+            ret = new Complex(real, imag);
+            return ret;
+        }
+
         private void GetPoints(int space)
         {
             double xint = midpoint.GetRealValue();
             double yint = midpoint.GetImaginaryValue();
-            double negRec = -1 / grad;
-            for (int i = 0; i < space; i++)
-            {
-                    xint--;
-                    yint -= negRec;
-            }
-            operand1 = new Complex(xint, yint);
-            xint = midpoint.GetRealValue();
-            yint = midpoint.GetImaginaryValue();
+            double negRec = - (1 / grad);
             for (int i = 0; i < space; i++)
             {
                     xint++;
                     yint += negRec;
             }
-            operand2 = new Complex(xint, yint);
+            operand1 = GetComp(xint, yint);
+            xint = midpoint.GetRealValue();
+            yint = midpoint.GetImaginaryValue();
+            for (int i = 0; i < space; i++)
+            {
+                    xint--;
+                    yint -= negRec;
+            }
+            operand2 = GetComp(xint, yint);
         }
 
         public void Calculate()
@@ -145,7 +190,7 @@ namespace NEA.Questions.Loci
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();
-            diagram.CreateModLine(midpoint, grad);
+            diagram.CreateModLine(midpoint, grad, equation);
             Task.Run(() => Application.Run(diagram));
         }
 

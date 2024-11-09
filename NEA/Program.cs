@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using NEA.Number_Classes;
 using NEA.Questions.Loci;
 using NEA.Questions.ModArg;
@@ -20,7 +22,7 @@ namespace NEA
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
-            IQuestion q = new ArgIntersect(rnd);
+            IQuestion q = new ModLine(rnd);
             bool lol = true;
             int score = int.MinValue;
             AskQuestion(q, ref lol, ref score);
@@ -126,32 +128,51 @@ namespace NEA
             if (grad != int.MaxValue) yint = grad * -a.GetRealValue() + a.GetImaginaryValue();
             else yint = a.GetImaginaryValue();
             double xint = a.GetRealValue();
-            if (grad == 0.5)
+            if (grad.ToString().Contains('.'))
             {
-                answer += "y=x/2";
+                switch (Math.Abs(grad).ToString()[2])
+                {
+                    case '5':
+                        answer += "y=" + new Fraction((int)(grad * 2), 2).GetString(true).Replace('i', 'x');
+                        break;
+                    case '3':
+                    case '6':
+                        answer += "y=" + new Fraction((int)(grad * 3), 3).GetString(true).Replace('i', 'x');
+                        break;
+                    case '2':
+                        if (xint.ToString().Length == 3) answer += "y=" + new Fraction((int)(grad * 5), 5).GetString(true).Replace('i', 'x');
+                        else answer += "y=" + new Fraction((int)(grad * 4), 4).GetString(true).Replace('i', 'x');
+                        break;
+                }
             }
-            else if (grad == -0.5) answer += "y=-x/2";
             else if (grad == 1) answer += "y=x";
             else if (grad == -1) answer += "y=-x";
-            else if (grad == int.MaxValue) answer = $"x={yint}";
+            else if (grad >4) answer = $"x={xint}";
             else if (grad == 0)
             {
-                string xint2;
-                if (xint.ToString().Contains('.'))
-                {
-                    xint2 = (xint * 2) + "/2";
-                }
-                else if (xint == double.NaN) xint2 = "0";
-                else xint2 = xint.ToString();
-                answer = $"y={xint2}";
+                answer = $"y={yint}";
+                return answer;
             }
             else answer += "y=" + grad + "x";
             if (yint != 0)
             {
-                string yint2;
+                string yint2 = "";
                 if (yint.ToString().Contains('.'))
                 {
-                    yint2 = (yint * 2) + "/2";
+                    switch (Math.Abs(yint).ToString()[2])
+                    {
+                        case '5':
+                            yint2 += new Fraction((int)(yint * 2), 2).GetString(false);
+                            break;
+                        case '3':
+                        case '6':
+                            yint2 += new Fraction((int)(yint * 3), 3).GetString(false);
+                            break;
+                        case '2':
+                            if (xint.ToString().Length == 3) yint2 += new Fraction((int)(yint * 5), 5).GetString(false);
+                            else yint2 += new Fraction((int)(yint * 4), 4).GetString(false);
+                            break;
+                    }
                 }
                 else yint2 = yint.ToString();
                 if (yint < 0) answer += yint2;
@@ -460,6 +481,15 @@ namespace NEA
                                 {
                                     return new Cubic1rootgiven(rnd);
                                 }
+                            case 2:
+                                if (rnd.Next(1, 16) == 1)
+                                {
+                                    return new GivenRootFindQuadratic();
+                                }
+                                else
+                                {
+                                    return new GivenRootFindQuadratic("Questions.txt");
+                                }
                         }
                         break;
                     case 4:
@@ -625,7 +655,10 @@ namespace NEA
             {
                 question.LoadDiagram();
             }
-            catch { }
+            catch  (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             do
             {
                 choice = Console.ReadKey(true);

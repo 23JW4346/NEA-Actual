@@ -129,8 +129,8 @@ namespace NEA.Questions.Loci
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();
-            diagram.CreateCircle(midpoint, modulus);
-            diagram.CreateLine(-step, midpoint, isleft);
+            diagram.CreateCircle(midpoint, modulus, modLoci);
+            diagram.CreateLine(-step, midpoint, isleft, argLoci);
             Task.Run(() => Application.Run(diagram));
         }
 

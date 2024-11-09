@@ -87,7 +87,7 @@ namespace NEA.Questions.Loci
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();
-            diagram.CreateCircle(operand, modulus);
+            diagram.CreateCircle(operand, modulus, loci);
             Task.Run(() => Application.Run(diagram));
         }
 

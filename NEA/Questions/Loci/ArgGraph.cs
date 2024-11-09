@@ -122,7 +122,7 @@ namespace NEA.Questions.Loci
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();
-            diagram.CreateLine(step, operand, isleft);
+            diagram.CreateLine(step, operand, isleft, answer);
             Task.Run(() => Application.Run(diagram));
         }
 

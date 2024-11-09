@@ -15,12 +15,11 @@ namespace NEA.Questions.Loci
 {
     public partial class ArgandDiagram : Form
     {
-
-        private int instance = 1;
-
+        Color[] colours = { Color.Red, Color.Blue, Color.Yellow, Color.Green };
         //draws the real and imaginary axis on the windows form
         public ArgandDiagram()
         {
+            Console.OutputEncoding = Encoding.Unicode;
             InitializeComponent();
             Diagram.Series.Clear();
             Diagram.Series.Add("Real");
@@ -39,13 +38,13 @@ namespace NEA.Questions.Loci
         }
 
         //draws a half line on windows forms
-        public void CreateLine(double step, Complex operand, bool isleft)
+        public void CreateLine(double step, Complex operand, bool isleft, string linename)
         {
-            Diagram.Series.Add("line " + instance);
-            Diagram.Series["line " + instance].BorderWidth = 2;
-            Diagram.Series["line " + instance].Color = Color.Red;
-            Diagram.Series["line " + instance].ChartType = SeriesChartType.Line;
-            Diagram.Series["line " + instance].Points.AddXY(operand.GetRealValue(), operand.GetImaginaryValue());
+            Diagram.Series.Add(linename);
+            Diagram.Series[linename].BorderWidth = 2;
+            Diagram.Series[linename].Color = colours[Diagram.Series.Count()-3];
+            Diagram.Series[linename].ChartType = SeriesChartType.Line;
+            Diagram.Series[linename].Points.AddXY(operand.GetRealValue(), operand.GetImaginaryValue());
             double real = operand.GetRealValue();
             double imag = operand.GetImaginaryValue();
             for(int i = 0; i < 20;i++)
@@ -54,57 +53,51 @@ namespace NEA.Questions.Loci
                 if (isleft) real--;
                 else real++;
             }
-            Diagram.Series["line " + instance].Points.AddXY(real, imag);
-            instance++;
+            Diagram.Series[linename].Points.AddXY(real, imag);
         }
 
         //draws a circles on windows form for an argand diagram
-        public void CreateCircle(Complex operand, int modulus)
+        public void CreateCircle(Complex operand, int modulus, string linename)
         {
-            Diagram.Series.Add("circle");
-            Diagram.Series["circle"].BorderWidth = 1;
-            Diagram.Series["circle"].Color = Color.Red;
-            Diagram.Series["circle"].ChartType = SeriesChartType.Line;
-            Diagram.Series["circle"].Points.Clear();
+            Diagram.Series.Add(linename);
+            Diagram.Series[linename].BorderWidth = 1;
+            Diagram.Series[linename].Color = colours[Diagram.Series.Count() - 3];
+            Diagram.Series[linename].ChartType = SeriesChartType.Line;
+            Diagram.Series[linename].Points.Clear();
             double realstart = modulus;
             double imagstart = 0;
-            Diagram.Series["circle"].Points.AddXY(operand.GetRealValue() + realstart, operand.GetImaginaryValue() + imagstart);
+            Diagram.Series[linename].Points.AddXY(operand.GetRealValue() + realstart, operand.GetImaginaryValue() + imagstart);
             for (int i = 0; i < 360; i++)
             {
                 realstart = modulus * Math.Cos(i);
                 imagstart = modulus * Math.Sin(i);
-                Diagram.Series["circle"].Points.AddXY(operand.GetRealValue() + realstart, operand.GetImaginaryValue() + imagstart);
+                Diagram.Series[linename].Points.AddXY(operand.GetRealValue() + realstart, operand.GetImaginaryValue() + imagstart);
             }
         }
 
 
         //draws a full line on windows form for an argand diagram
-        public void CreateModLine(Complex midpoint, double gradient)
+        public void CreateModLine(Complex midpoint, double gradient, string linename)
         {
-            Diagram.Series.Add("line " + instance);
-            Diagram.Series["line " + instance   ].BorderWidth = 2;
-            Diagram.Series["line " + instance].Color = Color.Red;
-            Diagram.Series["line " + instance].ChartType = SeriesChartType.Line;
+            Diagram.Series.Add(linename);
+            Diagram.Series[linename].BorderWidth = 2;
+            Diagram.Series[linename].Color = colours[Diagram.Series.Count() - 3];
+            Diagram.Series[linename].ChartType = SeriesChartType.Line;
             double x = midpoint.GetRealValue(), y = midpoint.GetImaginaryValue();
-            bool isleft = false;
-            if (gradient < 0) isleft = true;
             for(int i = 0; i < 20; i++)
             {
-                if (isleft) x++;
-                else x--;
+                x--;
                 y -= gradient;
             }
-            Diagram.Series["line " + instance].Points.AddXY(x, y);
+            Diagram.Series[linename].Points.AddXY(x, y);
             x = midpoint.GetRealValue();
             y = midpoint.GetImaginaryValue();
             for(int i = 0; i < 40; i++)
             {
-                if (isleft) x--;
-                else x++;
+                x++;
                 y += gradient;
             }
-            Diagram.Series["line " + instance].Points.AddXY(x, y);
-            instance++;
+            Diagram.Series[linename].Points.AddXY(x, y);
         }
     }
 }

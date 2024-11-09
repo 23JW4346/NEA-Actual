@@ -176,8 +176,8 @@ namespace NEA.Questions.Loci
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();
-            diagram.CreateLine(step1, point1, isleft1);
-            diagram.CreateLine(step2, point2, isleft2);
+            diagram.CreateLine(step1, point1, isleft1, loci1);
+            diagram.CreateLine(step2, point2, isleft2, loci2);
             Task.Run(() => Application.Run(diagram));
         }
 

@@ -43,7 +43,7 @@ namespace NEA.Number_Classes
             {
                 if (value != 0) return value.ToString();
             }
-            return null;
+            return "0";
         }
 
         public virtual double GetValue() => value;
