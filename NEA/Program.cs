@@ -652,7 +652,7 @@ namespace NEA
             }
             catch  (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                if(ex.GetType() != typeof(NotImplementedException)) MessageBox.Show(ex.Message);
             }
             do
             {
