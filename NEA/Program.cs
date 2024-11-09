@@ -22,11 +22,6 @@ namespace NEA
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
-            IQuestion q = new ModLine(rnd);
-            bool lol = true;
-            int score = int.MinValue;
-            AskQuestion(q, ref lol, ref score);
-
             Console.WriteLine("Maximise screen to continue");
             while (Console.WindowWidth != Console.LargestWindowWidth && Console.WindowHeight != Console.LargestWindowHeight) { }
             Console.Clear();
