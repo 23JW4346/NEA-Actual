@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using NEA.Number_Classes;
@@ -23,7 +24,7 @@ namespace NEA
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             Console.WriteLine("Maximise screen to continue");
-            //while (Console.WindowWidth < 100 && Console.WindowHeight < 100) { }
+            while (Console.WindowWidth < Console.LargestWindowWidth && Console.WindowHeight <Console.LargestWindowHeight) { }
             Console.Clear();
             Menu();
 
@@ -70,7 +71,7 @@ namespace NEA
             return loci;
         }
         //returns the Complex Loci string for a circle (|z-z1|=r)
-        public static string CreateModCircle(Complex a, int modulus)
+        public static string CreateModCircle(Complex a, string modulus)
         {
             string loci;
             if (a.GetComplex()[0] == '-')
@@ -203,6 +204,7 @@ namespace NEA
                 Console.WriteLine("Welcome to the Complex Number Revision Tool (Use up and down arrows to navigate)");
                 Console.WriteLine("> Choose Topic");
                 Console.WriteLine("  Create Quiz");
+                Console.WriteLine("  Special characters");
                 Console.WriteLine("  Exit");
                 Console.CursorLeft = 1;
                 Console.CursorTop = 1;
@@ -221,6 +223,9 @@ namespace NEA
                                 CreateQuiz();
                                 break;
                             case 3:
+                                Settings();
+                                break;
+                            case 4:
                                 exit = false;
                                 break;
                         }
@@ -228,11 +233,12 @@ namespace NEA
                         Console.WriteLine("Welcome to the Complex Number Revision Tool");
                         Console.WriteLine("> Choose Topic");
                         Console.WriteLine("  Create Quiz");
+                        Console.WriteLine("  Special characters");
                         Console.WriteLine("  Exit");
                         Console.CursorLeft = 1;
                         Console.CursorTop = 1;
                     }
-                    else if (choice.Key == ConsoleKey.DownArrow && Console.CursorTop != 3)
+                    else if (choice.Key == ConsoleKey.DownArrow && Console.CursorTop != 4)
                     {
                         Console.CursorLeft = 0;
                         Console.Write(" ");
@@ -251,6 +257,18 @@ namespace NEA
                 }
                 loop = false;
             }
+        }
+
+        static void Settings()
+        {
+            Console.Clear();
+            Console.WriteLine("Typing these characters into the program will output other characters");
+            Console.WriteLine("heres the List of character maps:");
+            Console.WriteLine("p -> π");
+            Console.WriteLine("x^2 -> x², works for any power 2-4");
+            Console.WriteLine("Press any key to go back to the main menu");
+            Console.ReadKey();
+            Console.Clear();
         }
 
         //Menu for choosing topic (still uses up and down arrow keys)
@@ -295,7 +313,7 @@ namespace NEA
                                 AskQuestion(GenQ(4), ref loop, ref placeholder);
                                 break;
                             case 6:
-                                AskQuestion(GenQ(rnd.Next(6)), ref loop, ref placeholder);
+                                AskQuestion(GenQ(rnd.Next(5)), ref loop, ref placeholder);
                                 break;
                             case 7:
                                 return;
@@ -545,17 +563,17 @@ namespace NEA
                                 {
                                     return new ArgIntersect(rnd);
                                 }
-                                //case 6:
-                                //    if(rnd.Next(1, 16) == 1)
-                                //    {
-                                //        return new ArgModIntersect(rnd);
-                                //    }
-                                //    else
-                                //    {
-                                //        return new ArgModIntersect(rnd);
-                                //    }
-                                //default:
-                                //    break;
+                            case 6:
+                                if (rnd.Next(1, 16) == 1)
+                                {
+                                    return new ArgModIntersect(rnd);
+                                }
+                                else
+                                {
+                                    return new ArgModIntersect(rnd);
+                                }
+                            default:
+                                break;
                         }
                         break;
                     default:
@@ -650,9 +668,8 @@ namespace NEA
             {
                 question.LoadDiagram();
             }
-            catch  (Exception ex)
+            catch
             {
-                if(ex.GetType() != typeof(NotImplementedException)) MessageBox.Show(ex.Message);
             }
             do
             {
@@ -661,6 +678,16 @@ namespace NEA
                 {
                     Console.CursorTop += 2;
                     Console.CursorLeft = 0;
+                    if (ans.Contains(' '))
+                    {
+                        string temp = "";
+                        foreach (char c in ans)
+                        {
+                            if (c != ' ') temp += c;
+                        }
+                        ans = temp;
+
+                    }
                     bool isValid = ValidateInput(ans, question);
                     if (!isValid)
                     {
@@ -675,11 +702,6 @@ namespace NEA
                     }
                     else
                     {
-                        try
-                        {
-                            question.CloseDiagram();
-                        }
-                        catch { }
                         bool iscorrect = question.CheckAnswer(ans);
                         if (!iscorrect)
                         {
@@ -689,6 +711,18 @@ namespace NEA
                         Console.WriteLine(question.PrintAnswer(question.CheckAnswer(ans)));
                         thisloop = false;
                     }
+                }
+                else if (choice.Key == ConsoleKey.Backspace && Console.CursorLeft < 8 + ans.Length & Console.CursorLeft >= 8)
+                {
+                    int index = Console.CursorLeft - 8;
+                    string firstpart = ans.Substring(0, index-1);
+                    string secondpart = ans.Substring(index);
+                    Console.CursorLeft = 8;
+                    Console.Write(new string(' ', ans.Length+1));
+                    Console.CursorLeft = 8;
+                    Console.Write(firstpart+secondpart);
+                    ans = firstpart + secondpart;
+                    Console.CursorLeft = 7 +index;
                 }
                 else if (choice.Key == ConsoleKey.Backspace && Console.CursorLeft > 8)
                 {
@@ -780,6 +814,7 @@ namespace NEA
                 Console.WriteLine("Would you like another question?");
                 Console.WriteLine("> yes");
                 Console.WriteLine("  no");
+                Task.Run(() => Application.Exit());
                 bool exit = true;
                 Console.CursorLeft = 1;
                 Console.CursorTop -= 2;
@@ -849,10 +884,10 @@ namespace NEA
             do
             {
                 loop = false;
-                Console.WriteLine("How many Questions would you like in your quiz?");
+                Console.WriteLine("How many Questions would you like in your quiz? (5-50)");
                 string choice = Console.ReadLine();
                 Console.Clear();
-                if (Regex.IsMatch(choice.Trim(), "[1-9][0-9]*"))
+                if (Regex.IsMatch(choice.Trim(), "[1-9][0-9]") && int.Parse(choice.Trim()) < 51 && int.Parse(choice.Trim()) > 4)
                 {
                     int length = int.Parse(choice);
                     quizQuestions = new IQuestion[length];

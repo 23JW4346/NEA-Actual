@@ -111,7 +111,7 @@ namespace NEA.Questions.Polynomial_Roots
 
         public string PrintQuestion()
         {
-            return $"find the roots of the quadradic with the equation {quadratic}. write the roots out next to each other, with a comma seperating them";
+            return $"find the roots of the quadradic with the equation {quadratic}. Write the roots out next to each other, with a comma seperating them";
         }
 
         public List<string> SaveQuestion()
@@ -124,9 +124,5 @@ namespace NEA.Questions.Polynomial_Roots
             };
         }
 
-        public void CloseDiagram()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

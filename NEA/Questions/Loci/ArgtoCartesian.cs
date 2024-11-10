@@ -147,18 +147,13 @@ namespace NEA.Questions.Loci
 
         public string PrintQuestion()
         {
-            return $"Write This Loci {loci} in Cartesian Form (y=mx+c)";
+            return $"Write This Loci {loci} in Cartesian Form y=mx+c, where m and c are rational numbers";
         }
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();
             diagram.CreateLine(step, operand, isleft, loci);
             Task.Run(() => Application.Run(diagram));
-        }
-
-        public void CloseDiagram()
-        {
-            diagram.Close();
         }
 
         public List<string> SaveQuestion()

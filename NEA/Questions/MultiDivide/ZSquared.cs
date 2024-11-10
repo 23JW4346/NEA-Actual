@@ -100,7 +100,7 @@ namespace NEA.Questions.MultiDivide
 
         public string PrintQuestion()
         {
-            return $"Given that z²={operand.GetComplex()}, find 2 values for z in the form a+bi (place a comma between both values, with 0 spaces)";
+            return $"Given that z²={operand.GetComplex()}, find 2 values for z in the form a+bi. write your answer as a+bi,c+di";
         }
 
         public List<string> SaveQuestion()
@@ -113,9 +113,5 @@ namespace NEA.Questions.MultiDivide
             };
         }
 
-        public void CloseDiagram()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

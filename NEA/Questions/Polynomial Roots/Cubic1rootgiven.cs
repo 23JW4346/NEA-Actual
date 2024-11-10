@@ -55,7 +55,7 @@ namespace NEA.Questions.Polynomial_Roots
             if (!c.Contains('-')) cubic += "+";
             cubic += c + "z";
             if(!d.Contains('-')) cubic += "+";
-            cubic += d;
+            cubic += d + "=0";
         }
 
         public bool CheckAnswer(string answer)
@@ -131,7 +131,7 @@ namespace NEA.Questions.Polynomial_Roots
 
         public string PrintQuestion()
         {
-            return $"{root.GetComplex()} is a root of the equation {cubic}. find the other 2 roots (write them out with a comma seperating them)";
+            return $"{root.GetComplex()} is a root of the equation {cubic}. calculate the other 2 roots (write them out with a comma between them, for example: a+bi,c)";
         }
 
         public List<string> SaveQuestion()
@@ -147,9 +147,5 @@ namespace NEA.Questions.Polynomial_Roots
             };
         }
 
-        public void CloseDiagram()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

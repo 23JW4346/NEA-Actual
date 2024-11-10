@@ -96,7 +96,7 @@ namespace NEA.Questions.MultiDivide
 
         public string PrintQuestion()
         {
-            return $"Find the Value of ({operand1.GetComplex()})/({operand2.GetComplex()}) in the form a+bi, where a and b can be written in fractions if needed (x/y)";
+            return $"Find the Value of ({operand1.GetComplex()})/({operand2.GetComplex()}) in the form a+bi, where a and b can be written in fractions in there simplest form (x/y+xi/y)";
         }
 
         public List<string> SaveQuestion()
@@ -107,11 +107,6 @@ namespace NEA.Questions.MultiDivide
                 operand1.GetComplex(),
                 operand2.GetComplex()
             };
-        }
-
-        public void CloseDiagram()
-        {
-            throw new NotImplementedException();
         }
     }
 }

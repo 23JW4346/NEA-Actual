@@ -120,10 +120,5 @@ namespace NEA.Questions.ModArg
                 answer.ToString()
             };
         }
-
-        public void CloseDiagram()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

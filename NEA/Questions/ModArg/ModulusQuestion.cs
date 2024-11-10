@@ -40,11 +40,6 @@ namespace NEA.Questions.ModArg
             return false;
         }
 
-        public void CloseDiagram()
-        {
-            throw new NotImplementedException();
-        }
-
         public bool GetQuestion(string filename)
         {
             bool found = false;

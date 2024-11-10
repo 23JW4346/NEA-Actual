@@ -39,7 +39,7 @@ namespace NEA.Questions.Loci
         public void Calculate()
         {
             Complex temp = operand.Flip();
-            loci = Program.CreateModCircle(temp, modulus);
+            loci = Program.CreateModCircle(temp, modulus.ToString());
         }
 
         public bool CheckAnswer(string answer)
@@ -84,13 +84,8 @@ namespace NEA.Questions.Loci
         public void LoadDiagram()
         {
             diagram = new ArgandDiagram();
-            diagram.CreateCircle(operand, modulus, loci);
+            diagram.CreateCircle(operand, modulus, "Circle");
             Task.Run(() => Application.Run(diagram));
-        }
-
-        public void CloseDiagram()
-        {
-            diagram.Close();
         }
 
         public string PrintAnswer(bool correct)
@@ -104,7 +99,7 @@ namespace NEA.Questions.Loci
 
         public string PrintQuestion()
         {
-            return $"What is the equation for this Complex loci?";
+            return $"What is the equation for this Complex loci? Write in the form |z-a-bi|=r, where a and b are rational numbers, and r is the radius.\nfor example, if you get an answer as|z-(9+9i)|=6, write as |z-9-9i|=6";
         }
 
         public List<string> SaveQuestion()

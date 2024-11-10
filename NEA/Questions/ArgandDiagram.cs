@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,8 @@ namespace NEA.Questions.Loci
         {
             Console.OutputEncoding = Encoding.Unicode;
             InitializeComponent();
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new Point((1920-this.Size.Width)/2, (1080 - this.Size.Height)/2);
             Diagram.Series.Clear();
             Diagram.Series.Add("Real");
             Diagram.Series["Real"].BorderWidth = 2;
@@ -57,7 +60,7 @@ namespace NEA.Questions.Loci
         }
 
         //draws a circles on windows form for an argand diagram
-        public void CreateCircle(Complex operand, int modulus, string linename)
+        public void CreateCircle(Complex operand, double modulus, string linename)
         {
             Diagram.Series.Add(linename);
             Diagram.Series[linename].BorderWidth = 1;

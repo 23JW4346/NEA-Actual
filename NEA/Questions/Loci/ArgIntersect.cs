@@ -181,11 +181,6 @@ namespace NEA.Questions.Loci
             Task.Run(() => Application.Run(diagram));
         }
 
-        public void CloseDiagram()
-        {
-            diagram.Close();
-        }
-
         public string PrintAnswer(bool correct)
         {
             if (correct)

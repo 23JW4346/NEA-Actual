@@ -33,11 +33,6 @@ namespace NEA.Questions.ModArg
             return false;
         }
 
-        public void CloseDiagram()
-        {
-            throw new NotImplementedException();
-        }
-
         public bool GetQuestion(string filename)
         {
              bool found = false;
@@ -84,7 +79,7 @@ namespace NEA.Questions.ModArg
         public string PrintQuestion()
         {
             return $"The complex number z has a modulus of {answer.GetModulus().GetValue()} and an argument of {Math.Round(answer.GetArgument(), 3)}\n" +
-                $"calculate z in the form a+bi, where a and b are intergers (no decimal part)";
+                $"calculate z in the form a+bi, where a and b are intergers (rounded to 0.d.p)";
         }
 
         public List<string> SaveQuestion()

@@ -110,7 +110,7 @@ namespace NEA.Questions.MultiDivide
             string complex1 = "a" + (known[0] < 0 ? "" : "+") + known[0];
             Complex complex2 = new Complex(known[1], known[2]);
             string answer = "b" + (known[3] < 0 ? "" : "+") + known[3];
-            return $"Find real numbers a and b such that ({complex1}i)({complex2.GetComplex()}) = {answer}i \nPlease seperate a and b with a comma, no spaces.";
+            return $"Find real numbers a and b such that ({complex1}i)({complex2.GetComplex()}) = {answer}i \nPlease write your answer as a,b.";
         }
 
         public List<string> SaveQuestion()
@@ -125,11 +125,6 @@ namespace NEA.Questions.MultiDivide
                 known[2].ToString(),
                 known[3].ToString()
             };
-        }
-
-        public void CloseDiagram()
-        {
-            throw new NotImplementedException();
         }
     }
 }

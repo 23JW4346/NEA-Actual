@@ -109,8 +109,8 @@ namespace NEA.Questions.MultiDivide
 
         public string PrintQuestion()
         {
-            if(a != 1) return $"The complex number z satisfies the equation z({operand1.GetComplex()}) = {a}({operand2.GetComplex()})\nDetermine z, giving your answer in the form a+bi, where a and b are real";
-            return $"The complex number z satisfies the equation z({operand1.GetComplex()}) = ({operand2.GetComplex()})\nDetermine z, giving your answer in the form a+bi, where a and b are real";
+            if(a != 1) return $"The complex number z satisfies the equation z({operand1.GetComplex()}) = {a}({operand2.GetComplex()})\nDetermine z, giving your answer in the form a+bi, where a and b are real numbers";
+            return $"The complex number z satisfies the equation z({operand1.GetComplex()}) = ({operand2.GetComplex()})\nDetermine z, giving your answer in the form a+bi, where a and b are real numbers";
         }
 
         public List<string> SaveQuestion()
@@ -125,9 +125,5 @@ namespace NEA.Questions.MultiDivide
             };
         }
 
-        public void CloseDiagram()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

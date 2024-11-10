@@ -40,7 +40,7 @@ namespace NEA.Questions.Loci
         public void Calculate()
         {
             Complex temp = operand.Flip();
-            loci = Program.CreateModCircle(temp, modulus);
+            loci = Program.CreateModCircle(temp, modulus.ToString());
             answer = Program.CreateCartesianCircle(temp, modulus * modulus);
         }
 
@@ -91,11 +91,6 @@ namespace NEA.Questions.Loci
             Task.Run(() => Application.Run(diagram));
         }
 
-        public void CloseDiagram()
-        {
-            diagram.Close();
-        }
-
         public string PrintAnswer(bool correct)
         {
             if (correct)
@@ -107,7 +102,7 @@ namespace NEA.Questions.Loci
 
         public string PrintQuestion()
         {
-            return $"Write This Loci {loci} in Cartesian Form (as a circle)";
+            return $"Write This Loci {loci} in Cartesian Form ((x-a)²+(y-b)²=r²), type ^2 to get the squared symbol";
         }
 
         public List<string> SaveQuestion()

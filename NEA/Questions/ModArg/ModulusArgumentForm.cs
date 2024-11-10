@@ -42,11 +42,6 @@ namespace NEA.Questions.ModArg
             return false;
         }
 
-        public void CloseDiagram()
-        {
-            throw new NotImplementedException();
-        }
-
         public bool GetQuestion(string filename)
         {
             bool found = false;
@@ -93,7 +88,7 @@ namespace NEA.Questions.ModArg
 
         public string PrintQuestion()
         {
-            return $"The complex number z is denoted as {operand.GetComplex()}. Write z in modulus-argument form (arguments in 3.d.p)";
+            return $"The complex number z is denoted as {operand.GetComplex()}. Write z in modulus-argument form (arguments in 3.d.p)\nWrite in form r(cos(θ)+isin(θ)), where θ is the argument, and r is the modulus";
         }
 
 

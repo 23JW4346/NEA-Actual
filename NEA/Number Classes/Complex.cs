@@ -69,12 +69,22 @@ namespace NEA.Number_Classes
                 else if (c == '+' || c == '-')
                 {
                     real = new Number(double.Parse(temp));
-                    temp = "";
+                    firstneg = false;
+                    if (c == '-') temp = "-";
+                    else temp = "";
                 }
                 else if (c == 'i')
                 {
-                    imaginary = new Number(double.Parse(temp));
-                }
+                    if (temp == "")
+                    {
+                        imaginary = new Number(1);
+                    }
+                    else if(temp == "-")
+                    {
+                        imaginary = new Number(-1);
+                    }
+                    else imaginary = new Number(double.Parse(temp));
+                }    
             }
         }
 
@@ -130,7 +140,7 @@ namespace NEA.Number_Classes
             return outputreal + "+" + outputimag;
         }
         //Calculates the Modulus of the Complex number
-        public Number GetModulus()
+        public Number GetModulus() 
         {
             int pythag = (int)Math.Pow(real.GetValue(), 2) + (int)Math.Pow(imaginary.GetValue(), 2);
             if (!Math.Sqrt(pythag).ToString().Contains("."))

@@ -63,12 +63,21 @@ namespace NEA.Number_Classes
             {
                 if (isnegative)
                 {
-                    if (denominator == 1) return $"-{numerator}i";
+                    if (denominator == 1)
+                    {
+                        if (numerator != 1) return $"-{numerator}i";
+                        return "-i";
+                    }
                     else if (numerator == 1) return $"-i/{denominator}";
                     return $"-{numerator}i/{denominator}";
                 }
-                else if (denominator == 1) return $"{numerator}i";
+                else if (denominator == 1)
+                {
+                    if (numerator != 1) return $"{numerator}i";
+                    return "i";
+                }
                 else if (numerator == 1) return $"i/{denominator}";
+                else if (numerator == 0) return "0";
                 return $"{numerator}i/{denominator}";
             }
             if (isnegative)
@@ -77,7 +86,7 @@ namespace NEA.Number_Classes
                 return $"-{numerator}/{denominator}";
             }
             else if (denominator == 1) return $"{numerator}";
-            else if (numerator == 0) return null;
+            else if (numerator == 0) return "0";
             return $"{numerator}/{denominator}";
         }
 

@@ -35,7 +35,7 @@ namespace NEA.Questions.Polynomial_Roots
             if (coef1 > 0) answer += "+";
             answer += $"{coef1}z";
             if(coef2  >  0) answer += "+";
-            answer += coef2;
+            answer += coef2 + "=0";
         }
 
         public bool CheckAnswer(string answer)
@@ -45,10 +45,6 @@ namespace NEA.Questions.Polynomial_Roots
 
         }
 
-        public void CloseDiagram()
-        {
-            throw new NotImplementedException();
-        }
 
         public bool GetQuestion(string filename)
         {

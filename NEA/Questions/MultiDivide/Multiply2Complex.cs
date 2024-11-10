@@ -95,7 +95,7 @@ namespace NEA.Questions.MultiDivide
 
         public string PrintQuestion()
         {
-            return $"Calculate ({operand1.GetComplex()})*({operand2.GetComplex()})";
+            return $"Calculate ({operand1.GetComplex()})*({operand2.GetComplex()}). Put your answer in the form a+bi, where a and b are intergers.";
         }
 
         public List<string> SaveQuestion()
@@ -108,9 +108,5 @@ namespace NEA.Questions.MultiDivide
             };
         }
 
-        public void CloseDiagram()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

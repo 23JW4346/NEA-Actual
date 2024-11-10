@@ -35,7 +35,13 @@ namespace NEA.Questions.ModArg
         public void Calculate()
         {
             double arg = operand.GetArgument();
-            answer =  exponent * Math.Round(arg,3);
+            answer = exponent * arg;
+            while(Math.Abs(answer) > Math.PI)
+            {
+                if (answer > Math.PI) answer -= Math.PI;
+                if (answer < -Math.PI) answer += Math.PI;
+            }
+            answer = Math.Round(answer, 3);
         }
 
         public bool CheckAnswer(string answer)
@@ -107,7 +113,7 @@ namespace NEA.Questions.ModArg
                     z += "⁴";
                     break;
             }
-            return $"The complex number z is denoted as {operand.GetComplex()}.\nWithout calculating {z}, Find arg({z})";
+            return $"The complex number z is denoted as {operand.GetComplex()}.\nWithout calculating {z}, Find arg({z}) to 3.d.p, within the range -π<arg({z})<π";
         }
 
 
@@ -120,11 +126,6 @@ namespace NEA.Questions.ModArg
                 exponent.ToString(),
                 answer.ToString()
             };
-        }
-
-        public void CloseDiagram()
-        {
-            throw new NotImplementedException();
         }
     }
 }
