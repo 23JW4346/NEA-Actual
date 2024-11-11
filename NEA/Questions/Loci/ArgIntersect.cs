@@ -214,5 +214,10 @@ namespace NEA.Questions.Loci
                 step2.ToString(),
             };
         }
+
+        public void CloseDiagram()
+        {
+            diagram.Hide();
+        }
     }
 }

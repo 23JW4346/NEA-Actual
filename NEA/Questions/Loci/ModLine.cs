@@ -220,5 +220,10 @@ namespace NEA.Questions.Loci
                 answer
             };
         }
+
+        public void CloseDiagram()
+        {
+            diagram.Hide();
+        }
     }
 }

@@ -165,5 +165,10 @@ namespace NEA.Questions.Loci
                 argument.GetString(false)
             };
         }
+
+        public void CloseDiagram()
+        {
+            diagram.Hide();
+        }
     }
 }

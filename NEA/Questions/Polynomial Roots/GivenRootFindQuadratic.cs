@@ -107,5 +107,10 @@ namespace NEA.Questions.Polynomial_Roots
                 answer
             };
         }
+
+        public void CloseDiagram()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

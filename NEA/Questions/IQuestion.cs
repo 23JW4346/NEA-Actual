@@ -23,5 +23,7 @@ namespace NEA
         //if the question requires an argand diagram, this will get called to 
         void LoadDiagram();
         //if the question requires a diagram, close it to save 
+
+        void CloseDiagram();
     }
 }

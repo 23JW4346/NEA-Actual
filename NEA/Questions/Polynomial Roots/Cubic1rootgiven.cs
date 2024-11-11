@@ -147,5 +147,9 @@ namespace NEA.Questions.Polynomial_Roots
             };
         }
 
+        public void CloseDiagram()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

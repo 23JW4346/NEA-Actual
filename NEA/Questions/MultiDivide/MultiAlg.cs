@@ -126,5 +126,10 @@ namespace NEA.Questions.MultiDivide
                 known[3].ToString()
             };
         }
+
+        public void CloseDiagram()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

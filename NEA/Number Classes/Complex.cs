@@ -86,6 +86,7 @@ namespace NEA.Number_Classes
                     else imaginary = new Number(double.Parse(temp));
                 }    
             }
+            firstneg = false;
         }
 
         public Complex Flip()

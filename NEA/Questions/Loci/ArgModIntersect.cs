@@ -195,5 +195,10 @@ namespace NEA.Questions.Loci
             };
 
         }
+
+        public void CloseDiagram()
+        {
+            diagram.Hide();
+        }
     }
 }

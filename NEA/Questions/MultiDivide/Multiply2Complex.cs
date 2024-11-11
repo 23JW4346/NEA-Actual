@@ -108,5 +108,9 @@ namespace NEA.Questions.MultiDivide
             };
         }
 
+        public void CloseDiagram()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

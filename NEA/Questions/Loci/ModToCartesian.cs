@@ -114,5 +114,10 @@ namespace NEA.Questions.Loci
                 modulus.ToString()
             };
         }
+
+        public void CloseDiagram()
+        {
+            diagram.Hide();
+        }
     }
 }

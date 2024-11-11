@@ -599,57 +599,56 @@ namespace NEA
         //Checks what question type it is, then with the corresponding RegEx Pattern
         static bool ValidateInput(string answer, IQuestion question)
         {
+            Regex inputValid;
             if (question.GetType() == typeof(Multiply2Complex)
                 || question.GetType() == typeof(MultiAlg)
                 || question.GetType() == typeof(ArgIntersect)
-                || question.GetType() == typeof(ModArgToNormal)
-                || question.GetType() == typeof(ArgModIntersect))
+                || question.GetType() == typeof(ModArgToNormal))
             {
-                if (Regex.IsMatch(answer, complexPat)) return true;
+                inputValid = new Regex(complexPat);
             }
             else if (question.GetType() == typeof(ModulusQuestion)
                 || question.GetType() == typeof(ModulusPowers)
                 || question.GetType() == typeof(ArgumentQuestion)
                 || question.GetType() == typeof(ArgumentPowers))
             {
-                if (Regex.IsMatch(answer, realPat)) return true;
+                inputValid = new Regex(realPat);
             }
             else if (question.GetType() == typeof(Divide2Complex)
                 || question.GetType() == typeof(DivAlg))
             {
-                if (Regex.IsMatch(answer, fracompPat)) return true;
+                inputValid = new Regex(fracompPat);
             }
             else if (question.GetType() == typeof(ModulusArgumentForm))
             {
-                if (Regex.IsMatch(answer, modArgPat)) return true;
+                inputValid = new Regex(modArgPat);
             }
             else if (question.GetType() == typeof(GivenRootFindQuadratic))
             {
-                if (Regex.IsMatch(answer, quadraticPat)) return true;
+                inputValid = new Regex(quadraticPat);
             }
             else if (question.GetType() == typeof(ArgGraph))
             {
-                if (Regex.IsMatch(answer, argPat)) return true;
+                inputValid = new Regex(argPat);
             }
             else if (question.GetType() == typeof(ModGraph))
             {
-                if (Regex.IsMatch(answer, modPat)) return true;
+                inputValid = new Regex(modPat);
             }
             else if (question.GetType() == typeof(ArgtoCartesian)
                 || question.GetType() == typeof(ModLine))
             {
-                if(Regex.IsMatch(answer ,linePat)) return true;
+                inputValid = new Regex(linePat);
             }
             else if (question.GetType() == typeof(ModToCartesian))
             {
-                if (Regex.IsMatch(answer, circlePat)) return true;
+                inputValid = new Regex(circlePat);
             }
-            else if (question.GetType() == typeof(Quadratic)
-                || question.GetType() == typeof(Cubic1rootgiven)
-                || question.GetType() == typeof(ZSquared))
-            {
-                if (Regex.IsMatch(answer, complexPat + "," + complexPat)) return true;
+            else
+            {   
+                inputValid = new Regex(complexPat + ","+complexPat);
             }
+            if (inputValid.IsMatch(answer)) return true;
             return false;
         }
 
@@ -811,10 +810,14 @@ namespace NEA
             if (loop)
             {
                 Console.WriteLine();
+                try
+                {
+                    question.CloseDiagram();
+                }
+                catch { }
                 Console.WriteLine("Would you like another question?");
                 Console.WriteLine("> yes");
                 Console.WriteLine("  no");
-                Task.Run(() => Application.Exit());
                 bool exit = true;
                 Console.CursorLeft = 1;
                 Console.CursorTop -= 2;
@@ -828,6 +831,7 @@ namespace NEA
                         if (newposition == 1)
                         {
                             loop = false;
+                            
                         }
                         else
                         {
@@ -887,7 +891,7 @@ namespace NEA
                 Console.WriteLine("How many Questions would you like in your quiz? (5-50)");
                 string choice = Console.ReadLine();
                 Console.Clear();
-                if (Regex.IsMatch(choice.Trim(), "[1-9][0-9]") && int.Parse(choice.Trim()) < 51 && int.Parse(choice.Trim()) > 4)
+                if (Regex.IsMatch(choice.Trim(), "[1-9][0-9]?") && int.Parse(choice.Trim()) < 51 && int.Parse(choice.Trim()) > 4)
                 {
                     int length = int.Parse(choice);
                     quizQuestions = new IQuestion[length];

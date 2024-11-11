@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -102,5 +104,6 @@ namespace NEA.Questions.Loci
             }
             Diagram.Series[linename].Points.AddXY(x, y);
         }
+
     }
 }

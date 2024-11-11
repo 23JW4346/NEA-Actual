@@ -90,5 +90,10 @@ namespace NEA.Questions.ModArg
                 answer.GetComplex()
             };
         }
+
+        public void CloseDiagram()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

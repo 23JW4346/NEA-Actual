@@ -101,5 +101,10 @@ namespace NEA.Questions.ModArg
                 answer
             };
         }
+
+        public void CloseDiagram()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
