@@ -26,6 +26,15 @@ namespace NEA
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
+            diagram = new ArgandDiagram();
+            var t = Task.Run(() => Application.Run(diagram));
+            Console.ReadKey();
+            diagram.Invoke((Action)(() =>
+            {
+                diagram.Close();
+            }));
+            t.Wait();
+            t.Dispose();
             Console.WriteLine("Maximise screen to continue");
             //while (Console.WindowWidth < Console.LargestWindowWidth && Console.WindowHeight <Console.LargestWindowHeight) { }
             Console.Clear();
