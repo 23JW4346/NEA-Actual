@@ -118,7 +118,10 @@ namespace NEA.Questions.Loci
 
         public void CloseDiagram(ArgandDiagram diagram)
         {
-            diagram.Hide();
+            diagram.Invoke((Action)(() =>
+            {
+                diagram.Close();
+            }));
         }
     }
 }

@@ -26,15 +26,6 @@ namespace NEA
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
-            diagram = new ArgandDiagram();
-            var t = Task.Run(() => Application.Run(diagram));
-            Console.ReadKey();
-            diagram.Invoke((Action)(() =>
-            {
-                diagram.Close();
-            }));
-            t.Wait();
-            t.Dispose();
             Console.WriteLine("Maximise screen to continue");
             //while (Console.WindowWidth < Console.LargestWindowWidth && Console.WindowHeight <Console.LargestWindowHeight) { }
             Console.Clear();
@@ -821,11 +812,6 @@ namespace NEA
             if (loop)
             {
                 Console.WriteLine();
-                try
-                {
-                    question.CloseDiagram(diagram);
-                }
-                catch { }
                 Console.WriteLine("Would you like another question?");
                 Console.WriteLine("> yes");
                 Console.WriteLine("  no");
@@ -881,7 +867,11 @@ namespace NEA
                 Console.ReadKey();
 
             }
-            Task.Run(() => Application.Exit());
+            try
+            {
+                question.CloseDiagram(diagram);
+            }
+            catch { }
             Console.Clear();
         }
 
