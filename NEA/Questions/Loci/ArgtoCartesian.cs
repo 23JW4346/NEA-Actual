@@ -14,7 +14,6 @@ namespace NEA.Questions.Loci
         private string loci, answer;
         private double step, m;
         private bool isleft;
-        private ArgandDiagram diagram;
         private (int, int)[] fractions = { (1, 6), (1, 4), (1, 3), (2, 3), (3, 4), (5, 6) };
         private double[] steps = { 0.5, 1, 2, 2, 1, 0.5 };
 
@@ -149,11 +148,13 @@ namespace NEA.Questions.Loci
         {
             return $"Write This Loci {loci} in Cartesian Form y=mx+c, where m and c are rational numbers";
         }
-        public void LoadDiagram()
+        public void LoadDiagram(ArgandDiagram diagram)
         {
-            diagram = new ArgandDiagram();
             diagram.CreateLine(step, operand, isleft, loci);
-            Task.Run(() => Application.Run(diagram));
+            Task.Run(() =>
+            {
+                Application.Run(diagram);
+            });
         }
 
         public List<string> SaveQuestion()
@@ -166,9 +167,9 @@ namespace NEA.Questions.Loci
             };
         }
 
-        public void CloseDiagram()
+        public void CloseDiagram(ArgandDiagram diagram)
         {
-            diagram.Hide();
+            Task.Run(() => diagram.Hide());
         }
     }
 }

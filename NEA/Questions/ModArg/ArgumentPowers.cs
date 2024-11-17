@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using NEA.Number_Classes;
+using NEA.Questions.Loci;
 
 namespace NEA.Questions.ModArg
 {
@@ -38,8 +39,8 @@ namespace NEA.Questions.ModArg
             answer = exponent * arg;
             while(Math.Abs(answer) > Math.PI)
             {
-                if (answer > Math.PI) answer -= Math.PI;
-                if (answer < -Math.PI) answer += Math.PI;
+                if (answer > Math.PI) answer -= 2*Math.PI;
+                if (answer < -Math.PI) answer += 2*Math.PI;
             }
             answer = Math.Round(answer, 3);
         }
@@ -84,7 +85,7 @@ namespace NEA.Questions.ModArg
             return found;
         }
 
-        public void LoadDiagram()
+        public void LoadDiagram(ArgandDiagram diagram)
         {
             throw new NotImplementedException();
         }
@@ -128,7 +129,7 @@ namespace NEA.Questions.ModArg
             };
         }
 
-        public void CloseDiagram()
+        public void CloseDiagram(ArgandDiagram diagram)
         {
             throw new NotImplementedException();
         }

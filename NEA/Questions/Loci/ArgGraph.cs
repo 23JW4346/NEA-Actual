@@ -14,7 +14,6 @@ namespace NEA.Questions.Loci
         private Fraction argument;
         private double step;
         private bool isleft;
-        private ArgandDiagram diagram;
         private (int, int)[] fractions = { (1, 6), (1, 4), (1, 3), (2, 3), (3, 4), (5, 6) };
         private double[] steps = { 0.5, 1, 2, 2, 1, 0.5 };
 
@@ -119,11 +118,13 @@ namespace NEA.Questions.Loci
             return found;
         }
 
-        public void LoadDiagram()
+        public void LoadDiagram(ArgandDiagram diagram)
         {
-            diagram = new ArgandDiagram();
             diagram.CreateLine(step, operand, isleft, "Line");
-            Task.Run(() => Application.Run(diagram));
+            Task.Run(() => 
+            {
+                Application.Run(diagram);
+            });
         }
 
         public string PrintAnswer(bool correct)
@@ -152,9 +153,9 @@ namespace NEA.Questions.Loci
             };
         }
 
-        public void CloseDiagram()
+        public void CloseDiagram(ArgandDiagram diagram)
         {
-            diagram.Hide();
+            Task.Run(() => diagram.Hide());
         }
     }
 }

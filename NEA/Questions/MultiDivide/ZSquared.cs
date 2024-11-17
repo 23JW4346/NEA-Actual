@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NEA.Number_Classes;
+using NEA.Questions.Loci;
 
 namespace NEA.Questions.MultiDivide
 {
@@ -87,7 +88,7 @@ namespace NEA.Questions.MultiDivide
             return found;
         }
 
-        public void LoadDiagram()
+        public void LoadDiagram(ArgandDiagram diagram)
         {
             throw new NotImplementedException();
         }
@@ -113,7 +114,7 @@ namespace NEA.Questions.MultiDivide
             };
         }
 
-        public void CloseDiagram()
+        public void CloseDiagram(ArgandDiagram diagram)
         {
             throw new NotImplementedException();
         }

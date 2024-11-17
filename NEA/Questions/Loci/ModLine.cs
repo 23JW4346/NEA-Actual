@@ -10,7 +10,6 @@ namespace NEA.Questions.Loci
 {
     public class ModLine : IQuestion
     {
-        private ArgandDiagram diagram;
         private Complex midpoint, operand1, operand2;
         private Number gradient;
         private double grad;
@@ -187,11 +186,13 @@ namespace NEA.Questions.Loci
             return found;
         }
 
-        public void LoadDiagram()
+        public void LoadDiagram(ArgandDiagram diagram)
         {
-            diagram = new ArgandDiagram();
             diagram.CreateModLine(midpoint, grad, equation);
-            Task.Run(() => Application.Run(diagram));
+            Task.Run(() =>
+            {
+                Application.Run(diagram);
+            });
         }
 
         public string PrintAnswer(bool correct)
@@ -221,9 +222,9 @@ namespace NEA.Questions.Loci
             };
         }
 
-        public void CloseDiagram()
+        public void CloseDiagram(ArgandDiagram diagram)
         {
-            diagram.Hide();
+            Task.Run(() => diagram.Hide());
         }
     }
 }

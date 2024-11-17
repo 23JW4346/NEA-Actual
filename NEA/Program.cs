@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Threading;
 using NEA.Number_Classes;
 using NEA.Questions.Loci;
 using NEA.Questions.ModArg;
@@ -20,11 +21,13 @@ namespace NEA
         static Random rnd = new Random();
         static List<List<string>> savequests = new List<List<string>>();
 
+        static ArgandDiagram diagram;
+
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             Console.WriteLine("Maximise screen to continue");
-            while (Console.WindowWidth < Console.LargestWindowWidth && Console.WindowHeight <Console.LargestWindowHeight) { }
+            //while (Console.WindowWidth < Console.LargestWindowWidth && Console.WindowHeight <Console.LargestWindowHeight) { }
             Console.Clear();
             Menu();
 
@@ -665,11 +668,10 @@ namespace NEA
             int currentposition = Console.CursorTop, newposition = 0;
             try
             {
-                question.LoadDiagram();
+                diagram = new ArgandDiagram();
+                question.LoadDiagram(diagram);
             }
-            catch
-            {
-            }
+            catch { }
             do
             {
                 choice = Console.ReadKey(true);
@@ -812,7 +814,7 @@ namespace NEA
                 Console.WriteLine();
                 try
                 {
-                    question.CloseDiagram();
+                    question.CloseDiagram(diagram);
                 }
                 catch { }
                 Console.WriteLine("Would you like another question?");
@@ -870,6 +872,7 @@ namespace NEA
                 Console.ReadKey();
 
             }
+            Task.Run(() => Application.Exit());
             Console.Clear();
         }
 

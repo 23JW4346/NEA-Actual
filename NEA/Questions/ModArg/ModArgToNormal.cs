@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using NEA.Number_Classes;
+using NEA.Questions.Loci;
 
 namespace NEA.Questions.ModArg
 {
@@ -62,7 +63,7 @@ namespace NEA.Questions.ModArg
             return found;
         }
 
-        public void LoadDiagram()
+        public void LoadDiagram(ArgandDiagram diagram)
         {
             throw new NotImplementedException();
         }
@@ -91,7 +92,7 @@ namespace NEA.Questions.ModArg
             };
         }
 
-        public void CloseDiagram()
+        public void CloseDiagram(ArgandDiagram diagram)
         {
             throw new NotImplementedException();
         }

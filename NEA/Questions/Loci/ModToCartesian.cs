@@ -13,7 +13,6 @@ namespace NEA.Questions.Loci
         private string loci;
         private string answer;
         private int modulus;
-        private ArgandDiagram diagram;
 
         public ModToCartesian(Random rnd)
         {
@@ -84,11 +83,13 @@ namespace NEA.Questions.Loci
             return found;
         }
 
-        public void LoadDiagram()
+        public void LoadDiagram(ArgandDiagram diagram)
         {
-            diagram = new ArgandDiagram();
             diagram.CreateCircle(operand, modulus, loci);
-            Task.Run(() => Application.Run(diagram));
+            Task.Run(() =>
+            {
+                Application.Run(diagram);
+            });
         }
 
         public string PrintAnswer(bool correct)
@@ -115,7 +116,7 @@ namespace NEA.Questions.Loci
             };
         }
 
-        public void CloseDiagram()
+        public void CloseDiagram(ArgandDiagram diagram)
         {
             diagram.Hide();
         }

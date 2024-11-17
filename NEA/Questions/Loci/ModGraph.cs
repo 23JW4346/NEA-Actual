@@ -13,7 +13,6 @@ namespace NEA.Questions.Loci
         private Complex operand;
         private string loci;
         private int modulus;
-        private ArgandDiagram diagram;
 
         public ModGraph(Random rnd)
         {
@@ -81,11 +80,13 @@ namespace NEA.Questions.Loci
             return found;
         }
 
-        public void LoadDiagram()
+        public void LoadDiagram(ArgandDiagram diagram)
         {
-            diagram = new ArgandDiagram();
             diagram.CreateCircle(operand, modulus, "Circle");
-            Task.Run(() => Application.Run(diagram));
+            Task.Run(() =>
+            {
+                Application.Run(diagram);
+            });
         }
 
         public string PrintAnswer(bool correct)
@@ -112,9 +113,9 @@ namespace NEA.Questions.Loci
             };
         }
 
-        public void CloseDiagram()
+        public void CloseDiagram(ArgandDiagram diagram)
         {
-            diagram.Hide();
+            Task.Run(() => diagram.Hide());
         }
     }
 }

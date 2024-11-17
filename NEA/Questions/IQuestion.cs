@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NEA.Questions.Loci;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,9 +22,8 @@ namespace NEA
         //opens the file and then gets the question off of the file
         bool GetQuestion(string filename);
         //if the question requires an argand diagram, this will get called to 
-        void LoadDiagram();
+        void LoadDiagram(ArgandDiagram diagram);
         //if the question requires a diagram, close it to save 
-
-        void CloseDiagram();
+        void CloseDiagram(ArgandDiagram diagram);
     }
 }

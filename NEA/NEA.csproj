@@ -81,12 +81,6 @@
     <Compile Include="Questions\Polynomial Roots\Cubic1rootgiven.cs" />
     <Compile Include="Questions\Polynomial Roots\GivenRootFindQuadratic.cs" />
     <Compile Include="Questions\Polynomial Roots\Quadratic.cs" />
-    <Compile Include="Questions\QuestionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Questions\QuestionForm.Designer.cs">
-      <DependentUpon>QuestionForm.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -94,9 +88,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Questions\ArgandDiagram.resx">
       <DependentUpon>ArgandDiagram.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Questions\QuestionForm.resx">
-      <DependentUpon>QuestionForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

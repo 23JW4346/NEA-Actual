@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NEA.Number_Classes;
+using NEA.Questions.Loci;
 
 namespace NEA.Questions.Polynomial_Roots
 {
@@ -112,7 +113,7 @@ namespace NEA.Questions.Polynomial_Roots
         }
 
 
-        public void LoadDiagram()
+        public void LoadDiagram(ArgandDiagram diagram)
         {
             throw new NotImplementedException();
         }
@@ -147,7 +148,7 @@ namespace NEA.Questions.Polynomial_Roots
             };
         }
 
-        public void CloseDiagram()
+        public void CloseDiagram(ArgandDiagram diagram)
         {
             throw new NotImplementedException();
         }
