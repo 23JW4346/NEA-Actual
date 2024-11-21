@@ -42,7 +42,7 @@ namespace NEA.Questions.MultiDivide
         {
             Complex operand1 = new Complex(algA, known[0]);
             Complex operand2 = new Complex(known[1], known[2]);
-            Complex rightSide = Program.TimesComplex(operand1, operand2);
+            Complex rightSide = operand1 * operand2;
             algB = (int)rightSide.GetRealValue();
             known[3] = (int)rightSide.GetImaginaryValue();
             answer = algA + "," + algB;

@@ -36,7 +36,7 @@ namespace NEA.Questions.MultiDivide
 
         public void Calculate()
         {
-            Complex temp = Program.TimesComplex(operand1, answer);
+            Complex temp = operand1 * answer; 
             a = 1;
             int loop = (int)temp.GetRealValue();
             if (temp.GetImaginaryValue() < temp.GetRealValue()) loop = (int)temp.GetImaginaryValue();

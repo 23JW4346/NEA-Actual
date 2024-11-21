@@ -34,7 +34,7 @@ namespace NEA.Questions.MultiDivide
 
         public void Calculate()
         {
-            answer = Program.TimesComplex(operand1, operand2);
+            answer = operand1 * operand2;
         }
 
         public bool CheckAnswer(string answer)

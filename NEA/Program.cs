@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
-using System.Threading;
 using NEA.Number_Classes;
 using NEA.Questions.Loci;
 using NEA.Questions.ModArg;
@@ -26,8 +22,6 @@ namespace NEA
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
-            Console.WriteLine("Maximise screen to continue");
-            //while (Console.WindowWidth < Console.LargestWindowWidth && Console.WindowHeight <Console.LargestWindowHeight) { }
             Console.Clear();
             Menu();
 
@@ -45,25 +39,15 @@ namespace NEA
             }
         }
 
-        //returns a*b
-        public static Complex TimesComplex(Complex a, Complex b)
-        {
-            return new Complex(a.GetRealValue() * b.GetRealValue() - a.GetImaginaryValue() * b.GetImaginaryValue(), a.GetImaginaryValue() * b.GetRealValue() + a.GetRealValue() * b.GetImaginaryValue());
-        }
-
-        //returns the calculation a/b
-        public static Complex DivideComplex(Complex a, Complex b)
-        {
-            Fraction RealPart = new Fraction((int)(a.GetRealValue() * b.GetRealValue() - a.GetImaginaryValue() * -b.GetImaginaryValue()), (int)(b.GetRealValue() * b.GetRealValue() - b.GetImaginaryValue() * -b.GetImaginaryValue()));
-            Fraction ImagPart = new Fraction((int)(a.GetRealValue() * -b.GetImaginaryValue() + a.GetImaginaryValue() * b.GetRealValue()), (int)(b.GetRealValue() * b.GetRealValue() - b.GetImaginaryValue() * -b.GetImaginaryValue()));
-            return new Complex(RealPart, ImagPart);
-        }
-
         //returns the string for an arg line in an argand diagram (arg(z-(z1)=θ)
         public static string CreateArgLine(Complex a, Fraction b)
         {
             string loci;
-            if (a.GetComplex()[0] == '-')
+            if(a.GetComplex() == "")
+            {
+                loci = $"arg(z)={b.GetString(true).Replace('i', 'π')}";
+            }
+            else if (a.GetComplex()[0] == '-')
             {
                 loci = $"arg(z{a.GetComplex()})={b.GetString(true).Replace('i', 'π')}";
             }
@@ -77,6 +61,10 @@ namespace NEA
         public static string CreateModCircle(Complex a, string modulus)
         {
             string loci;
+            if(a.GetComplex() == "")
+            {
+                loci = $"|z|={modulus}";
+            }
             if (a.GetComplex()[0] == '-')
             {
                 loci = $"|z{a.GetComplex()}|={modulus}";
@@ -183,18 +171,24 @@ namespace NEA
         //returns the string for a modline loci (|z-z1|=|z-z2|)
         public static string CreateModLine(Complex a, Complex b)
         {
-            string loci = "|z";
-            if (a.GetComplex()[0] == '-')
+            string loci = "|z";    
+            if(a.GetComplex() != "")
             {
-                loci += a.GetComplex();
+                if (a.GetComplex()[0] == '-')
+                {
+                    loci += a.GetComplex();
+                }
+                else loci += "+" + a.GetComplex();
             }
-            else loci += "+" + a.GetComplex();
             loci += "|=|z";
-            if (b.GetComplex()[0] == '-')
+            if (b.GetComplex() != "")
             {
-                loci += b.GetComplex();
+                if (b.GetComplex()[0] == '-')
+                {
+                    loci += b.GetComplex();
+                }
+                else loci += "+" + b.GetComplex();
             }
-            else loci += "+" + b.GetComplex();
             return loci + "|";
         }
 

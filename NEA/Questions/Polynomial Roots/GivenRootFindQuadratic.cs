@@ -31,7 +31,7 @@ namespace NEA.Questions.Polynomial_Roots
             Complex conj = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
             int coef1 , coef2 ;
             coef1 = -(int)(root.GetRealValue() + conj.GetRealValue());
-            coef2 = (int)Program.TimesComplex(root, conj).GetRealValue();
+            coef2 = (int)(root*conj).GetRealValue();
             answer = $"z²";
             if (coef1 > 0) answer += "+";
             answer += $"{coef1}z";

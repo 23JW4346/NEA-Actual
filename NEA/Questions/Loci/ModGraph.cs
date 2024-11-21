@@ -32,7 +32,7 @@ namespace NEA.Questions.Loci
         public void GenQ(Random rnd)
         {
             operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-            while (operand.GetComplex() == "") operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+            operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
             modulus = rnd.Next(1, 6);
         }
         public void Calculate()

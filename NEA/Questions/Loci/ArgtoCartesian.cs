@@ -51,7 +51,6 @@ namespace NEA.Questions.Loci
         public void GenQ(Random rnd)
         {
             operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
-            while(operand.GetComplex() == "") operand = new Complex(rnd.Next(-3,4), rnd.Next(-3,4));
             Complex inanswer = operand.Flip();
             if (rnd.Next(2) == 1)
             {
