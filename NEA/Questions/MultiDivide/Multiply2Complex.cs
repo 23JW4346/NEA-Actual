@@ -79,7 +79,7 @@ namespace NEA.Questions.MultiDivide
 
         public void LoadDiagram(ArgandDiagram diagram)
         {
-            throw new NotImplementedException();
+            throw new NoDiagramException();
         }
 
         public string PrintAnswer(bool correct)
@@ -111,7 +111,7 @@ namespace NEA.Questions.MultiDivide
 
         public void CloseDiagram(ArgandDiagram diagram)
         {
-            throw new NotImplementedException();
+            throw new NoDiagramException();
         }
     }
 }

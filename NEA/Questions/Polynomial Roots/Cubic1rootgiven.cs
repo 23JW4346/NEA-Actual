@@ -9,7 +9,7 @@ namespace NEA.Questions.Polynomial_Roots
 {
     public class Cubic1rootgiven : IQuestion
     {
-        private Complex root, conjugate;
+        private Complex root, conj;
         private int root2, coef;
         private string cubic;
         private bool hide1, hide2;
@@ -31,7 +31,7 @@ namespace NEA.Questions.Polynomial_Roots
         public void GenQ(Random rnd)
         {
             root = new Complex(false);
-            conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
+            conj = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
             root2 = rnd.Next(2, 5);
             coef = rnd.Next(1, 4);
             if (rnd.Next(3) == 0) hide1 = true;
@@ -43,20 +43,44 @@ namespace NEA.Questions.Polynomial_Roots
         public void Calculate()
         {
             string b, c, d;
-            if (!hide1) b = (-coef * (int)(root.GetRealValue() + conjugate.GetRealValue() + root2)).ToString();
+            int coef1, coef2, coef3;
+            coef1 = -(int)(root.GetRealValue() + conj.GetRealValue() + root2);
+            coef2 = (int)(root * conj).GetRealValue() + (int)(root * root2).GetRealValue() + (int)(conj * root2).GetRealValue();
+            coef3 = -(int)(root * conj).GetRealValue() * root2;
+            if (!hide1) b = (coef1 * coef).ToString();
             else b = "a";
-            if (!hide2) c = (coef * (int)(root.GetRealValue() * conjugate.GetRealValue() - root.GetImaginaryValue() * conjugate.GetImaginaryValue() + root.GetRealValue() * root2 + conjugate.GetRealValue() * root2)).ToString();
+            if (!hide2) c = (coef2 * coef).ToString();
             else if (hide2 && hide1) c = "b";
             else c = "a";
-            d = (-coef * (int)((root.GetRealValue() * conjugate.GetRealValue() - root.GetImaginaryValue() * conjugate.GetImaginaryValue()) * root2)).ToString();
+            d = (coef3 * coef).ToString();
             if (coef != 1) cubic += coef;
             cubic += "z³";
-            if (!b.Contains('-')) cubic += "+";
-            cubic += b + "z²";
-            if (!c.Contains('-')) cubic += "+";
-            cubic += c + "z";
-            if(!d.Contains('-')) cubic += "+";
-            cubic += d + "=0";
+            if (b != "0")
+            {
+                if (!b.Contains('-')) cubic += "+";
+                if (b != "a")
+                {
+                    if (Math.Abs(int.Parse(b)) != 1) cubic += b;
+                }
+                else cubic += "a";
+                cubic += "z²";
+            }
+            if (c != "0")
+            {
+                if (!c.Contains('-')) cubic += "+";
+                if (c != "b" || c != "a")
+                {
+                    if (Math.Abs(int.Parse(c)) != 1) cubic += c;
+                }
+                else cubic += "b";
+                cubic += "z";
+            }
+            if (d != "0")
+            {
+                if (!d.Contains('-')) cubic += "+";
+                if(Math.Abs(int.Parse(d)) != 1) cubic += d; 
+                cubic += "=0";
+            }
         }
 
         public bool CheckAnswer(string answer)
@@ -64,12 +88,26 @@ namespace NEA.Questions.Polynomial_Roots
             if (answer.Contains(','))
             {
                 string[] answers = answer.Split(',');
-
-                if (answers[0] == root2.ToString() || answers[1] == root2.ToString() && answers[1] != answers[0])
+                if (answers[1] != answers[0])
                 {
-                    if (answers[0] == conjugate.GetComplex() || answers[1] == conjugate.GetComplex())
+                    Complex a1;
+                    Number a2;
+                    if (answers[0].Contains("i"))
                     {
-                        return true;
+                        a1 = new Complex(answers[0]);
+                        a2 = new Number(int.Parse(answers[1]));
+                    }
+                    else
+                    {
+                        a1 = new Complex(answers[1]);
+                        a2 = new Number(int.Parse(answers[0]));
+                    }
+                    if (a2.GetValue() == root2)
+                    {
+                        if (a1 == conj)
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -90,7 +128,7 @@ namespace NEA.Questions.Polynomial_Roots
                     if (line == "Quadratic" && !found)
                     {
                         root = new Complex(sr.ReadLine());
-                        conjugate = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
+                        conj = new Complex(root.GetRealValue(), -root.GetImaginaryValue());
                         root2 = int.Parse(sr.ReadLine());
                         coef = int.Parse(sr.ReadLine());
                         if (sr.ReadLine() == "1") hide1 = true;
@@ -115,18 +153,18 @@ namespace NEA.Questions.Polynomial_Roots
 
         public void LoadDiagram(ArgandDiagram diagram)
         {
-            throw new NotImplementedException();
+            throw new NoDiagramException();
         }
 
         public string PrintAnswer(bool correct)
         {
             if (correct)
             {
-                return $"Correct, the answer was {conjugate.GetComplex()},{root2}";
+                return $"Correct, the answer was {conj.GetComplex()},{root2}";
             }
             else
             {
-                return $"Incorrect! The answer is {conjugate.GetComplex()},{root2}";
+                return $"Incorrect! The answer is {conj.GetComplex()},{root2}";
             }
         }
 
@@ -150,7 +188,7 @@ namespace NEA.Questions.Polynomial_Roots
 
         public void CloseDiagram(ArgandDiagram diagram)
         {
-            throw new NotImplementedException();
+            throw new NoDiagramException();
         }
     }
 }

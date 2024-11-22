@@ -53,10 +53,11 @@ namespace NEA.Questions.Polynomial_Roots
             if (answer.Contains(','))
             {
                 string[] answers = answer.Split(',');
-
-                if (answers[0] == root.GetComplex() || answers[1] == root.GetComplex() && answers[1] != answers[0])
+                Complex a1 = new Complex(answers[0]);
+                Complex a2 = new Complex(answers[1]);
+                if (a1 == root || a2 == root && a1 != a2)
                 {
-                    if (answers[0] == conjugate.GetComplex() || answers[1] == conjugate.GetComplex())
+                    if (a1 == conjugate || a2 == conjugate)
                     {
                         return true;
                     }
@@ -97,7 +98,7 @@ namespace NEA.Questions.Polynomial_Roots
         }
         public void LoadDiagram(ArgandDiagram diagram)
         {
-            throw new NotImplementedException();
+            throw new NoDiagramException();
         }
 
         public string PrintAnswer(bool correct)
@@ -127,7 +128,7 @@ namespace NEA.Questions.Polynomial_Roots
 
         public void CloseDiagram(ArgandDiagram diagram)
         {
-            throw new NotImplementedException();
+            throw new NoDiagramException();
         }
     }
 }

@@ -78,8 +78,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Questions\MultiDivide\ZSquared.cs" />
+    <Compile Include="Questions\NoDiagramException.cs" />
     <Compile Include="Questions\Polynomial Roots\Cubic1rootgiven.cs" />
     <Compile Include="Questions\Polynomial Roots\GivenRootFindQuadratic.cs" />
+    <Compile Include="Questions\Polynomial Roots\GivenRootsFindCubic.cs" />
     <Compile Include="Questions\Polynomial Roots\Quadratic.cs" />
   </ItemGroup>
   <ItemGroup>

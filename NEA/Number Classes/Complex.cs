@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Runtime.CompilerServices;
 
 namespace NEA.Number_Classes
 {
@@ -54,7 +56,7 @@ namespace NEA.Number_Classes
                 imaginary = new Number();
             }
         }
-        //Gets the complex from the text file, and converts it to the object
+        //Gets the complex from a string, and converts it to the object
         public Complex(string strcomp)
         {
             string temp = "";
@@ -73,7 +75,6 @@ namespace NEA.Number_Classes
                 else if (c == '+' || c == '-')
                 {
                     real = new Number(double.Parse(temp));
-                    firstneg = false;
                     if (c == '-') temp = "-";
                     else temp = "";
                 }
@@ -88,8 +89,11 @@ namespace NEA.Number_Classes
                         imaginary = new Number(-1);
                     }
                     else imaginary = new Number(double.Parse(temp));
-                }    
+                }
+                firstneg = false;
             }
+            if(real == null) real = new Number(0);
+            if(imaginary == null) imaginary = new Number(0);
             firstneg = false;
         }
 
@@ -189,6 +193,13 @@ namespace NEA.Number_Classes
         {
             return new Complex(a.GetRealValue() * b.GetRealValue() - a.GetImaginaryValue() * b.GetImaginaryValue(), a.GetImaginaryValue() * b.GetRealValue() + a.GetRealValue() * b.GetImaginaryValue());
         }
+        //multiplies complex by scalar
+        public static Complex operator * (double a, Complex b)
+        {
+            return new Complex(a * b.GetRealValue(), a*b.GetImaginaryValue());
+        }
+
+        public static Complex operator *(Complex a, double b) => b * a;
         //returns the calculation a/b
         public static Complex operator /(Complex a, Complex b)
         {
@@ -196,6 +207,18 @@ namespace NEA.Number_Classes
             Fraction ImagPart = new Fraction((int)(a.GetRealValue() * -b.GetImaginaryValue() + a.GetImaginaryValue() * b.GetRealValue()), (int)(b.GetRealValue() * b.GetRealValue() - b.GetImaginaryValue() * -b.GetImaginaryValue()));
             return new Complex(RealPart, ImagPart);
         }
+        //returns true if the answer is equal to user answer
+        public static bool operator ==(Complex a, Complex b)
+        {
+            if(a.GetRealValue() == b.GetRealValue() && a.GetImaginaryValue() == b.GetImaginaryValue()) return true;
+            return false;
+        }
+
+        public static bool operator !=(Complex a, Complex b) 
+        {
+            return !(a == b);
+        }
+
     }
 }
 
