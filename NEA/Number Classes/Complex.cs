@@ -7,7 +7,7 @@ namespace NEA.Number_Classes
 {
     public class Complex
     {
-        public Number real;
+        private Number real;
         private Number imaginary;
 
         private static Random rnd = new Random();
