@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using NEA.Number_Classes;
 using NEA.Questions.Loci;
 using NEA.Questions.ModArg;
@@ -165,11 +167,11 @@ namespace NEA
         }
 
         //Gets user option with the arrow keys
-        static int GetUserOption(int smallest, int largest, bool keeparrow)
+        static int GetUserOption(int smallest, int largest)
         {
             bool exit = true;
-            int topPosition = smallest;
-            int newPosition = Console.CursorTop-smallest;
+            int topPosition = Console.CursorTop;
+            int newPosition = 0;
             while (exit)
             {
                 ConsoleKeyInfo choice = Console.ReadKey(true);
@@ -177,43 +179,23 @@ namespace NEA
                 {
                     exit = false;
                 }
-                else if (choice.Key == ConsoleKey.DownArrow && newPosition < largest-smallest)
+                else if (choice.Key == ConsoleKey.DownArrow && newPosition != largest)
                 {
-                    if (keeparrow)
-                    {
-                        Console.CursorLeft = 0;
-                        newPosition++;
-                        Console.CursorTop = topPosition + newPosition;
-                        Console.CursorLeft = 1;
-                    }
-                    else
-                    {
-                        Console.CursorLeft = 0;
-                        Console.Write(" ");
-                        newPosition++;
-                        Console.CursorTop = topPosition + newPosition;
-                        Console.CursorLeft = 0;
-                        Console.Write(">");
-                    }
+                    Console.CursorLeft = 0;
+                    Console.Write(" ");
+                    newPosition++;
+                    Console.CursorTop = topPosition + newPosition;
+                    Console.CursorLeft = 0;
+                    Console.Write(">");
                 }
-                else if (choice.Key == ConsoleKey.UpArrow && newPosition !=0)
+                else if (choice.Key == ConsoleKey.UpArrow && newPosition != smallest)
                 {
-                    if (keeparrow)
-                    {
-                        Console.CursorLeft = 0;
-                        newPosition--;
-                        Console.CursorTop = topPosition + newPosition;
-                        Console.CursorLeft = 1;
-                    }
-                    else
-                    {
-                        Console.CursorLeft = 0;
-                        Console.Write(" ");
-                        newPosition--;
-                        Console.CursorTop = topPosition + newPosition;
-                        Console.CursorLeft = 0;
-                        Console.Write(">");
-                    }
+                    Console.CursorLeft = 0;
+                    Console.Write(" ");
+                    newPosition--;
+                    Console.CursorTop = topPosition + newPosition;
+                    Console.CursorLeft = 0;
+                    Console.Write(">");
                 }
             }
             return newPosition;
@@ -235,7 +217,7 @@ namespace NEA
                 bool exit = true;
                 while (exit)
                 {
-                    int choice = GetUserOption(1, 4, false);
+                    int choice = GetUserOption(0, 3);
                     switch (choice)
                     {
                         case 0:
@@ -295,7 +277,7 @@ namespace NEA
             bool exit = true;
             while (exit)
             {
-                int questionset = GetUserOption(1, 7, false);
+                int questionset = GetUserOption(0, 6);
                 bool loop = true;
                 int placeholder = 0;
                 while (loop)
@@ -493,7 +475,7 @@ namespace NEA
                                     return new GivenRootFindQuadratic();
                                 }
                             case 3:
-                                if (rnd.Next(1, 16) == 1)
+                                if(rnd.Next(1, 16) == 1)
                                 {
                                     return new GivenRootsFindCubic(rnd, "Questions.txt");
                                 }
@@ -784,7 +766,7 @@ namespace NEA
             }
             catch (NotImplementedException e)
             {
-                e.ToString();
+
             }
             while (thisloop)
             {
@@ -834,7 +816,7 @@ namespace NEA
                 Console.CursorLeft = 1;
                 Console.CursorTop -= 2;
                 currentposition = Console.CursorTop;
-                newposition = GetUserOption(currentposition, currentposition + 1, false);
+                newposition = GetUserOption(currentposition, currentposition + 1);
                 if (newposition == 1)
                 {
                     loop = false;
@@ -852,7 +834,7 @@ namespace NEA
                     score++;
                 }
                 Console.WriteLine();
-                Console.WriteLine("Click any button to continue.");
+                Console.WriteLine("Click any button for Next Question");
                 Console.ReadKey();
 
             }
@@ -862,7 +844,6 @@ namespace NEA
             }
             catch (NotImplementedException e)
             {
-                e.ToString();
             }
             Console.Clear();
         }
@@ -911,78 +892,69 @@ namespace NEA
             bool exit = true;
             while (exit)
             {
-                int choice = GetUserOption(1, 6, true);
-                Console.CursorLeft = 0;
-                switch (choice)
+                ConsoleKeyInfo choice = Console.ReadKey(true);
+                int cursorpos = Console.CursorTop;
+                if (choice.Key == ConsoleKey.Enter)
                 {
-                    case 0:
-                        if (!setsInUse.Contains(1))
-                        {
-                            setsInUse.Add(1);
-                            Console.Write(">");
-                        }
-                        else
-                        {
-                            setsInUse.Remove(1);
-                            Console.Write(" ");
-                        }
-                        Console.CursorLeft = 1;
-                        break;
-                    case 1:
-                        if (!setsInUse.Contains(2))
-                        {
-                            setsInUse.Add(2);
-                            Console.Write(">");
-                        }
-                        else
-                        {
-                            setsInUse.Remove(2);
-                            Console.Write(" ");
-                        }
-                        Console.CursorLeft = 1;
-                        break;
-                    case 2:
-                        if (!setsInUse.Contains(3))
-                        {
-                            setsInUse.Add(3);
-                            Console.Write(">");
-                        }
-                        else
-                        {
-                            setsInUse.Remove(3);
-                            Console.Write(" ");
-                        }
-                        Console.CursorLeft = 1;
-                        break;
-                    case 3:
-                        if (!setsInUse.Contains(4))
-                        {
-                            setsInUse.Add(4);
-                            Console.Write(">");
-                        }
-                        else
-                        {
-                            setsInUse.Remove(4);
-                            Console.Write(" ");
-                        }
-                        Console.CursorLeft = 1;
-                        break;
-                    case 4:
-                        if (!setsInUse.Contains(5))
-                        {
-                            setsInUse.Add(5);
-                            Console.Write(">");
-                        }
-                        else
-                        {
-                            setsInUse.Remove(5);
-                            Console.Write(" ");
-                        }
-                        Console.CursorLeft = 1;
-                        break;
-                    default:
-                        if(setsInUse.Count != 0) exit = false;
-                        break;
+                    switch (Console.CursorTop)
+                    {
+                        case 1:
+                            if (!setsInUse.Contains(1)) setsInUse.Add(1);
+                            else setsInUse.Remove(1);
+                            cursorpos = 1;
+                            break;
+                        case 2:
+                            if (!setsInUse.Contains(2)) setsInUse.Add(2);
+                            else setsInUse.Remove(2);
+                            cursorpos = 2;
+                            break;
+                        case 3:
+                            if (!setsInUse.Contains(3)) setsInUse.Add(3);
+                            else setsInUse.Remove(3);
+                            cursorpos = 3;
+                            break;
+                        case 4:
+                            if (!setsInUse.Contains(4)) setsInUse.Add(4);
+                            else setsInUse.Remove(4);
+                            cursorpos = 4;
+                            break;
+                        case 5:
+                            if (!setsInUse.Contains(5)) setsInUse.Add(5);
+                            else setsInUse.Remove(5);
+                            cursorpos = 5;
+                            break;
+                        default:
+                            exit = false;
+                            break;
+                    }
+                    Console.Clear();
+                    Console.WriteLine("Which Topics would you like?");
+                    if (setsInUse.Contains(1)) Console.WriteLine("> Complex Number Multiplication");
+                    else Console.WriteLine("  Complex Number Multiplication");
+                    if (setsInUse.Contains(2)) Console.WriteLine("> Complex Number Division");
+                    else Console.WriteLine("  Complex Number Division");
+                    if (setsInUse.Contains(3)) Console.WriteLine("> Modulus Argument Form");
+                    else Console.WriteLine("  Modulus Argument Form");
+                    if (setsInUse.Contains(4)) Console.WriteLine("> Finding Roots of a polynomial");
+                    else Console.WriteLine("  Finding Roots of a polynomial");
+                    if (setsInUse.Contains(5)) Console.WriteLine("> Complex Loci");
+                    else Console.WriteLine("  Complex Loci");
+                    Console.WriteLine("  Continue");
+                    Console.CursorLeft = 1;
+                    Console.CursorTop = cursorpos;
+                }
+                else if (choice.Key == ConsoleKey.DownArrow && Console.CursorTop != 6)
+                {
+                    Console.CursorLeft = 0;
+                    Console.CursorTop++;
+                    Console.CursorLeft = 1;
+
+                }
+                else if (choice.Key == ConsoleKey.UpArrow && Console.CursorTop != 1)
+                {
+                    Console.CursorLeft = 0;
+                    Console.CursorTop--;
+                    Console.CursorLeft = 1;
                 }
             }
 

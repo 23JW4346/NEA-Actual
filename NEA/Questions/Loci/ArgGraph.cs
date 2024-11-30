@@ -139,7 +139,7 @@ namespace NEA.Questions.Loci
 
         public string PrintQuestion()
         {
-            return $"What is the equation for this Complex loci? write in the form arg(z-a-bi)=θ,\nwhere a and b are rational numbers, and θ is a multiple of pi.";
+            return $"What is the equation for this Complex loci? write in the form arg(z-a-bi)=θ,\nwhere a and b are rational numbers, and θ is a multiple of pi (type p for π).";
         }
 
 
