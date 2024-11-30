@@ -12,7 +12,6 @@ namespace NEA.Questions.Loci
     {
         private Complex midpoint, operand1, operand2;
         private Number gradient;
-        private double grad;
         private string answer, equation;
 
         public ModLine(Random rnd)
@@ -60,7 +59,6 @@ namespace NEA.Questions.Loci
             } 
             else
             {
-                grad = gradient.GetValue();
                 GetPoints(rnd.Next(1, 5));
             }
         }
@@ -114,7 +112,7 @@ namespace NEA.Questions.Loci
         {
             double xint = midpoint.GetRealValue();
             double yint = midpoint.GetImaginaryValue();
-            double negRec = - (1 / grad);
+            double negRec = - (1 / gradient.GetValue());
             for (int i = 0; i < space; i++)
             {
                     xint++;
@@ -134,7 +132,7 @@ namespace NEA.Questions.Loci
         public void Calculate()
         {
             equation = Program.CreateModLine(operand1.Flip(), operand2.Flip());
-            answer = Program.CreateCartesianLine(midpoint, grad);
+            answer = Program.CreateCartesianLine(midpoint, (Fraction)gradient);
         }
 
         public bool CheckAnswer(string answer)
@@ -188,7 +186,7 @@ namespace NEA.Questions.Loci
 
         public void LoadDiagram(ArgandDiagram diagram)
         {
-            diagram.CreateModLine(midpoint, grad, equation);
+            diagram.CreateModLine(midpoint, gradient.GetValue(), equation);
             Task.Run(() =>
             {
                 Application.Run(diagram);

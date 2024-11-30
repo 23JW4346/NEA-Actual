@@ -104,13 +104,17 @@ namespace NEA.Number_Classes
             if (real.GetType() == typeof(Fraction))
             {
                 real = (Fraction)real;
-                outreal = new Fraction((int)(-real.GetTop()), (int)real.GetBottom());
+                if(real.top1 == null) outreal = new Fraction(new Number(0), real.top2, (int)real.GetBottom());
+                else if (real.top2 == null) outreal = new Fraction(real.top1, new Surd(0, 0), (int)   real.GetBottom());
+                else outreal = new Fraction(real.top1, real.top2, (int)real.GetBottom());
             }
             else outreal = new Number(-real.GetValue());
             if (imaginary.GetType() == typeof(Fraction))
             {
                 imaginary = (Fraction)imaginary;
-                outimag = new Fraction((int)(-imaginary.GetTop()), (int)imaginary.GetBottom());
+                if(imaginary.top1 == null) outimag = new Fraction(new Number(0), imaginary.top2, (int)imaginary.GetBottom());
+                else if(imaginary.top2 == null) outimag = new Fraction(imaginary.top1, new Surd(0,0), (int)imaginary.GetBottom());
+                else outimag = new Fraction(imaginary.top1, imaginary.top2, (int)imaginary.GetBottom());
             }
             else outimag = new Number(-imaginary.GetValue());
             return new Complex(outreal, outimag);
@@ -128,7 +132,7 @@ namespace NEA.Number_Classes
             string outputimag = "";
             if (real.GetString(false) == "0" && imaginary.GetString(true) == "0")
             {
-                return default;
+                return "";
             }
             if (real.GetString(false) != "0")
             {
@@ -150,7 +154,7 @@ namespace NEA.Number_Classes
             return outputreal + "+" + outputimag;
         }
         //Calculates the Modulus of the Complex number
-        public Number GetModulus() 
+        public Number GetModulus()
         {
             int pythag = (int)Math.Pow(real.GetValue(), 2) + (int)Math.Pow(imaginary.GetValue(), 2);
             if (!Math.Sqrt(pythag).ToString().Contains("."))
@@ -162,7 +166,6 @@ namespace NEA.Number_Classes
             {
                 if (pythag % (int)Math.Pow(i, 2) == 0)
                 {
-
                     coef = i;
                 }
             }
@@ -186,6 +189,21 @@ namespace NEA.Number_Classes
                 else arg = -arg;
             }
             return arg;
+        }
+        //no idea
+        public override bool Equals(object obj)
+        {
+            return obj is Complex complex &&
+                   EqualityComparer<Number>.Default.Equals(real, complex.real) &&
+                   EqualityComparer<Number>.Default.Equals(imaginary, complex.imaginary);
+        }
+        //no idea
+        public override int GetHashCode()
+        {
+            int hashCode = -1613305685;
+            hashCode = hashCode * -1521134295 + EqualityComparer<Number>.Default.GetHashCode(real);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Number>.Default.GetHashCode(imaginary);
+            return hashCode;
         }
 
         //returns a*b

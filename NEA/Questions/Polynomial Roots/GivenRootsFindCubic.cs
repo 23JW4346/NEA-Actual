@@ -125,7 +125,7 @@ namespace NEA.Questions.Polynomial_Roots
 
         public string PrintQuestion()
         {
-            return $"Find a cubic equation with real coefficients, two of whose roots are {compRoot.Flip().GetComplex()} and {intRoot}. \nWrite you answer in the form z³+az²+bz+c=0";
+            return $"Find a cubic equation with real coefficients, two of whose roots are {compRoot.GetComplex()} and {intRoot}. \nWrite you answer in the form z³+az²+bz+c=0";
         }
 
         public List<string> SaveQuestion()

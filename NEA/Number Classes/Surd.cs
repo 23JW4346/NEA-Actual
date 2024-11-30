@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,17 +9,18 @@ namespace NEA.Number_Classes
 {
     public class Surd : Number
     {
-        public int coefficent, root;
+        public int coefficient;
+        public int root;
 
         public Surd(int incoef, int inroot)
         {
-            coefficent = incoef;
+            coefficient = incoef;
             root = inroot;
         }
 
         public Surd()
         {
-            coefficent = rnd.Next(-5, 6);
+            coefficient = rnd.Next(-5, 6);
             int[] roots = { 2, 3, 5, 7 };
             root = roots[rnd.Next(roots.Length)];
         }
@@ -27,20 +29,27 @@ namespace NEA.Number_Classes
         {
             if (isimag)
             {
-                if (coefficent == 1) return $"√{root}i";
-                else return $"{coefficent}√{root}i";
+                if (coefficient== 1) return $"√{root}i";
+                else return $"{coefficient}√{root}i";
             }
-            if (coefficent == 1) return $"√{root}";
-            else return $"{coefficent}√{root}";
+            if (coefficient == 1) return $"√{root}";
+            else return $"{coefficient}√{root}";
         }
 
         public override double GetValue()
         {
-            return coefficent * Math.Sqrt(root);
+            return coefficient * Math.Sqrt(root);
         }
 
-        public int GetCoef() => coefficent;
+        public int GetCoef() => coefficient;
 
-        public int GetRoot() => root;
+        public override int GetRoot() => root;
+
+        public static Surd operator *(Surd s, Number n)
+        {
+            return new Surd(s.GetCoef() * (int)n.GetValue(), s.GetRoot());
+        }
+
+        public static Surd operator -(Surd s) => new Surd(-s.GetCoef(), s.GetRoot());
     }
 }

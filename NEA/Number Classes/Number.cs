@@ -12,7 +12,8 @@ namespace NEA.Number_Classes
         private double value;
         protected bool isnegative = false;
         protected static Random rnd = new Random();
-
+        public Number top1; 
+        public Surd top2;
         public Number()
         {
             while (value == 0) value = rnd.Next(-10, 11);
@@ -29,6 +30,7 @@ namespace NEA.Number_Classes
 
         public virtual double GetBottom() => throw new NotImplementedException();
 
+        public virtual int GetRoot() => throw new NotImplementedException();
 
         public virtual string GetString(bool isimag)
         {
@@ -47,7 +49,19 @@ namespace NEA.Number_Classes
         }
 
         public virtual double GetValue() => value;
-        
+
         public bool GetNegative() => isnegative;
+
+        public static Number operator +(Number a, Number b) => new Number(a.GetValue() + b.GetValue());
+
+        public static Number operator +(Number a, double b) => a + new Number(b);
+
+        public static Number operator -(Number a) => new Number(-a.GetValue());
+
+        public static Number operator /(Number a, int b) => new Number(a.GetValue() / b);
+
+        public static Number operator *(Number a, Number b) => new Number(a.GetValue() *b.GetValue());
+
+        public static Number operator *(Number a, double c) => a * new Number(c);
     }
 }

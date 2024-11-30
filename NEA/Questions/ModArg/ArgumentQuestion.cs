@@ -10,7 +10,7 @@ namespace NEA.Questions.ModArg
     {
         private Complex operand;
 
-        private Number answer;
+        private string answer;
 
         public ArgumentQuestion()
         {
@@ -33,12 +33,16 @@ namespace NEA.Questions.ModArg
 
         public void Calculate()
         {
-            answer = new Number(Math.Round(operand.GetArgument(), 3));
+            answer = Math.Round(operand.GetArgument(), 3).ToString();
+            if (operand.GetArgument() < Math.Round(operand.GetArgument(), 3) && ((operand.GetArgument().ToString()[4] ==0 && operand.GetArgument() > 0) || (operand.GetArgument().ToString()[5] == 0 && operand.GetArgument() < 0))) 
+            {
+                answer += "0";
+            }
         }
 
         public bool CheckAnswer(string answer)
         {
-            if (answer == this.answer.GetString(false))
+            if (answer == this.answer)
             {
                 return true;
             }
@@ -83,9 +87,9 @@ namespace NEA.Questions.ModArg
         {
             if (correct)
             {
-                return $"Correct!\nThe Answer is {answer.GetString(false)}";
+                return $"Correct!\nThe Answer is {answer}";
             }
-            return $"Incorrect!\nThe Answer was {answer.GetString(false)}";
+            return $"Incorrect!\nThe Answer was {answer}";
         }
 
         public string PrintQuestion()

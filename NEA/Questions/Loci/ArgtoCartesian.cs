@@ -12,10 +12,10 @@ namespace NEA.Questions.Loci
         private Complex operand;
         private Fraction argument;
         private string loci, answer;
-        private double step, m;
+        private Fraction step, m;
         private bool isleft;
         private (int, int)[] fractions = { (1, 6), (1, 4), (1, 3), (2, 3), (3, 4), (5, 6) };
-        private double[] steps = { 0.5, 1, 2, 2, 1, 0.5 };
+        private Fraction[] steps = { new Fraction(new Number(0), new Surd(1,3), 3), new Fraction(1,1), new Fraction(new Number(0), new Surd(1,3),1), new Fraction(new Number(1), new Surd(1,3), 1), new Fraction(1,1), new Fraction(new Number(0), new Surd(1, 3), 3) };
 
         public ArgtoCartesian(Random rnd)
         {
@@ -30,7 +30,7 @@ namespace NEA.Questions.Loci
                 Complex inanswer = operand.Flip();
                 if (argument.GetNegative())
                 {
-                    Fraction temp = new Fraction((int)-argument.GetTop(), (int)argument.GetBottom());
+                    Fraction temp = new Fraction((int)argument.GetTop(), (int)argument.GetBottom());
                     step = -steps[Array.IndexOf(fractions, (temp.GetTop(), temp.GetBottom()))];
                 }
                 else
@@ -149,7 +149,7 @@ namespace NEA.Questions.Loci
         }
         public void LoadDiagram(ArgandDiagram diagram)
         {
-            diagram.CreateLine(step, operand, isleft, loci);
+            diagram.CreateLine(step.GetValue(), operand, isleft, loci);
             Task.Run(() =>
             {
                 Application.Run(diagram);

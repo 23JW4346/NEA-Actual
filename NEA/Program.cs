@@ -22,6 +22,10 @@ namespace NEA
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
+            IQuestion q = new ArgIntersect(rnd);
+            bool cont = false;
+            int score = 0;
+            AskQuestion(q, ref cont, ref score);
             Console.Clear();
             Menu();
 
@@ -108,63 +112,31 @@ namespace NEA
         }
 
         //returns the string for a cartesian line (y=mx+c)
-        public static string CreateCartesianLine(Complex a, double grad)
+        public static string CreateCartesianLine(Complex a, Fraction grad)
         {
             string answer = "";
-            double yint;
-            if (grad != int.MaxValue) yint = grad * -a.GetRealValue() + a.GetImaginaryValue();
-            else yint = a.GetImaginaryValue();
-            double xint = a.GetRealValue();
-            if (grad.ToString().Contains('.'))
+            Number yint;
+            if (grad.GetValue() != 0)
             {
-                switch (Math.Abs(grad).ToString()[2])
+                if (grad.top2.GetType() == typeof(Surd))
                 {
-                    case '5':
-                        answer += "y=" + new Fraction((int)(grad * 2), 2).GetString(true).Replace('i', 'x');
-                        break;
-                    case '3':
-                    case '6':
-                        answer += "y=" + new Fraction((int)(grad * 3), 3).GetString(true).Replace('i', 'x');
-                        break;
-                    case '2':
-                        if (xint.ToString().Length == 3) answer += "y=" + new Fraction((int)(grad * 5), 5).GetString(true).Replace('i', 'x');
-                        else answer += "y=" + new Fraction((int)(grad * 4), 4).GetString(true).Replace('i', 'x');
-                        break;
+                    yint = new Fraction(grad.top1 * (int)-a.GetRealValue(), grad.top2 * new Number((int)-a.GetRealValue()), (int)grad.GetBottom()) + a.GetImaginaryValue();
                 }
+                else yint = new Fraction(grad.top1 * (int)-a.GetRealValue(), grad.top2, (int)grad.GetBottom()) + a.GetImaginaryValue();
             }
-            else if (grad == 1) answer += "y=x";
-            else if (grad == -1) answer += "y=-x";
-            else if (grad > 4) answer = $"x={xint}";
-            else if (grad == 0)
+            else yint = new Number(a.GetImaginaryValue());
+            double xint = a.GetRealValue();
+            if (grad.GetValue() == 1) answer += "y=x";
+            else if (grad.GetValue() == -1) answer += "y=-x";
+            else if (grad.GetValue() > 4) answer = $"x={xint}";
+            else if (grad.GetValue() == 0)
             {
                 answer = $"y={yint}";
                 return answer;
             }
-            else answer += "y=" + grad + "x";
-            if (yint != 0)
-            {
-                string yint2 = "";
-                if (yint.ToString().Contains('.'))
-                {
-                    switch (Math.Abs(yint).ToString()[2])
-                    {
-                        case '5':
-                            yint2 += new Fraction((int)(yint * 2), 2).GetString(false);
-                            break;
-                        case '3':
-                        case '6':
-                            yint2 += new Fraction((int)(yint * 3), 3).GetString(false);
-                            break;
-                        case '2':
-                            if (xint.ToString().Length == 3) yint2 += new Fraction((int)(yint * 5), 5).GetString(false);
-                            else yint2 += new Fraction((int)(yint * 4), 4).GetString(false);
-                            break;
-                    }
-                }
-                else yint2 = yint.ToString();
-                if (yint < 0) answer += yint2;
-                else answer += "+" + yint2;
-            }
+            else answer += "y=" + grad.GetString(true).Replace("i", "x");
+            if (yint.GetValue() < 0) answer += yint.GetString(false);
+            else if (yint.GetValue() > 0) answer += "+" + yint.GetString(false);
             return answer;
         }
 
@@ -298,7 +270,8 @@ namespace NEA
             Console.WriteLine("Typing these characters into the program will output other characters");
             Console.WriteLine("heres the List of character maps:");
             Console.WriteLine("p -> π");
-            Console.WriteLine("x^2 -> x², works for any power 2-4");
+            Console.WriteLine("x^2 -> x², works for any power 2-4, and x is any usable character");
+            Console.WriteLine("s -> √");
             Console.WriteLine("Press any key to go back to the main menu");
             Console.ReadKey();
             Console.Clear();
@@ -765,6 +738,11 @@ namespace NEA
                     Console.Write("π");
                     ans += "π";
                 }
+                else if (choice.Key == ConsoleKey.S)
+                {
+                    Console.Write("√");
+                    ans += "√";
+                }
                 else if (Regex.IsMatch(choice.KeyChar.ToString(), "[0-9]|[-\\.,\\+=\\|\\(\\)/ ]|[A-Za-z]"))
                 {
                     if (Console.CursorLeft == 8 + ans.Length)
@@ -925,7 +903,7 @@ namespace NEA
             Console.WriteLine("  Complex Number Multiplication");
             Console.WriteLine("  Complex Number Division");
             Console.WriteLine("  Modulus Argument Form");
-            Console.WriteLine("  Finding Roots of a polynomial");
+            Console.WriteLine("  Finding Roots of a polynomials");
             Console.WriteLine("  Complex Loci");
             Console.WriteLine("  Continue");
             Console.CursorLeft = 1;
@@ -1067,7 +1045,7 @@ namespace NEA
                         Console.WriteLine("Modulus-Argument form");
                         break;
                     case 3:
-                        Console.WriteLine("Roots of polynomails");
+                        Console.WriteLine("Roots of polynomials");
                         break;
                     case 4:
                         Console.WriteLine("Complex Loci");
