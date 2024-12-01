@@ -12,11 +12,11 @@ namespace NEA.Questions.Loci
     {
         private string argLoci, modLoci;
         private Complex midpoint, point1, point2, argStart;
-        private Fraction argument;
+        private Number argument;
         private double step;
         private Number modulus;
         private bool isleft;
-        private (int, int)[] fractions = { (1, 6), (1, 4), (1, 3), (2, 3), (3, 4), (5, 6) };
+        private (double, int)[] fractions = { (Math.Atan(0.5), 1), (1, 4), (Math.Atan(2), 1), (Math.PI - Math.Atan(2), 1), (3, 4), ((Math.PI - Math.Atan(0.5)), 1) };
         private double[] steps = { 0.5, 1, 2, 2, 1, 0.5 };
 
         public ArgModIntersect(Random rnd)
@@ -36,11 +36,12 @@ namespace NEA.Questions.Loci
 
         public void GenQ(Random rnd)
         {
-            point1 = new Complex(rnd.Next(-2,3), rnd.Next(-2,3));
+            point1 = new Complex(rnd.Next(-2, 3), rnd.Next(-2, 3));
             if (rnd.Next(2) == 1)
             {
                 int rand = rnd.Next(fractions.Length); ;
-                argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
+                if (rand == 1 || rand == 4) argument = new Fraction((int)fractions[rand].Item1, fractions[rand].Item2);
+                else argument = new Number(fractions[rand].Item1);
                 step = steps[rand];
                 if (rand > 2) isleft = true;
                 else isleft = false;
@@ -48,12 +49,13 @@ namespace NEA.Questions.Loci
             else
             {
                 int rand = rnd.Next(fractions.Length);
-                argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
+                if (rand == 1 || rand == 4) argument = new Fraction((int)-fractions[rand].Item1, fractions[rand].Item2);
+                else argument = new Number(-fractions[rand].Item1);
                 step = -steps[rand];
                 if (rand > 2) isleft = true;
                 else isleft = false;
             }
-            int loop = rnd.Next(2,4);
+            int loop = rnd.Next(2, 4);
             midpoint = GetPoint(point1, loop, -step, !isleft);
             point2 = GetPoint(midpoint, loop, -step, !isleft);
             argStart = GetPoint(point1, rnd.Next(1, 4), step, isleft);
@@ -138,10 +140,17 @@ namespace NEA.Questions.Loci
                         point1 = new Complex(sr.ReadLine());
                         point2 = new Complex(sr.ReadLine());
                         string fract = sr.ReadLine();
-                        string[] numbers = fract.Trim().Split('/');
-                        argument = new Fraction(int.Parse(numbers[0]), int.Parse(numbers[1]));
+                        try
+                        {
+                            string[] numbers = fract.Trim().Split('/');
+                            argument = new Fraction(int.Parse(numbers[0]), int.Parse(numbers[1]));
+                        }
+                        catch
+                        {
+                            argument = new Number(int.Parse(fract));
+                        }
                         step = int.Parse(sr.ReadLine());
-                        if (Array.IndexOf(steps, step) > 2) isleft= true;
+                        if (Array.IndexOf(steps, step) > 2) isleft = true;
                         else isleft = false;
                     }
                     else
@@ -179,7 +188,7 @@ namespace NEA.Questions.Loci
 
         public string PrintQuestion()
         {
-            return $"{argLoci} and {modLoci} Intersect at 2 points. find the 2 points in the form a+bi, write both out like a+bi,c+di";
+            return $"{argLoci} (3.d.p) and {modLoci} Intersect at 2 points. find the 2 points in the form a+bi, write both out like a+bi,c+di";
         }
 
         public List<string> SaveQuestion()

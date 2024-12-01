@@ -10,12 +10,12 @@ namespace NEA.Questions.Loci
     public class ArgtoCartesian : IQuestion
     {
         private Complex operand;
-        private Fraction argument;
+        private Number argument;
         private string loci, answer;
-        private Fraction step, m;
+        private double step, m;
         private bool isleft;
-        private (int, int)[] fractions = { (1, 6), (1, 4), (1, 3), (2, 3), (3, 4), (5, 6) };
-        private Fraction[] steps = { new Fraction(new Number(0), new Surd(1,3), 3), new Fraction(1,1), new Fraction(new Number(0), new Surd(1,3),1), new Fraction(new Number(1), new Surd(1,3), 1), new Fraction(1,1), new Fraction(new Number(0), new Surd(1, 3), 3) };
+        private (double, int)[] fractions = { (Math.Atan(0.5), 1), (1, 4), (Math.Atan(2), 1), (Math.PI - Math.Atan(2), 1), (3, 4), ((Math.PI - Math.Atan(0.5)), 1) };
+        private double[] steps = { 0.5, 1, 2, 2, 1, 0.5 };
 
         public ArgtoCartesian(Random rnd)
         {
@@ -30,7 +30,7 @@ namespace NEA.Questions.Loci
                 Complex inanswer = operand.Flip();
                 if (argument.GetNegative())
                 {
-                    Fraction temp = new Fraction((int)argument.GetTop(), (int)argument.GetBottom());
+                    Fraction temp = new Fraction((int)-argument.GetTop(), (int)argument.GetBottom());
                     step = -steps[Array.IndexOf(fractions, (temp.GetTop(), temp.GetBottom()))];
                 }
                 else
@@ -51,11 +51,13 @@ namespace NEA.Questions.Loci
         public void GenQ(Random rnd)
         {
             operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
+            while (operand.GetComplex() == "") operand = new Complex(rnd.Next(-3, 4), rnd.Next(-3, 4));
             Complex inanswer = operand.Flip();
             if (rnd.Next(2) == 1)
             {
                 int rand = rnd.Next(fractions.Length); ;
-                argument = new Fraction(fractions[rand].Item1, fractions[rand].Item2);
+                if (rand == 1 || rand == 4) argument = new Fraction((int)fractions[rand].Item1, fractions[rand].Item2);
+                else argument = new Number(fractions[rand].Item1);
                 step = steps[rand];
                 loci = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2)
@@ -72,7 +74,8 @@ namespace NEA.Questions.Loci
             else
             {
                 int rand = rnd.Next(fractions.Length);
-                argument = new Fraction(-fractions[rand].Item1, fractions[rand].Item2);
+                if (rand == 1 || rand == 4) argument = new Fraction((int)fractions[rand].Item1, fractions[rand].Item2);
+                else argument = new Number(fractions[rand].Item1);
                 step = -steps[rand];
                 loci = Program.CreateArgLine(inanswer, argument);
                 if (rand > 2)
@@ -149,7 +152,7 @@ namespace NEA.Questions.Loci
         }
         public void LoadDiagram(ArgandDiagram diagram)
         {
-            diagram.CreateLine(step.GetValue(), operand, isleft, loci);
+            diagram.CreateLine(step, operand, isleft, loci);
             Task.Run(() =>
             {
                 Application.Run(diagram);

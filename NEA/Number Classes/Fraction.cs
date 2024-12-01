@@ -6,62 +6,48 @@ namespace NEA.Number_Classes
     //inherited from number, so i could make fractions out of complex division.
     public class Fraction : Number
     {
-        public new Number top1;
-        public new Surd top2;
+        private int numerator = default;
         private int denominator = 1;
 
 
-        public Fraction(int innum, int inden)
+        public Fraction(int innum, int inden) : base(((double)innum / (double)inden))
         {
+            numerator = innum;
             denominator = inden;
-            top1 = new Number(innum);
             if (denominator == 0) denominator = 1;
-            if ((innum < 0 && denominator > 0) ||
-                (innum > 0 && denominator < 0))
+            if ((numerator < 0 && denominator > 0) ||
+                (numerator > 0 && denominator < 0))
             {
                 isnegative = true;
-                if (denominator < 0)
-                {
-                    denominator = -denominator;
-                    top1 = -top1;
-                }
+                if (numerator < 0) numerator = -numerator;
+                if (denominator < 0) denominator = -denominator;
             }
             else
             {
                 isnegative = false;
+                if (numerator < 0) numerator = -numerator;
+                if (denominator < 0) denominator = -denominator;
             }
-            top2 = new Surd(0,0);
             Simplify();
-
         }
 
-        public Fraction(Number n1, Surd n2, int inden)
+
+        public Fraction()
         {
-            isnegative = false;
-            denominator = inden;
-            top1 = n1;
-            if (n2 != null)
+            while (numerator == default) numerator = rnd.Next(-10, 11);
+            while (denominator == default) denominator = rnd.Next(-10, 11);
+            if ((numerator < 0 && denominator > 0) ||
+                (numerator > 0 && denominator < 0))
             {
-                if (n2.GetValue() == 0)
-                {
-                    top1 = n1;
-                    top2 = new Surd(0, 0);
-                }
-                else
-                {
-                    top1 = n1;
-                    top2 = n2;
-                }
-                if (((top1 + top2).GetValue() < 0 && denominator > 0) || ((top1 + top2).GetValue() > 0 && denominator < 0))
-                {
-                    isnegative = true;
-                    if (denominator < 0)
-                    {
-                        denominator = -denominator;
-                        top1 = -top1;
-                        top2 = -top2;
-                    }
-                }
+                isnegative = true;
+                if (numerator < 0) numerator = -numerator;
+                if (denominator < 0) denominator = -denominator;
+            }
+            else
+            {
+                isnegative = false;
+                if (numerator < 0) numerator = -numerator;
+                if (denominator < 0) denominator = -denominator;
             }
             Simplify();
         }
@@ -71,151 +57,80 @@ namespace NEA.Number_Classes
         {
             if (isimag)
             {
-                if (top2.GetValue() == 0)
-                {
-                    if (denominator == 1) return top1.GetString(true);
-                    return $"{top1.GetString(true)}/{denominator}";
-                }
-                else if (top1.GetValue() == 0)
-                {
-                    if (denominator == 1) return top2.GetString(true);
-                    return $"{top2.GetString(true)}/{denominator}";
-                }
-                else
+                if (isnegative)
                 {
                     if (denominator == 1)
                     {
-                        if (top2.GetNegative())
-                        {
-                            return "(" + top1.GetString(false) + top2.GetString(false) + ")i";
-                        }
-                        else
-                        {
-                            return "(" + top1.GetString(false) + "+" + top2.GetString(false) + ")i";
-                        }
+                        if (numerator != 1) return $"-{numerator}i";
+                        return "-i";
                     }
-                    else
-                    {
-                        if (top2.GetNegative())
-                        {
-                            return "(" + top1.GetString(false) + top2.GetString(false) + ")i/" + denominator;
-                        }
-                        else
-                        {
-                            return "(" + top1.GetString(false) + "+" + top2.GetString(false) + ")i/" + denominator;
-                        }
-                    }
+                    else if (numerator == 1) return $"-i/{denominator}";
+                    return $"-{numerator}i/{denominator}";
                 }
+                else if (denominator == 1)
+                {
+                    if (numerator != 1) return $"{numerator}i";
+                    return "i";
+                }
+                else if (numerator == 1) return $"i/{denominator}";
+                else if (numerator == 0) return "0";
+                return $"{numerator}i/{denominator}";
             }
-            else if ((top1 + top2).GetValue() == 0) return null;
-            else
+            if (isnegative)
             {
-                if (top2.GetType() != typeof(Surd))
-                {
-                    if (denominator == 1) return top1.GetString(false);
-                    return $"{top1.GetString(false)}/{denominator}";
-                }
-                else if (top1.GetValue() == 0)
-                {
-                    if (denominator == 1) return top2.GetString(false);
-                    return $"{top2.GetString(false)}/{denominator}";
-                }
-                else
-                {
-                    if (denominator == 1)
-                    {
-                        if (top2.GetNegative())
-                        {
-                            return "(" + top1.GetString(false) + top2.GetString(false) + ")";
-                        }
-                        else
-                        {
-                            return "(" + top1.GetString(false) + "+" + top2.GetString(false) + ")";
-                        }
-                    }
-                    else
-                    {
-                        if (top2.GetNegative())
-                        {
-                            return "(" + top1.GetString(false) + top2.GetString(false) + ")/" + denominator;
-                        }
-                        else
-                        {
-                            return "(" + top1.GetString(false) + "+" + top2.GetString(false) + ")/" + denominator;
-                        }
-                    }
-                }
+                if (denominator == 1) return $"-{numerator}";
+                return $"-{numerator}/{denominator}";
             }
+            else if (denominator == 1) return $"{numerator}";
+            else if (numerator == 0) return "0";
+            return $"{numerator}/{denominator}";
         }
 
         public override double GetTop()
         {
-            return (top1 + top2).GetValue();
+            if (isnegative) return -numerator;
+            return numerator;
         }
 
         public override double GetBottom() => denominator;
 
-        public override double GetValue()
-        {
-            return (double)((top1 + top2).GetValue() / denominator);
-        }
         public virtual void Simplify()
         {
-                bool x = true;
-            if (top1 == null) top1 = new Number(0);
-            if (top2 == null) top2 = new Surd(0,0);
-            if(top1 != null && top2 != null)
-                if ((top1 + top2).GetValue() == denominator)
+            bool x = true;
+            if (numerator == denominator)
+            {
+                numerator = 1;
+                denominator = 1;
+                x = false;
+            }
+            while (x)
+            {
+                int hcf = HCF();
+                if (hcf > 1)
                 {
-                    top1 = new Number(1);
-                    top2 = new Surd(0, 0);
-                    denominator = 1;
+                    denominator = denominator / hcf;
+                    numerator = numerator / hcf;
+                }
+                else
+                {
                     x = false;
                 }
-                while (x)
-                {
-                    int hcf = HCF();
-                    if (hcf > 1)
-                    {
-                        denominator = denominator / hcf;
-                        top1 = top1 / hcf;
-                        top2 = new Surd(top2.GetCoef() / hcf, top2.GetRoot());
-                    }
-                    else
-                    {
-                        x = false;
-                    }
-                }
+            }
         }
 
         public int HCF()
         {
-            int loop = (int)(top1 + top2).GetValue();
+            int loop = numerator;
             int hcf = 0;
-            if (denominator < (top1 + top2).GetValue()) loop = denominator;
+            if (denominator < numerator) loop = denominator;
             for (int i = 1; i <= loop; i++)
             {
-                if ((top1 + top2).GetValue() % i == 0 && denominator % i == 0)
+                if (numerator % i == 0 && denominator % i == 0)
                 {
                     hcf = i;
                 }
             }
             return hcf;
-        }
-
-        public static Fraction operator +(Fraction f, double d)
-        {
-            return new Fraction(f.top1 + d * f.GetBottom(), f.top2, (int)f.GetBottom());
-        }
-
-        public static Fraction operator *(Fraction f, Number n)
-        {
-            return new Fraction(f.top1 * n, f.top2 * n, (int)f.GetBottom());
-        }
-
-        public static Fraction operator -(Fraction f)
-        {
-            return new Fraction(f.top1, f.top2, (int)-f.GetBottom());
         }
     }
 }

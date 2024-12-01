@@ -12,10 +12,10 @@ namespace NEA.Questions.Loci
         private string answer;
         private Complex operand;
         private Fraction argument;
-        private Fraction step;
+        private double step;
         private bool isleft;
         private (int, int)[] fractions = { (1, 6), (1, 4), (1, 3), (2, 3), (3, 4), (5, 6) };
-        private Fraction[] steps = { new Fraction(new Number(0), new Surd(1, 3), 3), new Fraction(1, 1), new Fraction(new Number(0), new Surd(1, 3), 1), new Fraction(new Number(1), new Surd(1, 3), 1), new Fraction(1, 1), new Fraction(new Number(0), new Surd(1, 3), 3) };
+        private double[] steps = { Math.Sqrt(3) / 3, 1, Math.Sqrt(3), Math.Sqrt(3), 1, Math.Sqrt(3) / 3 };
 
         public ArgGraph(Random rnd)
         {
@@ -120,8 +120,8 @@ namespace NEA.Questions.Loci
 
         public void LoadDiagram(ArgandDiagram diagram)
         {
-            diagram.CreateLine(step.GetValue(), operand, isleft, "Line");
-            Task.Run(() => 
+            diagram.CreateLine(step, operand, isleft, "Line");
+            Task.Run(() =>
             {
                 Application.Run(diagram);
             });

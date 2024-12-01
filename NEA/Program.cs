@@ -46,20 +46,18 @@ namespace NEA
         }
 
         //returns the string for an arg line in an argand diagram (arg(z-(z1)=θ)
-        public static string CreateArgLine(Complex a, Fraction b)
+        public static string CreateArgLine(Complex a, Number b)
         {
             string loci;
-            if (a.GetComplex() == "")
+            if (a.GetComplex()[0] == '-')
             {
-                loci = $"arg(z)={b.GetString(true).Replace('i', 'π')}";
-            }
-            else if (a.GetComplex()[0] == '-')
-            {
-                loci = $"arg(z{a.GetComplex()})={b.GetString(true).Replace('i', 'π')}";
+                if (b.GetType() == typeof(Fraction)) loci = $"arg(z{a.GetComplex()})={b.GetString(true).Replace('i', 'π')}";
+                else loci = $"arg(z{a.GetComplex()})={Math.Round(b.GetValue(), 3)}";
             }
             else
             {
-                loci = $"arg(z+{a.GetComplex()})={b.GetString(true).Replace('i', 'π')}";
+                if (b.GetType() == typeof(Fraction)) loci = $"arg(z+{a.GetComplex()})={b.GetString(true).Replace('i', 'π')}";
+                else loci = $"arg(z+{a.GetComplex()})={Math.Round(b.GetValue(), 3)}";
             }
             return loci;
         }
@@ -114,31 +112,63 @@ namespace NEA
         }
 
         //returns the string for a cartesian line (y=mx+c)
-        public static string CreateCartesianLine(Complex a, Fraction grad)
+        public static string CreateCartesianLine(Complex a, double grad)
         {
             string answer = "";
-            Number yint;
-            if (grad.GetValue() != 0)
-            {
-                if (grad.top2.GetType() == typeof(Surd))
-                {
-                    yint = new Fraction(grad.top1 * (int)-a.GetRealValue(), grad.top2 * new Number((int)-a.GetRealValue()), (int)grad.GetBottom()) + a.GetImaginaryValue();
-                }
-                else yint = new Fraction(grad.top1 * (int)-a.GetRealValue(), grad.top2, (int)grad.GetBottom()) + a.GetImaginaryValue();
-            }
-            else yint = new Number(a.GetImaginaryValue());
+            double yint;
+            if (grad != int.MaxValue) yint = grad * -a.GetRealValue() + a.GetImaginaryValue();
+            else yint = a.GetImaginaryValue();
             double xint = a.GetRealValue();
-            if (grad.GetValue() == 1) answer += "y=x";
-            else if (grad.GetValue() == -1) answer += "y=-x";
-            else if (grad.GetValue() > 4) answer = $"x={xint}";
-            else if (grad.GetValue() == 0)
+            if (grad.ToString().Contains('.'))
+            {
+                switch (Math.Abs(grad).ToString()[2])
+                {
+                    case '5':
+                        answer += "y=" + new Fraction((int)(grad * 2), 2).GetString(true).Replace('i', 'x');
+                        break;
+                    case '3':
+                    case '6':
+                        answer += "y=" + new Fraction((int)(grad * 3), 3).GetString(true).Replace('i', 'x');
+                        break;
+                    case '2':
+                        if (xint.ToString().Length == 3) answer += "y=" + new Fraction((int)(grad * 5), 5).GetString(true).Replace('i', 'x');
+                        else answer += "y=" + new Fraction((int)(grad * 4), 4).GetString(true).Replace('i', 'x');
+                        break;
+                }
+            }
+            else if (grad == 1) answer += "y=x";
+            else if (grad == -1) answer += "y=-x";
+            else if (grad > 4) answer = $"x={xint}";
+            else if (grad == 0)
             {
                 answer = $"y={yint}";
                 return answer;
             }
-            else answer += "y=" + grad.GetString(true).Replace("i", "x");
-            if (yint.GetValue() < 0) answer += yint.GetString(false);
-            else if (yint.GetValue() > 0) answer += "+" + yint.GetString(false);
+            else answer += "y=" + grad + "x";
+            if (yint != 0)
+            {
+                string yint2 = "";
+                if (yint.ToString().Contains('.'))
+                {
+                    switch (Math.Abs(yint).ToString()[2])
+                    {
+                        case '5':
+                            yint2 += new Fraction((int)(yint * 2), 2).GetString(false);
+                            break;
+                        case '3':
+                        case '6':
+                            yint2 += new Fraction((int)(yint * 3), 3).GetString(false);
+                            break;
+                        case '2':
+                            if (xint.ToString().Length == 3) yint2 += new Fraction((int)(yint * 5), 5).GetString(false);
+                            else yint2 += new Fraction((int)(yint * 4), 4).GetString(false);
+                            break;
+                    }
+                }
+                else yint2 = yint.ToString();
+                if (yint < 0) answer += yint2;
+                else answer += "+" + yint2;
+            }
             return answer;
         }
 
