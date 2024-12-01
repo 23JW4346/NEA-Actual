@@ -12,6 +12,7 @@ namespace NEA.Questions.Loci
     {
         private Complex midpoint, operand1, operand2;
         private Number gradient;
+        private double grad;
         private string answer, equation;
 
         public ModLine(Random rnd)
@@ -56,16 +57,17 @@ namespace NEA.Questions.Loci
                 rand = rnd.Next(1, 5);
                 operand1 = new Complex(midpoint.GetRealValue() + rand, midpoint.GetImaginaryValue());
                 operand2 = new Complex(midpoint.GetRealValue() - rand, midpoint.GetImaginaryValue());
-            } 
+            }
             else
             {
+                grad = gradient.GetValue();
                 GetPoints(rnd.Next(1, 5));
             }
         }
 
         private Complex GetComp(double xint, double yint)
         {
-            Number real = new Number(); 
+            Number real = new Number();
             Number imag = new Number();
             Complex ret;
             if (xint.ToString().Contains('.'))
@@ -112,19 +114,19 @@ namespace NEA.Questions.Loci
         {
             double xint = midpoint.GetRealValue();
             double yint = midpoint.GetImaginaryValue();
-            double negRec = - (1 / gradient.GetValue());
+            double negRec = -(1 / grad);
             for (int i = 0; i < space; i++)
             {
-                    xint++;
-                    yint += negRec;
+                xint++;
+                yint += negRec;
             }
             operand1 = GetComp(xint, yint);
             xint = midpoint.GetRealValue();
             yint = midpoint.GetImaginaryValue();
             for (int i = 0; i < space; i++)
             {
-                    xint--;
-                    yint -= negRec;
+                xint--;
+                yint -= negRec;
             }
             operand2 = GetComp(xint, yint);
         }
@@ -132,7 +134,7 @@ namespace NEA.Questions.Loci
         public void Calculate()
         {
             equation = Program.CreateModLine(operand1.Flip(), operand2.Flip());
-            answer = Program.CreateCartesianLine(midpoint, (Fraction)gradient);
+            answer = Program.CreateCartesianLine(midpoint, grad);
         }
 
         public bool CheckAnswer(string answer)
@@ -186,7 +188,7 @@ namespace NEA.Questions.Loci
 
         public void LoadDiagram(ArgandDiagram diagram)
         {
-            diagram.CreateModLine(midpoint, gradient.GetValue(), equation);
+            diagram.CreateModLine(midpoint, grad, equation);
             Task.Run(() =>
             {
                 Application.Run(diagram);
