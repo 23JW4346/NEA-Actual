@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace NEA.Number_Classes
 {
@@ -104,17 +105,13 @@ namespace NEA.Number_Classes
             if (real.GetType() == typeof(Fraction))
             {
                 real = (Fraction)real;
-                if(real.top1 == null) outreal = new Fraction(new Number(0), real.top2, (int)real.GetBottom());
-                else if (real.top2 == null) outreal = new Fraction(real.top1, new Surd(0, 0), (int)   real.GetBottom());
-                else outreal = new Fraction(real.top1, real.top2, (int)real.GetBottom());
+                outreal = new Fraction((int)(-real.GetTop()), (int)real.GetBottom());
             }
             else outreal = new Number(-real.GetValue());
             if (imaginary.GetType() == typeof(Fraction))
             {
                 imaginary = (Fraction)imaginary;
-                if(imaginary.top1 == null) outimag = new Fraction(new Number(0), imaginary.top2, (int)imaginary.GetBottom());
-                else if(imaginary.top2 == null) outimag = new Fraction(imaginary.top1, new Surd(0,0), (int)imaginary.GetBottom());
-                else outimag = new Fraction(imaginary.top1, imaginary.top2, (int)imaginary.GetBottom());
+                outimag = new Fraction((int)(-imaginary.GetTop()), (int)imaginary.GetBottom());
             }
             else outimag = new Number(-imaginary.GetValue());
             return new Complex(outreal, outimag);
@@ -177,6 +174,9 @@ namespace NEA.Number_Classes
         //Calculates the Argument of the complex number
         public double GetArgument()
         {
+            if(real.GetValue() ==0 &  imaginary.GetValue() == 0) return 0; 
+            else if (real.GetValue() == 0) return imaginary.GetNegative() ? Math.PI / 2 : -Math.PI / 2;
+            else if (imaginary.GetValue() == 0) return real.GetNegative() ? Math.PI : 0;
             double tantheta = imaginary.GetValue() / real.GetValue();
             double arg = Math.Atan(Math.Abs(tantheta));
             if(imaginary.GetValue() > 0)

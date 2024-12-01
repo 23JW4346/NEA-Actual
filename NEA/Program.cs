@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NEA.Number_Classes;
+using NEA.Questions.Complex_Basics;
 using NEA.Questions.Loci;
 using NEA.Questions.ModArg;
 using NEA.Questions.MultiDivide;
@@ -24,10 +25,6 @@ namespace NEA
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
-            IQuestion q = new ArgIntersect(rnd);
-            bool cont = false;
-            int score = 0;
-            AskQuestion(q, ref cont, ref score);
             Console.Clear();
             Menu();
 
@@ -295,7 +292,8 @@ namespace NEA
         {
             Console.Clear();
             Console.WriteLine("Which Topic:");
-            Console.WriteLine("> Complex Number Multiplication");
+            Console.WriteLine("> Complex Number Basics");
+            Console.WriteLine("  Complex Number Multiplication");
             Console.WriteLine("  Complex Number Division");
             Console.WriteLine("  Modulus Argument Form");
             Console.WriteLine("  Roots of polynomials");
@@ -307,7 +305,7 @@ namespace NEA
             bool exit = true;
             while (exit)
             {
-                int questionset = GetUserOption(0, 6);
+                int questionset = GetUserOption(0, 7);
                 bool loop = true;
                 int placeholder = 0;
                 while (loop)
@@ -330,8 +328,12 @@ namespace NEA
                             AskQuestion(GenQ(4), ref loop, ref placeholder);
                             break;
                         case 5:
-                            AskQuestion(GenQ(rnd.Next(5)), ref loop, ref placeholder);
+                            AskQuestion(GenQ(5), ref loop, ref placeholder);
                             break;
+                        case 6:
+                            AskQuestion(GenQ(rnd.Next(6)), ref loop, ref placeholder);
+                            break;
+
                         default:
                             exit = false;
                             loop = false;
@@ -341,7 +343,8 @@ namespace NEA
                 }
                 Console.Clear();
                 Console.WriteLine("Which Topic:");
-                Console.WriteLine("> Complex Number Multiplication");
+                Console.WriteLine("> Complex Number Basics");
+                Console.WriteLine("  Complex Number Multiplication");
                 Console.WriteLine("  Complex Number Division");
                 Console.WriteLine("  Modulus Argument Form");
                 Console.WriteLine("  Finding Roots of a polynomial");
@@ -361,6 +364,29 @@ namespace NEA
                 switch (questionSet)
                 {
                     case 0:
+                        switch (rnd.Next(2))
+                        {
+                            case 0:
+                                if(rnd.Next(1,16) == 1)
+                                {
+                                    return new Conjugate("Questions.txt");
+                                }
+                                else
+                                {
+                                    return new Conjugate();
+                                }
+                            case 1:
+                                if(rnd.Next(1,16) == 1)
+                                {
+                                    return new REorIMQuestion(rnd, "Questions.txt");
+                                }
+                                else
+                                {
+                                    return new REorIMQuestion(rnd);
+                                }
+                        }
+                        break;
+                    case 1:
                         switch (rnd.Next(3))
                         {
                             case 0:
@@ -392,7 +418,7 @@ namespace NEA
                                 }
                         }
                         break;
-                    case 1:
+                    case 2:
                         switch (rnd.Next(2))
                         {
                             case 0:
@@ -415,7 +441,7 @@ namespace NEA
                                 }
                         }
                         break;
-                    case 2:
+                    case 3:
                         switch (rnd.Next(6))
                         {
                             case 0:
@@ -474,7 +500,7 @@ namespace NEA
                                 }
                         }
                         break;
-                    case 3:
+                    case 4:
                         switch (rnd.Next(4))
                         {
                             case 0:
@@ -515,7 +541,7 @@ namespace NEA
                                 }
                         }
                         break;
-                    case 4:
+                    case 5:
 
                         switch (rnd.Next(7))
                         {
@@ -911,6 +937,7 @@ namespace NEA
             } while (loop);
             Console.Clear();
             Console.WriteLine("Which Topics would you like?");
+            Console.WriteLine("  Complex Number Basics");
             Console.WriteLine("  Complex Number Multiplication");
             Console.WriteLine("  Complex Number Division");
             Console.WriteLine("  Modulus Argument Form");
@@ -926,8 +953,13 @@ namespace NEA
                 int cursorpos = Console.CursorTop;
                 if (choice.Key == ConsoleKey.Enter)
                 {
-                    switch (Console.CursorTop)
+                    switch (Console.CursorTop-1)
                     {
+                        case 0:
+                            if (!setsInUse.Contains(0)) setsInUse.Add(0);
+                            else setsInUse.Remove(0);
+                            cursorpos = 0;
+                            break;
                         case 1:
                             if (!setsInUse.Contains(1)) setsInUse.Add(1);
                             else setsInUse.Remove(1);
@@ -959,6 +991,8 @@ namespace NEA
                     }
                     Console.Clear();
                     Console.WriteLine("Which Topics would you like?");
+                    if (setsInUse.Contains(0)) Console.WriteLine("> Complex Number Basics");
+                    else Console.WriteLine("  Complex Number Basics");
                     if (setsInUse.Contains(1)) Console.WriteLine("> Complex Number Multiplication");
                     else Console.WriteLine("  Complex Number Multiplication");
                     if (setsInUse.Contains(2)) Console.WriteLine("> Complex Number Division");
@@ -990,7 +1024,7 @@ namespace NEA
 
             for (int i = 0; i < quizQuestions.Length; i++)
             {
-                questionSets[i] = setsInUse[rnd.Next(setsInUse.Count)] - 1;
+                questionSets[i] = setsInUse[rnd.Next(setsInUse.Count)];
                 quizQuestions[i] = GenQ(questionSets[i]);
                 questionWrong[i] = true;
             }
@@ -1016,20 +1050,23 @@ namespace NEA
                     {
                         switch (questionSets[i])
                         {
-                            case 1:
+                            case 0:
                                 numberwrong[0]++;
                                 break;
-                            case 2:
+                            case 1:
                                 numberwrong[1]++;
                                 break;
-                            case 3:
+                            case 2:
                                 numberwrong[2]++;
                                 break;
-                            case 4:
+                            case 3:
                                 numberwrong[3]++;
                                 break;
-                            case 5:
+                            case 4:
                                 numberwrong[4]++;
+                                break;
+                            case 5:
+                                numberwrong[5]++;
                                 break;
                         }
                     }
@@ -1038,18 +1075,21 @@ namespace NEA
                 switch (Array.IndexOf(numberwrong, numberwrong.Max()))
                 {
                     case 0:
-                        Console.WriteLine("Complex number multiplication");
+                        Console.WriteLine("Complex number basics");
                         break;
                     case 1:
-                        Console.WriteLine("Complex number division");
+                        Console.WriteLine("Complex number multiplication");
                         break;
                     case 2:
-                        Console.WriteLine("Modulus-Argument form");
+                        Console.WriteLine("Complex number division");
                         break;
                     case 3:
-                        Console.WriteLine("Roots of polynomials");
+                        Console.WriteLine("Modulus-Argument form");
                         break;
                     case 4:
+                        Console.WriteLine("Roots of polynomials");
+                        break;
+                    case 5:
                         Console.WriteLine("Complex Loci");
                         break;
 

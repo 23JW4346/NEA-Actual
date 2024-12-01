@@ -45,11 +45,5 @@ namespace NEA.Number_Classes
 
         public override int GetRoot() => root;
 
-        public static Surd operator *(Surd s, Number n)
-        {
-            return new Surd(s.GetCoef() * (int)n.GetValue(), s.GetRoot());
-        }
-
-        public static Surd operator -(Surd s) => new Surd(-s.GetCoef(), s.GetRoot());
     }
 }

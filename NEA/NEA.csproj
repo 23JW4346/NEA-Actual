@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Questions\Complex Basics\Conjugate.cs" />
+    <Compile Include="Questions\Complex Basics\REorIMQuestion.cs" />
     <Compile Include="Questions\Loci\ArgGraph.cs" />
     <Compile Include="Questions\Loci\ArgIntersect.cs" />
     <Compile Include="Questions\Loci\ArgModIntersect.cs" />
