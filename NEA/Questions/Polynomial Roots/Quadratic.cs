@@ -13,17 +13,17 @@ namespace NEA.Questions.Polynomial_Roots
         private int coef;
         private string quadratic;
         
-        public Quadratic(int incoef)
+        public Quadratic(Random rnd)
         {
-            GenQ(incoef);
+            GenQ(rnd.Next(1,4));
             Calculate();
         }
 
-        public Quadratic(int incoef, string filename)
+        public Quadratic(Random rnd, string filename)
         {
             if (!GetQuestion(filename))
             {
-                GenQ(incoef);
+                GenQ(rnd.Next(1,4));
             }
             Calculate();
         }

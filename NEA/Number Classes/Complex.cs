@@ -129,7 +129,7 @@ namespace NEA.Number_Classes
             string outputimag = "";
             if (real.GetString(false) == "0" && imaginary.GetString(true) == "0")
             {
-                return "";
+                return "0";
             }
             if (real.GetString(false) != "0")
             {

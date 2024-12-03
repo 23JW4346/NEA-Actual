@@ -12,17 +12,17 @@ namespace NEA.Questions.ModArg
         private int exponent;
         private double answer;
 
-        public ArgumentPowers(int inexp)
+        public ArgumentPowers(Random rnd)
         {
-            GenQ(inexp);
+            GenQ(rnd.Next(2, 5));
             Calculate();
         }
 
-        public ArgumentPowers(int inexp, string filename)
+        public ArgumentPowers(Random rnd, string filename)
         {
             if (!GetQuestion(filename))
             {
-                GenQ(inexp);
+                GenQ(rnd.Next(2, 5));
                 Calculate();
             }
         }

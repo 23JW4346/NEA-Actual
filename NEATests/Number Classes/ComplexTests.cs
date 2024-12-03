@@ -45,7 +45,12 @@ namespace NEA.Number_Classes.Tests
             Complex c1 = new Complex(5, 3);
             Complex c2 = new Complex(5, 2);
             Complex expected = new Complex(19,25);
+            Complex c3 = new Complex(2, 3);
             Assert.AreEqual((c1 * c2).GetComplex(), expected.GetComplex());
+            expected = new Complex(1,21);
+            Assert.AreEqual((c1 * c3).GetComplex(), expected.GetComplex());
+            expected = new Complex(4,19);
+            Assert.AreEqual((c2*c3).GetComplex(), expected.GetComplex());
         }
     }
 }

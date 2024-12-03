@@ -192,7 +192,7 @@ namespace NEA.Questions.Loci
 
         public string PrintQuestion()
         {
-            return $"The half lines {loci1} and {loci2} intersect at a point. write the complex point in the form a+bi. (numbers in question are rounded to 3.d.p (that aren't multiples of pi))";
+            return $"The half lines {loci1} and {loci2} intersect at a point. write the complex point in the form a+bi. \n(numbers in question are rounded to 3.d.p (that aren't multiples of pi))";
         }
 
         public List<string> SaveQuestion()

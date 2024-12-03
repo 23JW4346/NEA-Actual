@@ -13,17 +13,17 @@ namespace NEA.Questions.ModArg
 
         private int answer;
 
-        public ModulusPowers(int inexp)
+        public ModulusPowers(Random rnd)
         {
-            GenQ(inexp);
+            GenQ(rnd.Next(2, 5));
             Calculate();
         }
 
-        public ModulusPowers(int inexp, string filename)
+        public ModulusPowers(Random rnd, string filename)
         {
             if (!GetQuestion(filename))
             {
-                GenQ(inexp);
+                GenQ(rnd.Next(2, 5));
                 Calculate();
             }
         }

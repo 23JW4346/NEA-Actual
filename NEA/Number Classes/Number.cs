@@ -12,8 +12,6 @@ namespace NEA.Number_Classes
         private double value;
         protected bool isnegative = false;
         protected static Random rnd = new Random();
-        public Number top1; 
-        public Surd top2;
         public Number()
         {
             while (value == 0) value = rnd.Next(-10, 11);

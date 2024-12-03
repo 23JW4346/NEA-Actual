@@ -68,17 +68,17 @@ namespace NEA.Questions.Polynomial_Roots
             if (c != "0")
             {
                 if (!c.Contains('-')) cubic += "+";
-                if (c != "b" || c != "a")
+                if (Char.IsNumber(c[0]))
                 {
                     if (Math.Abs(int.Parse(c)) != 1) cubic += c;
                 }
-                else cubic += "b";
+                else cubic += c;
                 cubic += "z";
             }
             if (d != "0")
             {
                 if (!d.Contains('-')) cubic += "+";
-                if(Math.Abs(int.Parse(d)) != 1) cubic += d; 
+                else cubic += d; 
                 cubic += "=0";
             }
         }

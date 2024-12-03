@@ -19,14 +19,21 @@ namespace NEA
     {
         static Random rnd = new Random();
         static List<List<string>> savequests = new List<List<string>>();
-
         static ArgandDiagram diagram;
+        const bool testing = false;
 
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
+            IQuestion q = new ArgGraph(rnd);
+            diagram = new ArgandDiagram();
+            q.LoadDiagram(diagram);
+            System.Threading.Thread.Sleep(1000);
+            q.CloseDiagram(diagram);
             Console.Clear();
-            Menu();
+            if (!testing) Menu();
+            else test();
+
 
             //At the end when the user clicks exit, it saves all the questions that the user got wrong into a text file.
             using (StreamWriter sw = new StreamWriter("Questions.txt", true))
@@ -42,19 +49,42 @@ namespace NEA
             }
         }
 
+        static void test()
+        {
+            IQuestion[] tests = {new Conjugate(),
+                                 new ArgtoCartesian(rnd), new ArgtoCartesian(rnd), new ModGraph(rnd), new ModGraph(rnd), 
+                                 new ModLine(rnd), new ModLine(rnd), new ModToCartesian(rnd), new ModToCartesian(rnd), 
+                                 new Conjugate(), new Conjugate(), new REorIMQuestion(rnd), new REorIMQuestion(rnd)};
+            bool loop = false;
+            int score = 0;
+            foreach(IQuestion q in tests)
+            {
+                AskQuestion(q, ref loop, ref score);
+            }
+        }
+
         //returns the string for an arg line in an argand diagram (arg(z-(z1)=θ)
         public static string CreateArgLine(Complex a, Number b)
         {
             string loci;
-            if (a.GetComplex()[0] == '-')
+            string comp = a.GetComplex();
+            if (comp != "0")
             {
-                if (b.GetType() == typeof(Fraction)) loci = $"arg(z{a.GetComplex()})={b.GetString(true).Replace('i', 'π')}";
-                else loci = $"arg(z{a.GetComplex()})={Math.Round(b.GetValue(), 3)}";
+                if (a.GetComplex()[0] == '-')
+                {
+                    if (b.GetType() == typeof(Fraction)) loci = $"arg(z{comp})={b.GetString(true).Replace('i', 'π')}";
+                    else loci = $"arg(z{comp})={Math.Round(b.GetValue(), 3)}";
+                }
+                else
+                {
+                    if (b.GetType() == typeof(Fraction)) loci = $"arg(z+{comp})={b.GetString(true).Replace('i', 'π')}";
+                    else loci = $"arg(z+{comp})={Math.Round(b.GetValue(), 3)}";
+                }
             }
             else
             {
-                if (b.GetType() == typeof(Fraction)) loci = $"arg(z+{a.GetComplex()})={b.GetString(true).Replace('i', 'π')}";
-                else loci = $"arg(z+{a.GetComplex()})={Math.Round(b.GetValue(), 3)}";
+                if (b.GetType() == typeof(Fraction)) loci = $"arg(z)={b.GetString(true).Replace('i', 'π')}";
+                else loci = $"arg(z)={Math.Round(b.GetValue(), 3)}";
             }
             return loci;
         }
@@ -264,8 +294,8 @@ namespace NEA
                 bool exit = true;
                 while (exit)
                 {
-                    int choice = GetUserOption(0, 3, false);
-                    switch (choice)
+                    int choice = GetUserOption(1, 4, false);
+                    switch (choice+1)
                     {
                         case 1:
                             ChooseTopic();
@@ -501,20 +531,20 @@ namespace NEA
                             case 4:
                                 if (rnd.Next(1, 16) == 1)
                                 {
-                                    return new ModulusPowers(rnd.Next(2, 5), "Questions.txt");
+                                    return new ModulusPowers(rnd, "Questions.txt");
                                 }
                                 else
                                 {
-                                    return new ModulusPowers(rnd.Next(2, 5));
+                                    return new ModulusPowers(rnd);
                                 }
                             case 5:
                                 if (rnd.Next(1, 16) == 1)
                                 {
-                                    return new ArgumentPowers(rnd.Next(2, 5), "Questions.txt");
+                                    return new ArgumentPowers(rnd, "Questions.txt");
                                 }
                                 else
                                 {
-                                    return new ArgumentPowers(rnd.Next(2, 5));
+                                    return new ArgumentPowers(rnd);
                                 }
                         }
                         break;
@@ -524,11 +554,11 @@ namespace NEA
                             case 0:
                                 if (rnd.Next(1, 16) == 1)
                                 {
-                                    return new Quadratic(rnd.Next(1, 4), "Questions.txt");
+                                    return new Quadratic(rnd, "Questions.txt");
                                 }
                                 else
                                 {
-                                    return new Quadratic(rnd.Next(1, 4));
+                                    return new Quadratic(rnd);
                                 }
                             case 1:
                                 if (rnd.Next(1, 16) == 1)
@@ -637,16 +667,15 @@ namespace NEA
         }
 
         //RegEx Patterns
-        const string fracPat = "-?([1-9][0-9]*)(/[1-9][0-9]*)?|0";
-        const string fracompPat = "(" + fracPat + "(\\+|-)([1-9][0-9]*)i(/[1-9][0-9]*)?)|([1-9][0-9]*)i?(/[1-9][0-9]*)?";
+        const string fracompPat = "((-?([1-9][0-9]*)(\\/[1-9][0-9]*)?|0)(\\+|-)([1-9][0-9]*)?i(\\/[1-9][0-9]*)?)|0";
         const string realPat = "-?[1-9][0-9]*(\\.[0-9]*[1-9])?|-?0\\.[0-9]*[1-9]|0";
-        const string complexPat = "(-?[1-9][0-9]*(\\.[0-9]*[1-9])?(\\+|-)[1-9][0-9]*(\\.[0-9]*[1-9])?i)|(-?[1-9][0-9]*(\\.[0-9]*[1-9])?i?)|-?i|0";
-        const string modArgPat = "[1-9][0-9]\\(cos\\(" + realPat + "\\)\\+isin\\(" + realPat + "\\)\\)";
-        const string quadraticPat = "z²(\\+|-)[1-9][0-9]*z(\\+|-)[1-9][0-9]*";
-        const string cubicPat = "z³(\\+|-)[1-9][0-9]*" + quadraticPat;
-        const string argPat = "arg\\(z+?" + complexPat + "\\)=[1-9]?π/[1-9]";
-        const string modPat = "\\|z+?" + complexPat + "|=[1-9]";
-        const string linePat = "(y=[2-9]?x(/[2-9])?((\\+|-)" + fracPat + "))?|(y=" + fracPat + ")|(x=" + fracPat + ")";
+        const string complexPat = "(-?[1-9][0-9]*(\\.[0-9]*[1-9])?(\\+|-)[1-9][0-9]*(\\.[0-9]*[1-9])?i)|(-?[1-9][0-9]*(\\.[0-9]*[1-9])?i?)|(-?i)|0";
+        const string modArgPat = "[1-9][0-9]\\(cos\\((-?[1-9][0-9]*(\\.[0-9]*[1-9])?|-?0\\.[0-9]*[1-9]|0)\\)\\+isin\\((-?[1-9][0-9]*(\\.[0-9]*[1-9])?|-?0\\.[0-9]*[1-9]|0)\\)\\)";
+        const string quadraticPat = "z²(\\+|-)([1-9][0-9]*)?z(\\+|-)([1-9][0-9]*)?=0";
+        const string cubicPat = "z³(\\+|-)([1-9][0-9]*)?" + quadraticPat;
+        const string argPat = "arg\\(z\\+?(" + complexPat + ")?\\)=-?[1-9]?π\\/[1-9]";
+        const string modPat = "\\|z\\+?(" + complexPat + ")?\\|=[1-9]";
+        const string linePat = "(y=-?[2-9]?x(\\/[2-9])?((\\+|-)(-?([1-9][0-9]*)(\\/[1-9][0-9]*)?))?)|(y=((-?([1-9][0-9]*)(\\/[1-9][0-9]*)?)|0))|(x=((-?([1-9][0-9]*)(\\/[1-9][0-9]*)?)|0))";
         const string circlePat = "((\\(x(\\+|-)[1-9]\\)²)|(x²))\\+((\\(y(\\+|-)[1-9]\\)²)|(y²))=[1-9][0-9]*";
 
 
@@ -656,7 +685,6 @@ namespace NEA
         {
             Regex inputValid;
             if (question.GetType() == typeof(Multiply2Complex)
-                || question.GetType() == typeof(MultiAlg)
                 || question.GetType() == typeof(ArgIntersect)
                 || question.GetType() == typeof(ModArgToNormal)
                 || question.GetType() == typeof(Conjugate))
@@ -707,9 +735,12 @@ namespace NEA
             }
             else
             {
-                inputValid = new Regex(complexPat + "\\," + complexPat);
+                inputValid = new Regex("(" +complexPat + ")\\,(" + complexPat + ")");
             }
-            if (inputValid.IsMatch(answer)) return true;
+            if (inputValid.Matches(answer).Count == 1)
+            {
+                if (inputValid.Matches(answer)[0].Value == answer) return true;
+            }
             return false;
         }
 
@@ -817,8 +848,6 @@ namespace NEA
                         int index = Console.CursorLeft - 8;
                         string firstpart = ans.Substring(0, index);
                         string secondpart = ans.Substring(index);
-                        Console.Write(new string(' ', Math.Abs(ans.Length - index)));
-                        Console.CursorLeft = 8 + index;
                         char c = ' ';
                         if (choice.Key == ConsoleKey.P)
                         {
@@ -829,6 +858,8 @@ namespace NEA
                             c = '√';
                         }
                         else c = choice.KeyChar;
+                        Console.Write(new string(' ', Math.Abs(ans.Length - index)));
+                        Console.CursorLeft = 8 + index;
                         Console.Write($"{c}{secondpart}");
                         ans = firstpart + c + secondpart;
                         Console.CursorLeft = 9 + index;
@@ -846,7 +877,6 @@ namespace NEA
             bool thisloop = true;
             Console.WriteLine(question.PrintQuestion());
             Console.WriteLine();
-            Console.Write("Answer: ");
             int currentposition = Console.CursorTop, newposition = 0;
             try
             {
@@ -857,6 +887,7 @@ namespace NEA
             {
 
             }
+            Console.Write("Answer: ");
             while (thisloop)
             {
                 ans = GetUserAnswer();
@@ -947,7 +978,7 @@ namespace NEA
             IQuestion[] quizQuestions = new IQuestion[1];
             int[] questionSets = new int[1];
             bool[] questionWrong = new bool[1];
-            int[] numberwrong = new int[5];
+            int[] numberwrong = new int[6];
             List<int> setsInUse = new List<int>();
             do
             {
