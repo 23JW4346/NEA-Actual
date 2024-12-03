@@ -194,11 +194,11 @@ namespace NEA
         }
 
         //Gets user option with the arrow keys
-        static int GetUserOption(int smallest, int largest)
+        static int GetUserOption(int smallest, int largest, bool keeparrow)
         {
             bool exit = true;
-            int topPosition = Console.CursorTop;
-            int newPosition = 0;
+            int topPosition = smallest;
+            int newPosition = Console.CursorTop - smallest;
             while (exit)
             {
                 ConsoleKeyInfo choice = Console.ReadKey(true);
@@ -206,23 +206,43 @@ namespace NEA
                 {
                     exit = false;
                 }
-                else if (choice.Key == ConsoleKey.DownArrow && newPosition != largest)
+                else if (choice.Key == ConsoleKey.DownArrow && newPosition < largest - smallest)
                 {
-                    Console.CursorLeft = 0;
-                    Console.Write(" ");
-                    newPosition++;
-                    Console.CursorTop = topPosition + newPosition;
-                    Console.CursorLeft = 0;
-                    Console.Write(">");
+                    if (keeparrow)
+                    {
+                        Console.CursorLeft = 0;
+                        newPosition++;
+                        Console.CursorTop = topPosition + newPosition;
+                        Console.CursorLeft = 1;
+                    }
+                    else
+                    {
+                        Console.CursorLeft = 0;
+                        Console.Write(" ");
+                        newPosition++;
+                        Console.CursorTop = topPosition + newPosition;
+                        Console.CursorLeft = 0;
+                        Console.Write(">");
+                    }
                 }
-                else if (choice.Key == ConsoleKey.UpArrow && newPosition != smallest)
+                else if (choice.Key == ConsoleKey.UpArrow && newPosition != 0)
                 {
-                    Console.CursorLeft = 0;
-                    Console.Write(" ");
-                    newPosition--;
-                    Console.CursorTop = topPosition + newPosition;
-                    Console.CursorLeft = 0;
-                    Console.Write(">");
+                    if (keeparrow)
+                    {
+                        Console.CursorLeft = 0;
+                        newPosition--;
+                        Console.CursorTop = topPosition + newPosition;
+                        Console.CursorLeft = 1;
+                    }
+                    else
+                    {
+                        Console.CursorLeft = 0;
+                        Console.Write(" ");
+                        newPosition--;
+                        Console.CursorTop = topPosition + newPosition;
+                        Console.CursorLeft = 0;
+                        Console.Write(">");
+                    }
                 }
             }
             return newPosition;
@@ -244,19 +264,19 @@ namespace NEA
                 bool exit = true;
                 while (exit)
                 {
-                    int choice = GetUserOption(0, 3);
+                    int choice = GetUserOption(0, 3, false);
                     switch (choice)
                     {
-                        case 0:
+                        case 1:
                             ChooseTopic();
                             break;
-                        case 1:
+                        case 2:
                             CreateQuiz();
                             break;
-                        case 2:
+                        case 3:
                             Settings();
                             break;
-                        case 3:
+                        case 4:
                             exit = false;
                             break;
                     }
@@ -280,7 +300,7 @@ namespace NEA
             Console.WriteLine("heres the List of character maps:");
             Console.WriteLine("p -> π");
             Console.WriteLine("x^2 -> x², works for any power 2-4, and x is any usable character");
-            Console.WriteLine("s -> √");
+            Console.WriteLine("q -> √");
             Console.WriteLine("Press any key to go back to the main menu");
             Console.ReadKey();
             Console.Clear();
@@ -305,40 +325,38 @@ namespace NEA
             bool exit = true;
             while (exit)
             {
-                int questionset = GetUserOption(0, 7);
+                int questionset = GetUserOption(1, 8, false);
                 bool loop = true;
                 int placeholder = 0;
                 while (loop)
                 {
-                    switch (questionset)
+                    switch (questionset+1)
                     {
-                        case 0:
+                        case 1:
                             AskQuestion(GenQ(0), ref loop, ref placeholder);
                             break;
-                        case 1:
+                        case 2:
                             AskQuestion(GenQ(1), ref loop, ref placeholder);
                             break;
-                        case 2:
+                        case 3:
                             AskQuestion(GenQ(2), ref loop, ref placeholder);
                             break;
-                        case 3:
+                        case 4:
                             AskQuestion(GenQ(3), ref loop, ref placeholder);
                             break;
-                        case 4:
+                        case 5:
                             AskQuestion(GenQ(4), ref loop, ref placeholder);
                             break;
-                        case 5:
+                        case 6:
                             AskQuestion(GenQ(5), ref loop, ref placeholder);
                             break;
-                        case 6:
+                        case 7:
                             AskQuestion(GenQ(rnd.Next(6)), ref loop, ref placeholder);
                             break;
-
                         default:
                             exit = false;
                             loop = false;
                             break;
-
                     }
                 }
                 Console.Clear();
@@ -640,14 +658,16 @@ namespace NEA
             if (question.GetType() == typeof(Multiply2Complex)
                 || question.GetType() == typeof(MultiAlg)
                 || question.GetType() == typeof(ArgIntersect)
-                || question.GetType() == typeof(ModArgToNormal))
+                || question.GetType() == typeof(ModArgToNormal)
+                || question.GetType() == typeof(Conjugate))
             {
                 inputValid = new Regex(complexPat);
             }
             else if (question.GetType() == typeof(ModulusQuestion)
                 || question.GetType() == typeof(ModulusPowers)
                 || question.GetType() == typeof(ArgumentQuestion)
-                || question.GetType() == typeof(ArgumentPowers))
+                || question.GetType() == typeof(ArgumentPowers)
+                || question.GetType() == typeof(REorIMQuestion))
             {
                 inputValid = new Regex(realPat);
             }
@@ -771,22 +791,25 @@ namespace NEA
                         }
                     } while (!Char.IsDigit(choice.KeyChar) && doloop);
                 }
-                else if (choice.Key == ConsoleKey.P)
-                {
-                    Console.Write("π");
-                    ans += "π";
-                }
-                else if (choice.Key == ConsoleKey.S)
-                {
-                    Console.Write("√");
-                    ans += "√";
-                }
                 else if (Regex.IsMatch(choice.KeyChar.ToString(), "[0-9]|[-\\.,\\+=\\|\\(\\)/ ]|[A-Za-z]"))
                 {
                     if (Console.CursorLeft == 8 + ans.Length)
                     {
-                        Console.Write(choice.KeyChar);
-                        ans += choice.KeyChar;
+                        if (choice.Key == ConsoleKey.P)
+                        {
+                            Console.Write("π");
+                            ans += "π";
+                        }
+                        else if (choice.Key == ConsoleKey.Q)
+                        {
+                            Console.Write("√");
+                            ans += "√";
+                        }
+                        else
+                        {
+                            ans += choice.KeyChar;
+                            Console.Write(choice.KeyChar);
+                        }
                     }
                     else
                     {
@@ -796,8 +819,18 @@ namespace NEA
                         string secondpart = ans.Substring(index);
                         Console.Write(new string(' ', Math.Abs(ans.Length - index)));
                         Console.CursorLeft = 8 + index;
-                        Console.Write($"{choice.KeyChar}{secondpart}");
-                        ans = firstpart + choice.KeyChar + secondpart;
+                        char c = ' ';
+                        if (choice.Key == ConsoleKey.P)
+                        {
+                            c = 'π';
+                        }
+                        else if (choice.Key == ConsoleKey.Q)
+                        {
+                            c = '√';
+                        }
+                        else c = choice.KeyChar;
+                        Console.Write($"{c}{secondpart}");
+                        ans = firstpart + c + secondpart;
                         Console.CursorLeft = 9 + index;
                     }
                 }
@@ -872,7 +905,7 @@ namespace NEA
                 Console.CursorLeft = 1;
                 Console.CursorTop -= 2;
                 currentposition = Console.CursorTop;
-                newposition = GetUserOption(currentposition, currentposition + 1);
+                newposition = GetUserOption(currentposition, currentposition + 1, false);
                 if (newposition == 1)
                 {
                     loop = false;
@@ -949,76 +982,90 @@ namespace NEA
             bool exit = true;
             while (exit)
             {
-                ConsoleKeyInfo choice = Console.ReadKey(true);
-                int cursorpos = Console.CursorTop;
-                if (choice.Key == ConsoleKey.Enter)
+                int choice = GetUserOption(1, 7, true);
+                Console.CursorLeft = 0;
+                switch (choice)
                 {
-                    switch (Console.CursorTop-1)
-                    {
-                        case 0:
-                            if (!setsInUse.Contains(0)) setsInUse.Add(0);
-                            else setsInUse.Remove(0);
-                            cursorpos = 0;
-                            break;
-                        case 1:
-                            if (!setsInUse.Contains(1)) setsInUse.Add(1);
-                            else setsInUse.Remove(1);
-                            cursorpos = 1;
-                            break;
-                        case 2:
-                            if (!setsInUse.Contains(2)) setsInUse.Add(2);
-                            else setsInUse.Remove(2);
-                            cursorpos = 2;
-                            break;
-                        case 3:
-                            if (!setsInUse.Contains(3)) setsInUse.Add(3);
-                            else setsInUse.Remove(3);
-                            cursorpos = 3;
-                            break;
-                        case 4:
-                            if (!setsInUse.Contains(4)) setsInUse.Add(4);
-                            else setsInUse.Remove(4);
-                            cursorpos = 4;
-                            break;
-                        case 5:
-                            if (!setsInUse.Contains(5)) setsInUse.Add(5);
-                            else setsInUse.Remove(5);
-                            cursorpos = 5;
-                            break;
-                        default:
-                            exit = false;
-                            break;
-                    }
-                    Console.Clear();
-                    Console.WriteLine("Which Topics would you like?");
-                    if (setsInUse.Contains(0)) Console.WriteLine("> Complex Number Basics");
-                    else Console.WriteLine("  Complex Number Basics");
-                    if (setsInUse.Contains(1)) Console.WriteLine("> Complex Number Multiplication");
-                    else Console.WriteLine("  Complex Number Multiplication");
-                    if (setsInUse.Contains(2)) Console.WriteLine("> Complex Number Division");
-                    else Console.WriteLine("  Complex Number Division");
-                    if (setsInUse.Contains(3)) Console.WriteLine("> Modulus Argument Form");
-                    else Console.WriteLine("  Modulus Argument Form");
-                    if (setsInUse.Contains(4)) Console.WriteLine("> Finding Roots of a polynomial");
-                    else Console.WriteLine("  Finding Roots of a polynomial");
-                    if (setsInUse.Contains(5)) Console.WriteLine("> Complex Loci");
-                    else Console.WriteLine("  Complex Loci");
-                    Console.WriteLine("  Continue");
-                    Console.CursorLeft = 1;
-                    Console.CursorTop = cursorpos;
-                }
-                else if (choice.Key == ConsoleKey.DownArrow && Console.CursorTop != 6)
-                {
-                    Console.CursorLeft = 0;
-                    Console.CursorTop++;
-                    Console.CursorLeft = 1;
-
-                }
-                else if (choice.Key == ConsoleKey.UpArrow && Console.CursorTop != 1)
-                {
-                    Console.CursorLeft = 0;
-                    Console.CursorTop--;
-                    Console.CursorLeft = 1;
+                    case 0:
+                        if (!setsInUse.Contains(0))
+                        {
+                            setsInUse.Add(0);
+                            Console.Write(">");
+                        }
+                        else
+                        {
+                            setsInUse.Remove(0);
+                            Console.Write(" ");
+                        }
+                        break;
+                    case 1:
+                        if (!setsInUse.Contains(1))
+                        {
+                            setsInUse.Add(1);
+                            Console.Write(">");
+                        }
+                        else
+                        {
+                            setsInUse.Remove(1);
+                            Console.Write(" ");
+                        }
+                        Console.CursorLeft = 1;
+                        break;
+                    case 2:
+                        if (!setsInUse.Contains(2))
+                        {
+                            setsInUse.Add(2);
+                            Console.Write(">");
+                        }
+                        else
+                        {
+                            setsInUse.Remove(2);
+                            Console.Write(" ");
+                        }
+                        Console.CursorLeft = 1;
+                        break;
+                    case 3:
+                        if (!setsInUse.Contains(3))
+                        {
+                            setsInUse.Add(3);
+                            Console.Write(">");
+                        }
+                        else
+                        {
+                            setsInUse.Remove(3);
+                            Console.Write(" ");
+                        }
+                        Console.CursorLeft = 1;
+                        break;
+                    case 4:
+                        if (!setsInUse.Contains(4))
+                        {
+                            setsInUse.Add(4);
+                            Console.Write(">");
+                        }
+                        else
+                        {
+                            setsInUse.Remove(4);
+                            Console.Write(" ");
+                        }
+                        Console.CursorLeft = 1;
+                        break;
+                    case 5:
+                        if (!setsInUse.Contains(5))
+                        {
+                            setsInUse.Add(5);
+                            Console.Write(">");
+                        }
+                        else
+                        {
+                            setsInUse.Remove(5);
+                            Console.Write(" ");
+                        }
+                        Console.CursorLeft = 1;
+                        break;
+                    default:
+                        if (setsInUse.Count != 0) exit = false;
+                        break;
                 }
             }
 
