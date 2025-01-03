@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using NEA.Number_Classes;
+﻿using NEA.Number_Classes;
+using NEA.Questions;
 using NEA.Questions.Complex_Basics;
 using NEA.Questions.Loci;
 using NEA.Questions.ModArg;
 using NEA.Questions.MultiDivide;
 using NEA.Questions.Polynomial_Roots;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace NEA
 {
@@ -52,12 +51,12 @@ namespace NEA
         static void test()
         {
             IQuestion[] tests = {new Conjugate(),
-                                 new ArgtoCartesian(rnd), new ArgtoCartesian(rnd), new ModGraph(rnd), new ModGraph(rnd), 
-                                 new ModLine(rnd), new ModLine(rnd), new ModToCartesian(rnd), new ModToCartesian(rnd), 
+                                 new ArgtoCartesian(rnd), new ArgtoCartesian(rnd), new ModGraph(rnd), new ModGraph(rnd),
+                                 new ModLine(rnd), new ModLine(rnd), new ModToCartesian(rnd), new ModToCartesian(rnd),
                                  new Conjugate(), new Conjugate(), new REorIMQuestion(rnd), new REorIMQuestion(rnd)};
             bool loop = false;
             int score = 0;
-            foreach(IQuestion q in tests)
+            foreach (IQuestion q in tests)
             {
                 AskQuestion(q, ref loop, ref score);
             }
@@ -295,7 +294,7 @@ namespace NEA
                 while (exit)
                 {
                     int choice = GetUserOption(1, 4, false);
-                    switch (choice+1)
+                    switch (choice + 1)
                     {
                         case 1:
                             ChooseTopic();
@@ -360,7 +359,7 @@ namespace NEA
                 int placeholder = 0;
                 while (loop)
                 {
-                    switch (questionset+1)
+                    switch (questionset + 1)
                     {
                         case 1:
                             AskQuestion(GenQ(0), ref loop, ref placeholder);
@@ -415,7 +414,7 @@ namespace NEA
                         switch (rnd.Next(2))
                         {
                             case 0:
-                                if(rnd.Next(1,16) == 1)
+                                if (rnd.Next(1, 16) == 1)
                                 {
                                     return new Conjugate("Questions.txt");
                                 }
@@ -424,7 +423,7 @@ namespace NEA
                                     return new Conjugate();
                                 }
                             case 1:
-                                if(rnd.Next(1,16) == 1)
+                                if (rnd.Next(1, 16) == 1)
                                 {
                                     return new REorIMQuestion(rnd, "Questions.txt");
                                 }
@@ -579,7 +578,7 @@ namespace NEA
                                     return new GivenRootFindQuadratic();
                                 }
                             case 3:
-                                if(rnd.Next(1, 16) == 1)
+                                if (rnd.Next(1, 16) == 1)
                                 {
                                     return new GivenRootsFindCubic(rnd, "Questions.txt");
                                 }
@@ -667,17 +666,16 @@ namespace NEA
         }
 
         //RegEx Patterns
-        const string fracompPat = "((-?([1-9][0-9]*)(\\/[1-9][0-9]*)?|0)(\\+|-)([1-9][0-9]*)?i(\\/[1-9][0-9]*)?)|0";
-        const string realPat = "-?[1-9][0-9]*(\\.[0-9]*[1-9])?|-?0\\.[0-9]*[1-9]|0";
-        const string complexPat = "(-?[1-9][0-9]*(\\.[0-9]*[1-9])?(\\+|-)[1-9][0-9]*(\\.[0-9]*[1-9])?i)|(-?[1-9][0-9]*(\\.[0-9]*[1-9])?i?)|(-?i)|0";
-        const string modArgPat = "[1-9][0-9]\\(cos\\((-?[1-9][0-9]*(\\.[0-9]*[1-9])?|-?0\\.[0-9]*[1-9]|0)\\)\\+isin\\((-?[1-9][0-9]*(\\.[0-9]*[1-9])?|-?0\\.[0-9]*[1-9]|0)\\)\\)";
-        const string quadraticPat = "z²(\\+|-)([1-9][0-9]*)?z(\\+|-)([1-9][0-9]*)?=0";
-        const string cubicPat = "z³(\\+|-)([1-9][0-9]*)?" + quadraticPat;
-        const string argPat = "arg\\(z\\+?(" + complexPat + ")?\\)=-?[1-9]?π\\/[1-9]";
-        const string modPat = "\\|z\\+?(" + complexPat + ")?\\|=[1-9]";
-        const string linePat = "(y=-?[2-9]?x(\\/[2-9])?((\\+|-)(-?([1-9][0-9]*)(\\/[1-9][0-9]*)?))?)|(y=((-?([1-9][0-9]*)(\\/[1-9][0-9]*)?)|0))|(x=((-?([1-9][0-9]*)(\\/[1-9][0-9]*)?)|0))";
-        const string circlePat = "((\\(x(\\+|-)[1-9]\\)²)|(x²))\\+((\\(y(\\+|-)[1-9]\\)²)|(y²))=[1-9][0-9]*";
-
+        const string fracompPat = @"((-?([1-9][0-9]*)(\/[1-9][0-9]*)?|0)(\+|-)([1-9][0-9]*)?i(\/[1-9][0-9]*)?)|0";
+        const string realPat = @"-?[1-9][0-9]*(\.[0-9]*[1-9])?|-?0\.[0-9]*[1-9]|0";
+        const string complexPat = @"(-?[1-9][0-9]*(\.[0-9]*[1-9])?(\+|-)([1-9][0-9]*(\.[0-9]*[1-9])?)?i)|(-?[1-9][0-9]*(\.[0-9]*[1-9])?i?)|(-?i)|0";
+        const string modArgPat = @"[1-9][0-9]\\(cos\\((-?[1-9][0-9]*(\\.[0-9]*[1-9])?|-?0\\.[0-9]*[1-9]|0)\\)\\+isin\\((-?[1-9][0-9]*(\\.[0-9]*[1-9])?|-?0\\.[0-9]*[1-9]|0)\\)\\)";
+        const string quadraticPat = @"z²(\+|-)([1-9][0-9]*)?z(\+|-)([1-9][0-9]*)?=0";
+        const string cubicPat = @"z³(\+|-)([1-9][0-9]*)?z²(\+|-)([1-9][0-9]*)?z(\+|-)([1-9][0-9]*)?=0";
+        const string argPat = @"arg\(z[-\+]?((-?[1-9][0-9]*(\.[0-9]*[1-9])?(\+|-)([1-9][0-9]*(\.[0-9]*[1-9])?)?i)|(-?[1-9][0-9]*(\.[0-9]*[1-9])?i?)|(-?i)|0)?\)=-?[1-9]?π(\/[1-9])?";
+        const string modPat = @"\|z[-\+]?((-?[1-9][0-9]*(\.[0-9]*[1-9])?(\+|-)([1-9][0-9]*(\.[0-9]*[1-9])?)?i)|(-?[1-9][0-9]*(\.[0-9]*[1-9])?i?)|(-?i)|0)?\|=[1-9]";
+        const string linePat = @"(y=-?[2-9]?x(\/[2-9])?((\+|-)(-?([1-9][0-9]*)(\/[1-9][0-9]*)?))?)|(y=((-?([1-9][0-9]*)(\/[1-9][0-9]*)?)|0))|(x=((-?([1-9][0-9]*)(\/[1-9][0-9]*)?)|0))";
+        const string circlePat = @"((\(x(\+|-)[1-9]\)²)|(x²))\+((\(y(\+|-)[1-9]\)²)|(y²))=[1-9][0-9]*";
 
         //Checks the user input with RegEx patterns defined above to see if its a answer that is allowed.
         //Checks what question type it is, then with the corresponding RegEx Pattern
@@ -735,13 +733,9 @@ namespace NEA
             }
             else
             {
-                inputValid = new Regex("(" +complexPat + ")\\,(" + complexPat + ")");
+                inputValid = new Regex("(" + complexPat + ")\\,(" + complexPat + ")");
             }
-            if (inputValid.Matches(answer).Count == 1)
-            {
-                if (inputValid.Matches(answer)[0].Value == answer) return true;
-            }
-            return false;
+            return inputValid.IsMatch(answer);
         }
 
         //Gets the user input for the answer of the question
@@ -883,7 +877,7 @@ namespace NEA
                 diagram = new ArgandDiagram();
                 question.LoadDiagram(diagram);
             }
-            catch (NotImplementedException e)
+            catch (NoDiagramException)
             {
 
             }
@@ -893,6 +887,7 @@ namespace NEA
                 ans = GetUserAnswer();
                 Console.CursorTop += 2;
                 Console.CursorLeft = 0;
+                int length = ans.Length;
                 if (ans.Contains(' '))
                 {
                     string temp = "";
@@ -909,7 +904,7 @@ namespace NEA
                     Console.WriteLine("Invalid input, please enter a correct input");
                     Console.CursorTop = currentposition;
                     Console.CursorLeft = 8;
-                    Console.Write(new string(' ', ans.Length));
+                    Console.Write(new string(' ', length));
                     Console.CursorTop = currentposition;
                     Console.CursorLeft = 8;
                     ans = "";
@@ -962,7 +957,7 @@ namespace NEA
             {
                 question.CloseDiagram(diagram);
             }
-            catch (NotImplementedException e)
+            catch (NoDiagramException)
             {
             }
             Console.Clear();
@@ -986,7 +981,7 @@ namespace NEA
                 Console.WriteLine("How many Questions would you like in your quiz? (5-50)");
                 string choice = Console.ReadLine();
                 Console.Clear();
-                if (Regex.IsMatch(choice.Trim(), "[1-9][0-9]?") && int.Parse(choice.Trim()) < 51 && int.Parse(choice.Trim()) > 4)
+                if (Regex.IsMatch(choice.Trim(), @"\A[1-9][0-9]?\z") && int.Parse(choice.Trim()) < 51 && int.Parse(choice.Trim()) > 4)
                 {
                     int length = int.Parse(choice);
                     quizQuestions = new IQuestion[length];
