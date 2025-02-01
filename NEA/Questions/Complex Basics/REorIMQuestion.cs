@@ -19,7 +19,7 @@ namespace NEA.Questions.Complex_Basics
         public REorIMQuestion(Random rnd)
         {
             c = new Complex(false);
-            rE = rnd.Next(2) == 1 ? true: false;
+            rE = rnd.Next(2) == 1;
             Calculate();
         }
 
@@ -28,7 +28,7 @@ namespace NEA.Questions.Complex_Basics
             if (!GetQuestion(filename))
             {
                 c = new Complex(false);
-                rE = rnd.Next(2) == 1? true: false;
+                rE = rnd.Next(2) == 1;
             }
             Calculate();
         }
@@ -62,7 +62,7 @@ namespace NEA.Questions.Complex_Basics
                     string line;
                     line = sr.ReadLine();
 
-                    if (line == "conj" && !found)
+                    if (line == "ReIm" && !found)
                     {
                         c = new Complex(sr.ReadLine());
                         if (sr.ReadLine() == "1") rE = true;
@@ -107,6 +107,7 @@ namespace NEA.Questions.Complex_Basics
         {
             return new List<string>()
             {
+                "ReIm",
                 c.GetComplex(),
                 rE ? "1" : "0"
             };

@@ -1,6 +1,5 @@
 ﻿using NEA.Number_Classes;
 using NEA.Questions.Loci;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -19,10 +18,7 @@ namespace NEA.Questions.MultiDivide
 
         public Multiply2Complex(string filename)
         {
-            if (!GetQuestion(filename))
-            {
-                GenQ();
-            }
+            if (!GetQuestion(filename)) GenQ();
             Calculate();
         }
 
@@ -37,14 +33,8 @@ namespace NEA.Questions.MultiDivide
             answer = operand1 * operand2;
         }
 
-        public bool CheckAnswer(string answer)
-        {
-            if (answer == this.answer.GetComplex())
-            {
-                return true;
-            }
-            return false;
-        }
+        public bool CheckAnswer(string answer) => answer == this.answer.GetComplex();
+
 
         public bool GetQuestion(string filename)
         {

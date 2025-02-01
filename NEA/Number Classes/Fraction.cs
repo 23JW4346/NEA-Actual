@@ -108,13 +108,10 @@ namespace NEA.Number_Classes
                 int hcf = HCF();
                 if (hcf > 1)
                 {
-                    denominator = denominator / hcf;
-                    numerator = numerator / hcf;
+                    denominator /= hcf;
+                    numerator /= hcf;
                 }
-                else
-                {
-                    x = false;
-                }
+                else x = false;
             }
         }
 
@@ -125,10 +122,7 @@ namespace NEA.Number_Classes
             if (denominator < numerator) loop = denominator;
             for (int i = 1; i <= loop; i++)
             {
-                if (numerator % i == 0 && denominator % i == 0)
-                {
-                    hcf = i;
-                }
+                if (numerator % i == 0 && denominator % i == 0) hcf = i;
             }
             return hcf;
         }

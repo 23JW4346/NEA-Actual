@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
-using System.Threading.Tasks;
 using NEA.Number_Classes;
 using NEA.Questions.Loci;
 
@@ -86,7 +82,7 @@ namespace NEA.Questions.Polynomial_Roots
                 {
                     string line;
                     line = sr.ReadLine();
-                    if (line == "Quadratic" && !found)
+                    if (line == "rootC" && !found)
                     {
                         compRoot = new Complex(sr.ReadLine());
                         intRoot = int.Parse(sr.ReadLine());
@@ -132,6 +128,7 @@ namespace NEA.Questions.Polynomial_Roots
         {
             return new List<string>
             {
+                "rootC",
                 compRoot.GetComplex(),
                 intRoot.ToString(),
                 answer

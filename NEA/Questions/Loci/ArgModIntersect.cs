@@ -132,7 +132,7 @@ namespace NEA.Questions.Loci
                 {
                     string line;
                     line = sr.ReadLine();
-                    if (line == "ArgInt" && !found)
+                    if (line == "ArgModInt" && !found)
                     {
                         found = true;
                         midpoint = new Complex(sr.ReadLine());

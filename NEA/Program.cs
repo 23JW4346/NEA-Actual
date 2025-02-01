@@ -1,26 +1,23 @@
-﻿using NEA.Number_Classes;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using NEA.Number_Classes;
 using NEA.Questions;
 using NEA.Questions.Complex_Basics;
 using NEA.Questions.Loci;
 using NEA.Questions.ModArg;
 using NEA.Questions.MultiDivide;
 using NEA.Questions.Polynomial_Roots;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace NEA
 {
-
     internal class Program
     {
         static Random rnd = new Random();
         static List<List<string>> savequests = new List<List<string>>();
         static ArgandDiagram diagram;
-        const bool testing = false;
-
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
@@ -30,35 +27,17 @@ namespace NEA
             System.Threading.Thread.Sleep(1000);
             q.CloseDiagram(diagram);
             Console.Clear();
-            if (!testing) Menu();
-            else test();
-
-
+            Test();
+            Console.ReadKey();
+            Menu();
             //At the end when the user clicks exit, it saves all the questions that the user got wrong into a text file.
             using (StreamWriter sw = new StreamWriter("Questions.txt", true))
             {
                 foreach (List<string> strings in savequests)
                 {
-                    foreach (string s in strings)
-                    {
-                        sw.WriteLine(s);
-                    }
+                    foreach (string s in strings) sw.WriteLine(s);
                 }
                 sw.Close();
-            }
-        }
-
-        static void test()
-        {
-            IQuestion[] tests = {new Conjugate(),
-                                 new ArgtoCartesian(rnd), new ArgtoCartesian(rnd), new ModGraph(rnd), new ModGraph(rnd),
-                                 new ModLine(rnd), new ModLine(rnd), new ModToCartesian(rnd), new ModToCartesian(rnd),
-                                 new Conjugate(), new Conjugate(), new REorIMQuestion(rnd), new REorIMQuestion(rnd)};
-            bool loop = false;
-            int score = 0;
-            foreach (IQuestion q in tests)
-            {
-                AskQuestion(q, ref loop, ref score);
             }
         }
 
@@ -91,18 +70,9 @@ namespace NEA
         public static string CreateModCircle(Complex a, string modulus)
         {
             string loci;
-            if (a.GetComplex() == "")
-            {
-                loci = $"|z|={modulus}";
-            }
-            if (a.GetComplex()[0] == '-')
-            {
-                loci = $"|z{a.GetComplex()}|={modulus}";
-            }
-            else
-            {
-                loci = $"|z+{a.GetComplex()}|={modulus}";
-            }
+            if (a.GetComplex() == "") loci = $"|z|={modulus}";
+            else if (a.GetComplex()[0] == '-') loci = $"|z{a.GetComplex()}|={modulus}";
+            else loci = $"|z+{a.GetComplex()}|={modulus}";
             return loci;
         }
 
@@ -204,19 +174,13 @@ namespace NEA
             string loci = "|z";
             if (a.GetComplex() != "")
             {
-                if (a.GetComplex()[0] == '-')
-                {
-                    loci += a.GetComplex();
-                }
+                if (a.GetComplex()[0] == '-') loci += a.GetComplex();
                 else loci += "+" + a.GetComplex();
             }
             loci += "|=|z";
             if (b.GetComplex() != "")
             {
-                if (b.GetComplex()[0] == '-')
-                {
-                    loci += b.GetComplex();
-                }
+                if (b.GetComplex()[0] == '-') loci += b.GetComplex();
                 else loci += "+" + b.GetComplex();
             }
             return loci + "|";
@@ -414,178 +378,59 @@ namespace NEA
                         switch (rnd.Next(2))
                         {
                             case 0:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new Conjugate("Questions.txt");
-                                }
-                                else
-                                {
-                                    return new Conjugate();
-                                }
+                                return rnd.Next(1, 16) == 1 ? new Conjugate("Questions.txt") : new Conjugate();
                             case 1:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new REorIMQuestion(rnd, "Questions.txt");
-                                }
-                                else
-                                {
-                                    return new REorIMQuestion(rnd);
-                                }
+                                return rnd.Next(1, 16) == 1 ? new REorIMQuestion(rnd, "Questions.txt") : new REorIMQuestion(rnd);
                         }
                         break;
                     case 1:
                         switch (rnd.Next(3))
                         {
                             case 0:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new Multiply2Complex("Questions.txt");
-                                }
-                                else
-                                {
-                                    return new Multiply2Complex();
-                                }
+                                return rnd.Next(1, 16) == 1 ? new Multiply2Complex("Questions.txt") : new Multiply2Complex();
                             case 1:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new MultiAlg("Questions.txt");
-                                }
-                                else
-                                {
-                                    return new MultiAlg();
-                                }
+                                return rnd.Next(1, 16) == 1 ? new MultiAlg("Questions.txt") : new MultiAlg();
                             case 2:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new ZSquared(rnd);
-                                }
-                                else
-                                {
-                                    return new ZSquared("Questions.txt", rnd);
-                                }
+                                return rnd.Next(1, 16) == 1 ? new ZSquared(rnd) : new ZSquared("Questions.txt", rnd);
                         }
                         break;
                     case 2:
                         switch (rnd.Next(2))
                         {
                             case 0:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new Divide2Complex("Questions.txt");
-                                }
-                                else
-                                {
-                                    return new Divide2Complex();
-                                }
+                                return rnd.Next(1, 16) == 1 ? new Divide2Complex("Questions.txt") : new Divide2Complex();
                             case 1:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new DivAlg("Questions.txt");
-                                }
-                                else
-                                {
-                                    return new DivAlg();
-                                }
+                                return rnd.Next(1, 16) == 1 ? new DivAlg("Questions.txt") : new DivAlg();
                         }
                         break;
                     case 3:
                         switch (rnd.Next(6))
                         {
                             case 0:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new ModulusQuestion("Questions.txt");
-                                }
-                                else
-                                {
-                                    return new ModulusQuestion();
-                                }
+                                return rnd.Next(1, 16) == 1 ? new ModulusQuestion("Questions.txt") : new ModulusQuestion();
                             case 1:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new ArgumentQuestion("Questions.txt");
-                                }
-                                else
-                                {
-                                    return new ArgumentQuestion();
-                                }
+                                return rnd.Next(1, 16) == 1 ? new ArgumentQuestion("Questions.txt") : new ArgumentQuestion();
                             case 2:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new ModulusArgumentForm("Questions.txt");
-                                }
-                                else
-                                {
-                                    return new ModulusArgumentForm();
-                                }
+                                return rnd.Next(1, 16) == 1 ? new ModulusArgumentForm("Questions.txt") : new ModulusArgumentForm();
                             case 3:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new ModArgToNormal("Questions.txt");
-                                }
-                                else
-                                {
-                                    return new ModArgToNormal();
-                                }
+                                return rnd.Next(1, 16) == 1 ? new ModArgToNormal("Questions.txt") : new ModArgToNormal();
                             case 4:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new ModulusPowers(rnd, "Questions.txt");
-                                }
-                                else
-                                {
-                                    return new ModulusPowers(rnd);
-                                }
+                                return rnd.Next(1, 16) == 1 ? new ModulusPowers(rnd, "Questions.txt") : new ModulusPowers(rnd);
                             case 5:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new ArgumentPowers(rnd, "Questions.txt");
-                                }
-                                else
-                                {
-                                    return new ArgumentPowers(rnd);
-                                }
+                                return rnd.Next(1, 16) == 1 ? new ArgumentPowers(rnd, "Questions.txt") : new ArgumentPowers(rnd);
                         }
                         break;
                     case 4:
                         switch (rnd.Next(4))
                         {
                             case 0:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new Quadratic(rnd, "Questions.txt");
-                                }
-                                else
-                                {
-                                    return new Quadratic(rnd);
-                                }
+                                return rnd.Next(1, 16) == 1 ? new Quadratic(rnd, "Questions.txt") : new Quadratic(rnd);
                             case 1:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new Cubic1rootgiven(rnd, "Questions.txt");
-                                }
-                                else
-                                {
-                                    return new Cubic1rootgiven(rnd);
-                                }
+                                return rnd.Next(1, 16) == 1 ? new Cubic1rootgiven(rnd, "Questions.txt") : new Cubic1rootgiven(rnd);
                             case 2:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new GivenRootFindQuadratic("Questions.txt");
-                                }
-                                else
-                                {
-                                    return new GivenRootFindQuadratic();
-                                }
+                                return rnd.Next(1, 16) == 1 ? new GivenRootFindQuadratic("Questions.txt") : new GivenRootFindQuadratic();
                             case 3:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new GivenRootsFindCubic(rnd, "Questions.txt");
-                                }
-                                else
-                                {
-                                    return new GivenRootsFindCubic(rnd);
-                                }
+                                return rnd.Next(1, 16) == 1 ? new GivenRootsFindCubic(rnd, "Questions.txt") : new GivenRootsFindCubic(rnd);
                         }
                         break;
                     case 5:
@@ -593,70 +438,19 @@ namespace NEA
                         switch (rnd.Next(7))
                         {
                             case 0:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new ArgtoCartesian("Questions.txt", rnd);
-                                }
-                                else
-                                {
-                                    return new ArgtoCartesian(rnd);
-                                }
+                                return rnd.Next(1, 16) == 1 ? new ArgtoCartesian("Questions.txt", rnd) : new ArgtoCartesian(rnd);
                             case 1:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new ArgGraph("Questions.txt", rnd);
-                                }
-                                else
-                                {
-                                    return new ArgGraph(rnd);
-                                }
+                                return rnd.Next(1, 16) == 1 ? new ArgGraph("Questions.txt", rnd) : new ArgGraph(rnd);
                             case 2:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new ModToCartesian(rnd, "Questions.txt");
-                                }
-                                else
-                                {
-                                    return new ModToCartesian(rnd);
-                                }
+                                return rnd.Next(1, 16) == 1 ? new ModToCartesian(rnd, "Questions.txt") : new ModToCartesian(rnd);
                             case 3:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new ModGraph(rnd, "Questions.txt");
-                                }
-                                else
-                                {
-                                    return new ModGraph(rnd);
-                                }
+                                return rnd.Next(1, 16) == 1 ? new ModGraph(rnd, "Questions.txt") : new ModGraph(rnd);
                             case 4:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new ModLine("Questions.txt", rnd);
-                                }
-                                else
-                                {
-                                    return new ModLine(rnd);
-                                }
+                                return rnd.Next(1, 16) == 1 ? new ModLine("Questions.txt", rnd) : new ModLine(rnd);
                             case 5:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new ArgIntersect(rnd, "Questions.txt");
-                                }
-                                else
-                                {
-                                    return new ArgIntersect(rnd);
-                                }
+                                return rnd.Next(1, 16) == 1 ? new ArgIntersect(rnd, "Questions.txt") : new ArgIntersect(rnd);
                             case 6:
-                                if (rnd.Next(1, 16) == 1)
-                                {
-                                    return new ArgModIntersect(rnd);
-                                }
-                                else
-                                {
-                                    return new ArgModIntersect(rnd);
-                                }
-                            default:
-                                break;
+                                return rnd.Next(1, 16) == 1 ? new ArgModIntersect(rnd) : new ArgModIntersect(rnd);
                         }
                         break;
                     default:
@@ -666,16 +460,16 @@ namespace NEA
         }
 
         //RegEx Patterns
-        const string fracompPat = @"((-?([1-9][0-9]*)(\/[1-9][0-9]*)?|0)(\+|-)([1-9][0-9]*)?i(\/[1-9][0-9]*)?)|0";
-        const string realPat = @"-?[1-9][0-9]*(\.[0-9]*[1-9])?|-?0\.[0-9]*[1-9]|0";
-        const string complexPat = @"(-?[1-9][0-9]*(\.[0-9]*[1-9])?(\+|-)([1-9][0-9]*(\.[0-9]*[1-9])?)?i)|(-?[1-9][0-9]*(\.[0-9]*[1-9])?i?)|(-?i)|0";
-        const string modArgPat = @"[1-9][0-9]\\(cos\\((-?[1-9][0-9]*(\\.[0-9]*[1-9])?|-?0\\.[0-9]*[1-9]|0)\\)\\+isin\\((-?[1-9][0-9]*(\\.[0-9]*[1-9])?|-?0\\.[0-9]*[1-9]|0)\\)\\)";
-        const string quadraticPat = @"z²(\+|-)([1-9][0-9]*)?z(\+|-)([1-9][0-9]*)?=0";
-        const string cubicPat = @"z³(\+|-)([1-9][0-9]*)?z²(\+|-)([1-9][0-9]*)?z(\+|-)([1-9][0-9]*)?=0";
-        const string argPat = @"arg\(z[-\+]?((-?[1-9][0-9]*(\.[0-9]*[1-9])?(\+|-)([1-9][0-9]*(\.[0-9]*[1-9])?)?i)|(-?[1-9][0-9]*(\.[0-9]*[1-9])?i?)|(-?i)|0)?\)=-?[1-9]?π(\/[1-9])?";
-        const string modPat = @"\|z[-\+]?((-?[1-9][0-9]*(\.[0-9]*[1-9])?(\+|-)([1-9][0-9]*(\.[0-9]*[1-9])?)?i)|(-?[1-9][0-9]*(\.[0-9]*[1-9])?i?)|(-?i)|0)?\|=[1-9]";
-        const string linePat = @"(y=-?[2-9]?x(\/[2-9])?((\+|-)(-?([1-9][0-9]*)(\/[1-9][0-9]*)?))?)|(y=((-?([1-9][0-9]*)(\/[1-9][0-9]*)?)|0))|(x=((-?([1-9][0-9]*)(\/[1-9][0-9]*)?)|0))";
-        const string circlePat = @"((\(x(\+|-)[1-9]\)²)|(x²))\+((\(y(\+|-)[1-9]\)²)|(y²))=[1-9][0-9]*";
+        const string fracompPat = @"((-?([1-9]\d*)(\/[1-9]\d*)?|0)[-\+]([1-9]\d*)?i(\/[1-9]\d*)?)|0";
+        const string realPat = @"-?[1-9]\d*(\.\d*[1-9])?|-?0\.\d*[1-9]|0";
+        const string complexPat = @"(-?[1-9]\d*(\.\d*[1-9])?[-\+]([1-9]\d*(\.\d*[1-9])?)?i)|(-?[1-9]\d*(\.\d*[1-9])?i?)|(-?i)|0";
+        const string modArgPat = @"[1-9]\d*\(cos\((-?[0-3](\.\d*[1-9])?|0)\)\+isin\((-?[0-3](\.\d*[1-9])?|0)\)\)";
+        const string quadraticPat = @"z²[-\+]([1-9]\d*)?z[-\+]([1-9]\d*)?=0";
+        const string cubicPat = @"z³[-\+]([1-9]\d*)?z²[-\+]([1-9]\d*)?z[-\+]([1-9]\d*)?=0";
+        const string argPat = @"arg\(z[-\+]?((-?[1-9]\d*(\.\d*[1-9])?[-\+]([1-9]\d*(\.\d*[1-9])?)?i)|(-?[1-9]\d*(\.\d*[1-9])?i?)|(-?i)|0)?\)=-?[1-9]?π(\/[1-9])?";
+        const string modPat = @"\|z[-\+]?((-?[1-9]\d*(\.\d*[1-9])?[-\+]([1-9]\d*(\.\d*[1-9])?)?i)|(-?[1-9]\d*(\.\d*[1-9])?i?)|(-?i)|0)?\|=[1-9]";
+        const string linePat = @"(y=-?[2-9]?x(\/[2-9])?([-\+](-?([1-9]\d*)(\/[1-9]\d*)?))?)|(y=((-?([1-9]\d*)(\/[1-9]\d*)?)|0))|(x=((-?([1-9]\d*)(\/[1-9]\d*)?)|0))";
+        const string circlePat = @"((\(x[-\+][1-9]\)²)|(x²))\+((\(y[-\+][1-9]\)²)|(y²))=[1-9]\d*";
 
         //Checks the user input with RegEx patterns defined above to see if its a answer that is allowed.
         //Checks what question type it is, then with the corresponding RegEx Pattern
@@ -842,15 +636,9 @@ namespace NEA
                         int index = Console.CursorLeft - 8;
                         string firstpart = ans.Substring(0, index);
                         string secondpart = ans.Substring(index);
-                        char c = ' ';
-                        if (choice.Key == ConsoleKey.P)
-                        {
-                            c = 'π';
-                        }
-                        else if (choice.Key == ConsoleKey.Q)
-                        {
-                            c = '√';
-                        }
+                        char c;
+                        if (choice.Key == ConsoleKey.P) c = 'π';
+                        else if (choice.Key == ConsoleKey.Q) c = '√';
                         else c = choice.KeyChar;
                         Console.Write(new string(' ', Math.Abs(ans.Length - index)));
                         Console.CursorLeft = 8 + index;
@@ -969,12 +757,12 @@ namespace NEA
         {
             Console.Clear();
             int quizScore = 0, scoreForQuestion = 0;
-            bool loop = false;
             IQuestion[] quizQuestions = new IQuestion[1];
             int[] questionSets = new int[1];
             bool[] questionWrong = new bool[1];
             int[] numberwrong = new int[6];
             List<int> setsInUse = new List<int>();
+            bool loop;
             do
             {
                 loop = false;
